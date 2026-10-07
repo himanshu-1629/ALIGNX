@@ -16,7 +16,6 @@ import {
   Clock,
   ArrowRight
 } from 'lucide-react';
-import { StudioNavTabs } from '../studio/StudioNavTabs';
 
 interface RecommendationsModuleProps {
   onSelectCareerTwin: (careerId: string) => void;
@@ -437,17 +436,6 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
               Multi-dimensional ranking synthesizing Student Aptitude (35%), Financial Feasibility (20%), Family Alignment (15%), Industrial Market Demand (20%), and Regional Location (10%).
             </p>
           </div>
-
-          {/* Quick Studio Switcher */}
-          <StudioNavTabs
-            currentTab="dashboard"
-            onSelectTab={(tab) => {
-              if (tab === 'twin') onSelectCareerTwin(selectedCareer.id);
-              else if (tab === 'whatif') onOpenWhatIf();
-              else if (tab === 'roadmap' && onOpenRoadmap) onOpenRoadmap(selectedCareer.id);
-            }}
-            selectedCareerTitle={selectedCareer.title}
-          />
         </div>
 
         {/* Filter Bar & Comparison Mode Toggle */}

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import type { AppView } from './components/Header';
+import { SubNavStepper } from './components/SubNavStepper';
+import type { SubNavStep } from './components/SubNavStepper';
 import { CinematicFrames } from './components/frames/CinematicFrames';
 import { OnboardingModule } from './components/modules/OnboardingModule';
 import { DiscoveryModule } from './components/modules/DiscoveryModule';
@@ -159,18 +161,27 @@ export function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleOpenRoadmap = () => {
+  const handleOpenRoadmap = (careerId?: string) => {
+    if (careerId) setSelectedCareerId(careerId);
     setCurrentView('roadmap');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const isAssessmentStage = ['onboarding', 'discovery', 'aptitude', 'dna'].includes(currentView);
+  const isDecisionStage = ['dashboard', 'twin', 'whatif', 'roadmap'].includes(currentView);
 
-  const assessmentSteps = [
-    { id: 'onboarding' as AppView, num: '1', label: 'Goals & Budget' },
-    { id: 'discovery' as AppView, num: '2', label: 'Holland Interests' },
-    { id: 'aptitude' as AppView, num: '3', label: 'Cognitive Aptitude' },
-    { id: 'dna' as AppView, num: '4', label: 'Career DNA' },
+  const assessmentSteps: SubNavStep[] = [
+    { id: 'onboarding', num: '1', label: 'Goals & Budget' },
+    { id: 'discovery', num: '2', label: 'Holland Interests' },
+    { id: 'aptitude', num: '3', label: 'Cognitive Aptitude' },
+    { id: 'dna', num: '4', label: 'Career DNA' },
+  ];
+
+  const decisionSteps: SubNavStep[] = [
+    { id: 'dashboard', num: '1', label: '5D Recommendations' },
+    { id: 'twin', num: '2', label: 'Career Twin Radar' },
+    { id: 'whatif', num: '3', label: 'What-if Lab' },
+    { id: 'roadmap', num: '4', label: 'Roadmap Blueprint' },
   ];
 
   return (
@@ -191,85 +202,30 @@ export function App() {
 
       {/* Sleek Progressive Assessment Stepper Header */}
       {isAssessmentStage && (
-        <div
-          style={{
-            backgroundColor: 'var(--bg-surface)',
-            borderBottom: '1px solid var(--border-hairline)',
-            padding: '10px 24px'
+        <SubNavStepper
+          steps={assessmentSteps}
+          currentView={currentView}
+          onSelectStep={(stepId) => {
+            if (!currentUser) {
+              setIsAuthModalOpen(true);
+              return;
+            }
+            setCurrentView(stepId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-        >
-          <div
-            style={{
-              maxWidth: '960px',
-              margin: '0 auto',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '12px',
-              overflowX: 'auto'
-            }}
-          >
-            {assessmentSteps.map((step, idx) => {
-              const isActive = currentView === step.id;
-              const stepIndex = assessmentSteps.findIndex((s) => s.id === currentView);
-              const isPast = idx < stepIndex;
+        />
+      )}
 
-              return (
-                <div
-                  key={step.id}
-                  onClick={() => {
-                    if (!currentUser) {
-                      setIsAuthModalOpen(true);
-                      return;
-                    }
-                    setCurrentView(step.id);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    cursor: 'pointer',
-                    opacity: isActive ? 1 : 0.75,
-                    whiteSpace: 'nowrap',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  <span
-                    style={{
-                      width: '22px',
-                      height: '22px',
-                      borderRadius: '0px',
-                      backgroundColor: isActive ? 'var(--accent)' : isPast ? 'var(--text-primary)' : 'var(--border-hairline)',
-                      color: isActive || isPast ? '#FFFFFF' : 'var(--text-muted)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.68rem',
-                      fontWeight: 700
-                    }}
-                  >
-                    {isPast ? '✓' : step.num}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '0.84rem',
-                      fontWeight: isActive ? 600 : 500,
-                      color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)'
-                    }}
-                  >
-                    {step.label}
-                  </span>
-                  {idx < assessmentSteps.length - 1 && (
-                    <span style={{ color: 'var(--border-subtle)', marginLeft: '12px' }}>—</span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+      {/* Sleek Progressive Decision Engine Stepper Header */}
+      {isDecisionStage && (
+        <SubNavStepper
+          steps={decisionSteps}
+          currentView={currentView}
+          onSelectStep={(stepId) => {
+            setCurrentView(stepId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
       )}
 
       {/* Main View Container */}
