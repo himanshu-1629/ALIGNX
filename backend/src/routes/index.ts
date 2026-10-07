@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { sendSuccess } from '../utils/apiResponse';
 import authRoutes from './authRoutes';
+import studentRoutes from './studentRoutes';
 
 const router = Router();
 
@@ -38,5 +39,8 @@ router.get('/health', (req: Request, res: Response) => {
 
 // Authentication routes (/api/v1/auth)
 router.use('/auth', authRoutes);
+
+// Student profile & onboarding routes (/api/v1/students)
+router.use('/students', studentRoutes);
 
 export default router;
