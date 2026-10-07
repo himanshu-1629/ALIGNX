@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { INITIAL_CAREERS } from '../../data/mockAlignxData';
 import { ApiService } from '../../services/api';
-import { ArrowRight, Cpu, CheckCircle2, AlertCircle, GitBranch, ChevronLeft, SlidersHorizontal } from 'lucide-react';
-import { StudioNavTabs } from '../studio/StudioNavTabs';
+import { ArrowRight, Cpu, CheckCircle2, AlertCircle, GitBranch } from 'lucide-react';
 
 interface CareerTwinModuleProps {
   careerId?: string;
@@ -15,8 +14,6 @@ interface CareerTwinModuleProps {
 export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
   careerId = 'ai-engineer',
   onOpenRoadmap,
-  onBackToDashboard,
-  onOpenWhatIf,
   onSelectCareer
 }) => {
   const [career, setCareer] = useState(() => INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0]);
@@ -40,41 +37,6 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
 
   return (
     <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 24px' }}>
-      {/* Synchronized Studio Nav Tabs */}
-      <StudioNavTabs
-        currentTab="twin"
-        onSelectTab={(tab) => {
-          if (tab === 'dashboard' && onBackToDashboard) onBackToDashboard();
-          else if (tab === 'whatif' && onOpenWhatIf) onOpenWhatIf();
-          else if (tab === 'roadmap') onOpenRoadmap();
-        }}
-        selectedCareerTitle={career.title}
-      />
-      {/* Top Navigation Bar */}
-      {onBackToDashboard && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-          <button
-            onClick={onBackToDashboard}
-            className="alignx-key"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
-          >
-            <ChevronLeft size={14} />
-            <span>BACK TO 5D RECOMMENDATIONS</span>
-          </button>
-
-          {onOpenWhatIf && (
-            <button
-              onClick={onOpenWhatIf}
-              className="alignx-key"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
-            >
-              <SlidersHorizontal size={14} color="var(--accent)" />
-              <span>TEST WHAT-IF SIMULATOR</span>
-            </button>
-          )}
-        </div>
-      )}
-
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '24px', marginBottom: '36px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' }}>
@@ -299,7 +261,7 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '16px',
@@ -307,19 +269,6 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
           paddingTop: '24px'
         }}
       >
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          {onBackToDashboard && (
-            <button onClick={onBackToDashboard} className="alignx-key" style={{ padding: '12px 18px', fontSize: '0.76rem' }}>
-              <span>← 5D RECOMMENDATIONS</span>
-            </button>
-          )}
-          {onOpenWhatIf && (
-            <button onClick={onOpenWhatIf} className="alignx-key" style={{ padding: '12px 18px', fontSize: '0.76rem' }}>
-              <span>TEST WHAT-IF SIMULATOR</span>
-            </button>
-          )}
-        </div>
-
         <button onClick={onOpenRoadmap} className="btn-alignx-primary">
           <span>GENERATE PERSONALIZED SKILL-GAP ROADMAP</span>
           <ArrowRight size={16} />

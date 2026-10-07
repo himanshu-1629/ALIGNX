@@ -43,8 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
   const isHomeActive = currentView === 'home';
   const isExploreActive = currentView === 'explore';
   const isAssessmentActive = ['onboarding', 'discovery', 'aptitude', 'dna', 'parent'].includes(currentView);
-  const isDecisionActive = ['dashboard', 'twin', 'whatif'].includes(currentView);
-  const isRoadmapActive = currentView === 'roadmap';
+  const isDecisionActive = ['dashboard', 'twin', 'whatif', 'roadmap'].includes(currentView);
 
   const navPillars = [
     {
@@ -62,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({
       isGated: false
     },
     {
-      id: 'dashboard' as AppView,
+      id: (isDecisionActive ? currentView : 'dashboard') as AppView,
       num: '03',
       label: 'DECISION ENGINE',
       isActive: isDecisionActive,
@@ -74,13 +73,6 @@ export const Header: React.FC<HeaderProps> = ({
       label: 'TALENT ATLAS',
       isActive: isExploreActive,
       isGated: false
-    },
-    {
-      id: 'roadmap' as AppView,
-      num: '05',
-      label: 'ROADMAP',
-      isActive: isRoadmapActive,
-      isGated: true
     }
   ];
 
@@ -146,7 +138,7 @@ export const Header: React.FC<HeaderProps> = ({
           <span style={{ color: '#2D5A43', fontSize: '24px', fontWeight: 900 }}>.</span>
         </div>
 
-        {/* Center: 5 Core Routes in Martian Mono */}
+        {/* Center: 4 Core Routes in Martian Mono */}
         <nav
           style={{ display: 'flex', alignItems: 'center', gap: '30px' }}
           className="hide-mobile"

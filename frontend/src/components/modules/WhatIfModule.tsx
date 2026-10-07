@@ -14,7 +14,6 @@ import {
   Coins,
   CheckCircle2
 } from 'lucide-react';
-import { StudioNavTabs } from '../studio/StudioNavTabs';
 
 interface WhatIfModuleProps {
   careerId?: string;
@@ -24,12 +23,8 @@ interface WhatIfModuleProps {
 }
 
 export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
-  careerId = 'ai-engineer',
-  onContinueToRoadmap,
-  onBackToDashboard,
-  onOpenTwin
+  onContinueToRoadmap
 }) => {
-  const currentCareer = INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0];
   // Simulator input parameters
   const [budgetLakhs, setBudgetLakhs] = useState<number>(14);
   const [selectedLocation, setSelectedLocation] = useState<string>('Bangalore');
@@ -157,17 +152,6 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
 
   return (
     <div style={{ maxWidth: '1400px', margin: '36px auto', padding: '0 24px' }}>
-      {/* Synchronized Studio Nav Tabs */}
-      <StudioNavTabs
-        currentTab="whatif"
-        onSelectTab={(tab) => {
-          if (tab === 'dashboard' && onBackToDashboard) onBackToDashboard();
-          else if (tab === 'twin' && onOpenTwin) onOpenTwin();
-          else if (tab === 'roadmap' && onContinueToRoadmap) onContinueToRoadmap();
-        }}
-        selectedCareerTitle={currentCareer.title}
-      />
-
       {/* Editorial Header */}
       <div
         style={{
@@ -883,15 +867,6 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {onBackToDashboard && (
-            <button
-              onClick={onBackToDashboard}
-              className="alignx-key"
-              style={{ padding: '12px 20px', fontSize: '0.78rem' }}
-            >
-              <span>← 5D RECOMMENDATIONS</span>
-            </button>
-          )}
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--text-muted)' }}>
             CURRENT SIMULATION READY FOR EXECUTION
           </span>
