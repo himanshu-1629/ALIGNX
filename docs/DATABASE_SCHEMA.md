@@ -31,18 +31,25 @@ The database must support:
 
 Recommended database:
 
-**PostgreSQL**
+**MongoDB (MongoDB Atlas)**
 
-Supabase may be used as the managed PostgreSQL platform.
+MongoDB Atlas is selected as the cloud document database for ALIGNX.
 
-The schema should use:
+### Why MongoDB for ALIGNX:
 
-- Primary keys
-- Foreign keys
-- Unique constraints
-- Check constraints where useful
-- Timestamps
-- Indexes for frequently queried fields
+1. **Native Document Hierarchy**: Complex entities such as Career DNA, RIASEC vectors, multi-factor assessment answers, and diagnostic score breakdowns naturally map to JSON/BSON documents without unnatural table decomposition.
+2. **Rapid Hackathon Iteration**: Dynamic addition of new assessment dimensions or career attributes without blocking database migrations.
+3. **Mongoose / ODM Ergonomics**: Strong schema validation and type support in Node.js (via Mongoose) or Python (via Motor/Beanie).
+4. **Atlas Vector Search**: Direct support for `$vectorSearch` enables future semantic matching of student interests to career embeddings.
+
+The schema uses:
+
+- Document `_id` (`ObjectId` or UUID string)
+- Embedded subdocuments for tightly coupled data (e.g. `career_dna`, `component_scores`, `salary_tiers`)
+- Referenced documents for relational joins (`student_id` in families, parent submissions, assessments)
+- Unique indexes for email, tokens, and slug identifiers
+- Timestamps (`createdAt`, `updatedAt`)
+- Compound indexes for optimized query lookup
 
 ---
 
@@ -78,31 +85,23 @@ Careers ───────────────── Education Paths
 
 ---
 
-# 4. Core Tables
+# 4. Core Collections & Document Model
 
-Initial core tables:
+ALIGNX organizes data into document collections, taking advantage of embedding for tightly coupled structures:
 
 ```text
-students
-families
-parents
-parent_invitations
-student_assessments
-aptitude_results
-career_dna
-financial_profiles
-careers
-skills
-career_skills
-career_market_data
-career_location_demand
-recommendations
-recommendation_scores
-skill_gaps
-roadmaps
-roadmap_items
-what_if_scenarios
+students                 # Student profile + embedded interests & career DNA
+families                 # Family financial context + embedded parent records
+parent_invitations       # Temporary tokenized parent invitation links
+assessments              # Assessments sessions + detailed question response arrays
+careers                  # Comprehensive career data + embedded skills, salary tiers & clusters
+recommendations          # Generated recommendations + embedded multi-fit scores & diagnostics
+what_if_scenarios        # History of dynamic student simulation runs
 ```
+
+### Embedding vs. Referencing Strategy:
+- **Embedded Subdocuments**: Career DNA inside `students`, parent entries inside `families`, component scores inside `recommendations`.
+- **Referenced Collections**: `student_id` links `families`, `assessments`, `recommendations`, and `what_if_scenarios` to `students`.
 
 ---
 
@@ -1085,7 +1084,7 @@ Do not expose sensitive parent information to the frontend unnecessarily.
 
 ### Rule 6
 
-Use foreign keys for relational integrity.
+Use ObjectId references, embedded subdocuments, and schema validation for data integrity.
 
 ### Rule 7
 

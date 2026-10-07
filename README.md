@@ -76,8 +76,8 @@ ALIGNX follows a modular, decoupled architecture:
          ▼                                                      ▼
 ┌──────────────────┐                                  ┌──────────────────┐
 │     DATABASE     │                                  │ DECISION ENGINE  │
-│    PostgreSQL    │                                  │ (Deterministic)  │
-│    (Supabase)    │                                  │ Multi-Fit Math   │
+│  MongoDB Atlas   │                                  │ (Deterministic)  │
+│  (Document DB)   │                                  │ Multi-Fit Math   │
 └──────────────────┘                                  └────────┬─────────┘
                                                                │
                                                      ┌─────────┴─────────┐
@@ -98,7 +98,7 @@ Developed for **DataQuest 3.0** by a dedicated 4-member team:
 |---|---|---|
 | **Himanshu** | **AI/ML & Decision Engine** | Mathematical scoring engine, Student Vector / Career DNA, Financial Solver, Conflict Index, What-If simulator logic. |
 | **Arpit** | **Data & LLM Layer** | Career Knowledge Base, LLM prompt engineering, Gemini integration, Career DNA narrative synthesis. |
-| **OM** | **Backend & Database** | API infrastructure, schema design (PostgreSQL/Supabase), authentication, service orchestration. |
+| **OM** | **Backend & Database** | API infrastructure, schema design (MongoDB / Mongoose), authentication, service orchestration. |
 | **Daksh** | **Frontend & UI/UX** | User experience, design system, interactive dashboards, Career Twin visualizations, What-If UI. |
 
 ---
@@ -109,13 +109,13 @@ Developed for **DataQuest 3.0** by a dedicated 4-member team:
 ALIGNX/
 ├── backend/            # Backend API server & business logic
 ├── frontend/           # Client application (Next.js / React)
-├── database/           # PostgreSQL migration scripts & seed data
+├── database/           # MongoDB models, validation & seed scripts
 ├── assets/             # Architecture diagrams, mockups, design assets
 ├── docs/               # In-depth technical & product specifications
 │   ├── PRD.md                  # Product Requirements Document
 │   ├── TRD.md                  # Technical Requirements Document
 │   ├── SYSTEM_ARCHITECTURE.md  # Detailed System Architecture
-│   ├── DATABASE_SCHEMA.md      # Database Entity-Relationship & DDL
+│   ├── DATABASE_SCHEMA.md      # Database Collections & Schema Architecture
 │   ├── API_DOCUMENTATION.md    # REST API Contracts
 │   ├── UI_UX.md                # Design System & Wireframes
 │   ├── USER_FLOW.md            # User Journeys & State Machines
@@ -151,7 +151,7 @@ $$\text{ALIGNX Score} = w_s S_{\text{fit}} + w_f F_{\text{fit}} + w_a A_{\text{f
 
 - Node.js (v18+ or v20 LTS)
 - Python (3.10+ for Decision Engine & AI modules)
-- PostgreSQL (or Supabase account)
+- MongoDB (Local instance or free MongoDB Atlas URI)
 
 ### Quick Setup
 

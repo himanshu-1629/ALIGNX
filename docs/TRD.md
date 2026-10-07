@@ -151,15 +151,14 @@ The exact implementation may evolve, but the following stack is recommended for 
 
 ## Database
 
-- PostgreSQL
+- MongoDB (MongoDB Atlas)
 
-Supabase may be used to provide:
+MongoDB is used for document-oriented storage of polymorphic AI structures, Career DNA, and fast hackathon iteration:
 
-- PostgreSQL
-- Authentication
-- Database hosting
-- Row-level security
-- Optional storage
+- MongoDB Atlas (Cloud-hosted cluster)
+- Mongoose ODM (for Node.js/Express) or Motor/Beanie (for FastAPI)
+- Native JSON/BSON document modeling for Career DNA and assessment answers
+- Built-in MongoDB Atlas Vector Search ($vectorSearch) for semantic matching
 
 ## AI/ML
 
@@ -174,7 +173,7 @@ Possible MVP deployment:
 ```text
 Frontend → Vercel
 Backend  → Render / Railway / Vercel-compatible service
-Database → Supabase
+Database → MongoDB Atlas
 AI      → API-based service
 ```
 
@@ -206,7 +205,7 @@ The final deployment provider can be changed without changing the product archit
                   ┌─────────────────┼─────────────────┐
                   │                 │                 │
                   ▼                 ▼                 ▼
-             PostgreSQL       Decision Engine      LLM Service
+             MongoDB Atlas     Decision Engine      LLM Service
                   │                 │                 │
                   │                 │                 │
                   └────────────┬────┴─────────────────┘
@@ -1197,11 +1196,10 @@ Secrets must be stored outside source code.
 Example:
 
 ```env
-DATABASE_URL=
+MONGODB_URI=
 JWT_SECRET=
-LLM_API_KEY=
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
+GEMINI_API_KEY=
+PORT=5000
 ```
 
 Never commit `.env` files containing secrets.
@@ -1332,8 +1330,8 @@ Recommended MVP:
                     │
         ┌───────────┼───────────┐
         ▼           ▼           ▼
-   PostgreSQL   Decision      LLM API
-    /Supabase     Engine
+   MongoDB Atlas Decision     LLM API
+                   Engine
 ```
 
 Deployment providers are implementation choices and can change.

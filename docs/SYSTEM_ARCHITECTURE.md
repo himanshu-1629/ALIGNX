@@ -80,7 +80,7 @@ The architecture separates:
                   ▼                                     ▼
         ┌───────────────────┐                ┌───────────────────┐
         │     DATABASE      │                │ DECISION ENGINE   │
-        │   PostgreSQL      │                │                   │
+        │   MongoDB Atlas   │                │                   │
         │                   │                │ Student Fit       │
         │ Students          │                │ Financial Fit     │
         │ Parents           │                │ Family Alignment  │
@@ -931,8 +931,8 @@ Recommended MVP deployment:
           ┌───────┘     └────────┐
           ▼                      ▼
    ┌─────────────┐        ┌─────────────┐
-   │ PostgreSQL  │        │  LLM API    │
-   │ / Supabase  │        │             │
+   │   MongoDB   │        │  LLM API    │
+   │    Atlas    │        │             │
    └─────────────┘        └─────────────┘
 ```
 
@@ -1110,7 +1110,7 @@ React
 +
 Node/Express
 +
-PostgreSQL
+MongoDB Atlas
 +
 Decision Engine
 +
