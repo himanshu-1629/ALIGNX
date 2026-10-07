@@ -218,14 +218,49 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
                 <span>START ASSESSMENT</span>
               </button>
 
+              <button
+                onClick={() => onEnterApp('explore')}
+                style={{
+                  height: '42px',
+                  padding: '0 20px',
+                  backgroundColor: '#ECE9E2',
+                  color: '#181816',
+                  border: '1px solid rgba(24, 24, 22, 0.25)',
+                  borderRadius: '0px',
+                  fontFamily: "'Martian Mono', monospace",
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.borderColor = '#2D5A43';
+                  e.currentTarget.style.color = '#2D5A43';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#ECE9E2';
+                  e.currentTarget.style.borderColor = 'rgba(24, 24, 22, 0.25)';
+                  e.currentTarget.style.color = '#181816';
+                }}
+              >
+                <span>EXPLORE INDIA TALENT ATLAS</span>
+                <span style={{ color: '#2D5A43' }}>→</span>
+              </button>
+
               <a
                 href="#section-equilibrium"
                 style={{
                   height: '42px',
-                  padding: '0 20px',
+                  padding: '0 18px',
                   backgroundColor: 'transparent',
-                  color: '#181816',
-                  border: '1px solid rgba(24, 24, 22, 0.25)',
+                  color: '#6E6A61',
+                  border: '1px solid rgba(24, 24, 22, 0.16)',
                   borderRadius: '0px',
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '11px',
@@ -242,11 +277,11 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
                   e.currentTarget.style.color = '#2D5A43';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(24, 24, 22, 0.25)';
-                  e.currentTarget.style.color = '#181816';
+                  e.currentTarget.style.borderColor = 'rgba(24, 24, 22, 0.16)';
+                  e.currentTarget.style.color = '#6E6A61';
                 }}
               >
-                EXPLORE EQUILIBRIUM
+                EQUILIBRIUM ↓
               </a>
             </div>
           </div>

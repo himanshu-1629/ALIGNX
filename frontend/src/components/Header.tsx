@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Lock } from 'lucide-react';
 
 export type AppView =
   | 'home'
+  | 'explore'
   | 'onboarding'
   | 'discovery'
   | 'aptitude'
@@ -21,6 +22,8 @@ interface HeaderProps {
   onSignOut?: () => void;
   onResetSession?: () => void;
   hasSessionProgress?: boolean;
+  hasAssessmentCompleted?: boolean;
+  onAssessmentGateTrigger?: (target: AppView) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -30,15 +33,17 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAuth,
   onSignOut,
   onResetSession,
-  hasSessionProgress = false
+  hasSessionProgress = false,
+  hasAssessmentCompleted = false,
+  onAssessmentGateTrigger
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Group active view states
   const isHomeActive = currentView === 'home';
-  const isAssessmentActive = ['onboarding', 'discovery', 'aptitude', 'dna'].includes(currentView);
+  const isExploreActive = currentView === 'explore';
+  const isAssessmentActive = ['onboarding', 'discovery', 'aptitude', 'dna', 'parent'].includes(currentView);
   const isDecisionActive = ['dashboard', 'twin', 'whatif'].includes(currentView);
-  const isFamilyActive = currentView === 'parent';
   const isRoadmapActive = currentView === 'roadmap';
 
   const navPillars = [
@@ -46,33 +51,48 @@ export const Header: React.FC<HeaderProps> = ({
       id: 'home' as AppView,
       num: '01',
       label: 'OVERVIEW',
-      isActive: isHomeActive
+      isActive: isHomeActive,
+      isGated: false
     },
     {
       id: (isAssessmentActive ? currentView : 'onboarding') as AppView,
       num: '02',
       label: 'ASSESSMENT',
-      isActive: isAssessmentActive
+      isActive: isAssessmentActive,
+      isGated: false
     },
     {
       id: 'dashboard' as AppView,
       num: '03',
       label: 'DECISION ENGINE',
-      isActive: isDecisionActive
+      isActive: isDecisionActive,
+      isGated: true
     },
     {
-      id: 'parent' as AppView,
+      id: 'explore' as AppView,
       num: '04',
-      label: 'FAMILY PORTAL',
-      isActive: isFamilyActive
+      label: 'TALENT ATLAS',
+      isActive: isExploreActive,
+      isGated: false
     },
     {
       id: 'roadmap' as AppView,
       num: '05',
       label: 'ROADMAP',
-      isActive: isRoadmapActive
+      isActive: isRoadmapActive,
+      isGated: true
     }
   ];
+
+  const handleNavClick = (target: AppView, isGated: boolean) => {
+    if (isGated && !hasAssessmentCompleted) {
+      if (onAssessmentGateTrigger) {
+        onAssessmentGateTrigger(target);
+      }
+      return;
+    }
+    onSelectView(target);
+  };
 
   return (
     <header
@@ -135,7 +155,7 @@ export const Header: React.FC<HeaderProps> = ({
           {navPillars.map((pillar) => (
             <button
               key={pillar.num}
-              onClick={() => onSelectView(pillar.id)}
+              onClick={() => handleNavClick(pillar.id, pillar.isGated)}
               style={{
                 background: 'none',
                 border: 'none',
@@ -162,11 +182,14 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <span style={{ opacity: pillar.isActive ? 1 : 0.6, fontSize: '9px' }}>{pillar.num} ·</span>
               <span>{pillar.label}</span>
+              {pillar.isGated && !hasAssessmentCompleted && (
+                <Lock size={10} style={{ opacity: 0.5, color: '#6E6A61' }} />
+              )}
               {pillar.isActive && (
                 <span
                   style={{
                     position: 'absolute',
-                    bottom: '-2px',
+                    bottom: '-1px',
                     left: 0,
                     right: 0,
                     height: '2px',
@@ -334,7 +357,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               key={pillar.num}
               onClick={() => {
-                onSelectView(pillar.id);
+                handleNavClick(pillar.id, pillar.isGated);
                 setMobileMenuOpen(false);
               }}
               style={{
@@ -347,10 +370,19 @@ export const Header: React.FC<HeaderProps> = ({
                 color: pillar.isActive ? '#2D5A43' : '#181816',
                 padding: '8px 0',
                 cursor: 'pointer',
-                borderBottom: '1px solid rgba(24, 24, 22, 0.08)'
+                borderBottom: '1px solid rgba(24, 24, 22, 0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
               }}
             >
-              {pillar.num} · {pillar.label}
+              <span>{pillar.num} · {pillar.label}</span>
+              {pillar.isGated && !hasAssessmentCompleted && (
+                <span style={{ fontSize: '10px', color: '#6E6A61', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <Lock size={11} />
+                  <span>LOCKED</span>
+                </span>
+              )}
             </button>
           ))}
           {currentUser ? (
