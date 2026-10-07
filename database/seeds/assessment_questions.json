@@ -1,0 +1,175 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Standardized Psychometric (Holland RIASEC) & Cognitive Aptitude Question Bank for ALIGNX Career Discovery",
+    "total_interest_questions": 18,
+    "total_aptitude_questions": 5
+  },
+  "interest_questions": [
+    {
+      "id": "riasec_r1",
+      "dimension": "realistic",
+      "question": "How much do you enjoy assembling hardware, operating tools, or building physical prototypes?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_r2",
+      "dimension": "realistic",
+      "question": "Do you prefer working outdoors or in a laboratory/workshop with physical equipment rather than at an office desk?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_r3",
+      "dimension": "realistic",
+      "question": "How interested are you in diagnosing mechanical, electrical, or robotic hardware malfunctions?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_i1",
+      "dimension": "investigative",
+      "question": "How much do you enjoy researching complex scientific problems, exploring mathematical theories, or analyzing data?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_i2",
+      "dimension": "investigative",
+      "question": "Do you find satisfaction in uncovering underlying root causes and patterns behind unexplained phenomena?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_i3",
+      "dimension": "investigative",
+      "question": "How eager are you to learn new programming paradigms, statistical methods, or scientific literature?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_a1",
+      "dimension": "artistic",
+      "question": "How often do you express ideas through visual design, digital sketches, user interfaces, or creative storytelling?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_a2",
+      "dimension": "artistic",
+      "question": "Do you prefer unstructured, open-ended problem solving that allows creative freedom over rigid rules?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_a3",
+      "dimension": "artistic",
+      "question": "How important is aesthetic elegance, user experience, or brand identity to you when evaluating a product?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_s1",
+      "dimension": "social",
+      "question": "How energized do you feel when mentoring, teaching, or explaining difficult technical concepts to peers?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_s2",
+      "dimension": "social",
+      "question": "Do you prefer collaborative team projects with high interpersonal interaction over solitary tasks?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_s3",
+      "dimension": "social",
+      "question": "How important is it that your work directly improves human welfare, healthcare, or community well-being?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_e1",
+      "dimension": "enterprising",
+      "question": "How comfortable are you taking calculated risks to pitch ideas, launch projects, or persuade stakeholders?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_e2",
+      "dimension": "enterprising",
+      "question": "Do you naturally take on leadership roles, delegate responsibilities, and drive teams toward strategic goals?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_e3",
+      "dimension": "enterprising",
+      "question": "How motivated are you by commercial outcomes, product-market fit, and startup entrepreneurship?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_c1",
+      "dimension": "conventional",
+      "question": "How much do you value clear processes, systematic documentation, and organized folder structures?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_c2",
+      "dimension": "conventional",
+      "question": "Do you take pride in precision, error checking, compliance, and maintaining data integrity?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    },
+    {
+      "id": "riasec_c3",
+      "dimension": "conventional",
+      "question": "Do you prefer work with predictable expectations, well-defined metrics, and structured milestones?",
+      "scale": { "min": 1, "max": 5, "min_label": "Strongly Dislike", "max_label": "Strongly Enjoy" }
+    }
+  ],
+  "aptitude_questions": [
+    {
+      "id": "apt_logical",
+      "dimension": "logical",
+      "question": "If all Quantum models require Linear Algebra, and System X is a Quantum model, which statement is definitely true?",
+      "options": [
+        { "id": "A", "text": "System X does not use Linear Algebra" },
+        { "id": "B", "text": "System X requires Linear Algebra", "is_correct": true },
+        { "id": "C", "text": "All Linear Algebra algorithms are Quantum models" },
+        { "id": "D", "text": "None of the above" }
+      ]
+    },
+    {
+      "id": "apt_numerical",
+      "dimension": "numerical",
+      "question": "A cloud server costs ₹12,000/month. By migrating to serverless, the cost drops by 35%. What is the annual saving?",
+      "options": [
+        { "id": "A", "text": "₹42,000" },
+        { "id": "B", "text": "₹50,400", "is_correct": true },
+        { "id": "C", "text": "₹48,000" },
+        { "id": "D", "text": "₹54,200" }
+      ]
+    },
+    {
+      "id": "apt_analytical",
+      "dimension": "analytical",
+      "question": "In a distributed pipeline, Node B processes 2x data of Node A, and Node C processes 3x data of Node B. If total records are 180,000, how many does Node B process?",
+      "options": [
+        { "id": "A", "text": "20,000" },
+        { "id": "B", "text": "40,000", "is_correct": true },
+        { "id": "C", "text": "60,000" },
+        { "id": "D", "text": "120,000" }
+      ]
+    },
+    {
+      "id": "apt_spatial",
+      "dimension": "spatial",
+      "question": "A 3D coordinate frame is rotated 90° clockwise around the Z-axis. What happens to the positive X-axis orientation?",
+      "options": [
+        { "id": "A", "text": "Points along positive Y-axis" },
+        { "id": "B", "text": "Points along negative Y-axis", "is_correct": true },
+        { "id": "C", "text": "Points along negative X-axis" },
+        { "id": "D", "text": "Remains unchanged" }
+      ]
+    },
+    {
+      "id": "apt_verbal",
+      "dimension": "verbal",
+      "question": "Choose the word most analogous to: 'HEURISTIC' : 'DISCOVERY' :: 'ALGORITHM' : '______'",
+      "options": [
+        { "id": "A", "text": "AMBIGUITY" },
+        { "id": "B", "text": "PRECISION", "is_correct": true },
+        { "id": "C", "text": "CONJECTURE" },
+        { "id": "D", "text": "INTUITION" }
+      ]
+    }
+  ]
+}

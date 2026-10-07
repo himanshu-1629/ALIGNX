@@ -27,6 +27,7 @@ from backend.engine.conflict_index import ConflictIndexCalculator
 from backend.engine.market_evaluator import MarketEvaluator
 from backend.engine.scoring_engine import AlignxDecisionEngine
 from backend.engine.what_if_simulator import WhatIfSimulator
+from backend.engine.assessment_scorer import AssessmentScorer
 
 
 class TestAlignxDecisionEngine(unittest.TestCase):
@@ -176,6 +177,30 @@ class TestAlignxDecisionEngine(unittest.TestCase):
         delta_info = simulation_out["rank_deltas"]["ai_ml_engineer"]
         self.assertGreaterEqual(delta_info["score_delta"], 0.0)
 
+    def test_09_assessment_scoring_pipeline(self):
+        """Verifies parsing of raw student assessment UI clicks into normalized vectors."""
+        sample_responses = {
+            # Investigative answers (High: 5)
+            "riasec_i1": 5, "riasec_i2": 5, "riasec_i3": 5,
+            # Realistic answers (Moderate: 3)
+            "riasec_r1": 3, "riasec_r2": 3, "riasec_r3": 3,
+            # Artistic answers (Low: 1)
+            "riasec_a1": 1, "riasec_a2": 1, "riasec_a3": 1,
+            # Cognitive aptitude challenges
+            "apt_logical": "B",     # Correct -> 95
+            "apt_numerical": "B",   # Correct -> 95
+            "apt_analytical": "B",  # Correct -> 95
+            "apt_spatial": "C",     # Incorrect -> 45
+            "apt_verbal": "B"       # Correct -> 95
+        }
+        interests, aptitude = AssessmentScorer.score_full_assessment(sample_responses)
+        self.assertEqual(interests.investigative, 100.0)
+        self.assertEqual(interests.realistic, 50.0)
+        self.assertEqual(interests.artistic, 0.0)
+        self.assertEqual(aptitude.logical, 95.0)
+        self.assertEqual(aptitude.spatial, 45.0)
+
 
 if __name__ == "__main__":
     unittest.main()
+

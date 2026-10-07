@@ -26,6 +26,7 @@ from .conflict_index import ConflictIndexCalculator
 from .market_evaluator import MarketEvaluator
 from .scoring_engine import AlignxDecisionEngine
 from .what_if_simulator import WhatIfSimulator
+from .assessment_scorer import AssessmentScorer
 
 __all__ = [
     "AptitudeProfile",
@@ -45,4 +46,5 @@ __all__ = [
     "MarketEvaluator",
     "AlignxDecisionEngine",
     "WhatIfSimulator",
+    "AssessmentScorer",
 ]
