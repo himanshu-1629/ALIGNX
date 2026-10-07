@@ -1,45 +1,47 @@
 :root {
   /* ========================================================
-     APPLE PRO LIGHT COLOR SYSTEM (Ceramic White / Desert Titanium)
-     Clean, modern, luxury light theme
+     SOOTHING INSTRUMENT CRAFT COLOR SYSTEM
+     Natural linen paper ground, deep charcoal ink, Deep Botanical Pine (#2D5A43)
      ======================================================== */
-  --bg-deep: #FFFFFF;              /* Crisp Pure White */
-  --bg-surface: #F5F5F7;           /* Apple Classic Neutral Light Gray */
-  --bg-card: #FFFFFF;              /* Pure White Floating Cards */
-  --bg-elevated: #FAFAFC;          /* Elevated Light Surface */
-  --bg-frosted: rgba(255, 255, 255, 0.85);
-  --bg-dim: rgba(255, 255, 255, 0.94);
+  --bg-deep: #F6F5F1;              /* Warm Natural Linen / Architectural Ground */
+  --bg-surface: #ECE9E2;           /* Refined Warm Card Surface */
+  --bg-card: #FFFFFF;              /* Crisp White Surface */
+  --bg-elevated: #F1EFE9;          /* Elevated Tactile Plate */
+  --bg-frosted: rgba(246, 245, 241, 0.88);
+  --bg-dim: rgba(246, 245, 241, 0.95);
 
   /* Typography Colors */
-  --text-primary: #1D1D1F;         /* Apple Keynote Rich Obsidian */
-  --text-secondary: #515154;       /* Refined Slate Gray */
-  --text-muted: #86868B;          /* Precision Metadata Gray */
+  --text-primary: #181816;         /* Deep Warm Charcoal */
+  --text-secondary: #6E6A61;       /* Editorial Slate Gray */
+  --text-muted: #9E9A90;          /* Precision Metadata Gray */
 
-  /* Titanium Accents - Calibrated for high readability on white */
-  --accent: #9E6B38;              /* Rich Desert Titanium Gold */
-  --accent-light: #B8824C;        /* Warm Gold Highlight */
-  --accent-dim: rgba(158, 107, 56, 0.08);
-  --accent-border: rgba(158, 107, 56, 0.28);
+  /* Deep Botanical Pine Accent (#2D5A43) */
+  --accent: #2D5A43;              /* Deep Botanical Pine */
+  --accent-light: #3D7357;        /* Pine Highlight */
+  --accent-dim: rgba(45, 90, 67, 0.09);
+  --accent-border: rgba(45, 90, 67, 0.28);
 
-  --titanium-raw: #3A3A3C;         /* Natural Titanium Graphite */
-  --titanium-blue: #0071E3;        /* Apple Signature Blue */
-  --titanium-blue-dim: rgba(0, 113, 227, 0.08);
+  --titanium-raw: #2C2C2E;         /* Deep Natural Titanium */
+  --titanium-blue: #1D3557;        /* Architectural Prussian Blue */
+  --titanium-blue-dim: rgba(29, 53, 87, 0.08);
 
-  /* Apple Pro Light Hairlines */
-  --border-hairline: rgba(0, 0, 0, 0.08);
-  --border-subtle: rgba(0, 0, 0, 0.14);
-  --border-bright: rgba(0, 0, 0, 0.24);
-  --grid-line: rgba(0, 0, 0, 0.035);
+  /* Instrument Hairlines */
+  --border-hairline: rgba(24, 24, 22, 0.12);
+  --border-subtle: rgba(24, 24, 22, 0.18);
+  --border-bright: rgba(24, 24, 22, 0.32);
+  --grid-line: rgba(24, 24, 22, 0.04);
 
   /* Typography */
-  --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  --font-display: 'Big Shoulders Display', 'Plus Jakarta Sans', sans-serif;
+  --font-condensed: 'Big Shoulders Display', -apple-system, sans-serif;
   --font-serif: 'Syne', sans-serif;
-  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Martian Mono', 'JetBrains Mono', monospace;
+  --font-craft-mono: 'Martian Mono', 'JetBrains Mono', monospace;
 
-  /* Apple Kinetic Easing */
-  --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Kinetic Easing */
+  --ease-apple: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-smooth: 0.5s;
 }
 

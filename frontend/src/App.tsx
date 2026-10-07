@@ -185,6 +185,8 @@ export function App() {
         currentUser={currentUser}
         onOpenAuth={() => setIsAuthModalOpen(true)}
         onSignOut={handleSignOut}
+        onResetSession={handleResetSession}
+        hasSessionProgress={!!(sessionProgress?.completedStages?.onboarding || sessionProgress?.completedStages?.discovery || sessionProgress?.completedStages?.aptitude)}
       />
 
       {/* Sleek Progressive Assessment Stepper Header */}
