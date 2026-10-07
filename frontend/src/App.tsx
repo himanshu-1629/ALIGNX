@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import type { AppView } from './components/Header';
+import { SubNavStepper } from './components/SubNavStepper';
+import type { SubNavStep } from './components/SubNavStepper';
 import { CinematicFrames } from './components/frames/CinematicFrames';
 import { OnboardingModule } from './components/modules/OnboardingModule';
 import { DiscoveryModule } from './components/modules/DiscoveryModule';
@@ -11,6 +13,8 @@ import { RecommendationsModule } from './components/modules/RecommendationsModul
 import { CareerTwinModule } from './components/modules/CareerTwinModule';
 import { WhatIfModule } from './components/modules/WhatIfModule';
 import { RoadmapModule } from './components/modules/RoadmapModule';
+import { TalentAtlasModule } from './components/modules/TalentAtlasModule';
+import { AssessmentGateModal } from './components/AssessmentGateModal';
 import type { StudentProfile, AlignxSessionProgress } from './types/alignx';
 import { getSessionProgress, saveSessionProgress, clearSessionProgress, DEFAULT_SESSION_PROGRESS } from './utils/sessionManager';
 import { AuthModal } from './components/auth/AuthModal';
@@ -57,6 +61,17 @@ export function App() {
     };
   }, []);
 
+  const [isAssessmentGateOpen, setIsAssessmentGateOpen] = useState(false);
+  const [gateTargetView, setGateTargetView] = useState<AppView>('dashboard');
+
+  // A student has completed assessment if they have finished onboarding and at least one core test stage
+  const hasAssessmentCompleted = Boolean(
+    sessionProgress?.completedStages?.dashboard ||
+    sessionProgress?.completedStages?.dna ||
+    (sessionProgress?.completedStages?.onboarding &&
+     (sessionProgress?.completedStages?.discovery || sessionProgress?.completedStages?.aptitude))
+  );
+
   // Authenticated user state
   const [currentUser, setCurrentUser] = useState<{ id: string; name: string; email: string } | null>(() => {
     try {
@@ -78,6 +93,15 @@ export function App() {
   useEffect(() => {
     setSessionProgress(getSessionProgress());
   }, [currentView]);
+
+  // Strict Guard: User cannot use Decision Engine routes without completed assessment
+  useEffect(() => {
+    if (['dashboard', 'twin', 'whatif', 'roadmap'].includes(currentView) && !hasAssessmentCompleted) {
+      setGateTargetView(currentView);
+      setCurrentView('onboarding');
+      setIsAssessmentGateOpen(true);
+    }
+  }, [currentView, hasAssessmentCompleted]);
 
   const handleAuthSuccess = (user: { id: string; name: string; email: string }) => {
     localStorage.setItem('alignx_current_user', JSON.stringify(user));
@@ -102,11 +126,26 @@ export function App() {
   };
 
   const handleEnterApp = (view: AppView = 'onboarding') => {
+    // Public routes that require no auth or assessment
+    if (view === 'home' || view === 'explore') {
+      setCurrentView(view);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    // Assessment Gating: Decision Engine and Roadmap require prior assessment completion
+    if (['dashboard', 'twin', 'whatif', 'roadmap'].includes(view) && !hasAssessmentCompleted) {
+      setGateTargetView(view);
+      setIsAssessmentGateOpen(true);
+      return;
+    }
+
     // Auth Gate: Student must sign in before answering or starting the assessment
     if (['onboarding', 'discovery', 'aptitude', 'dna', 'parent'].includes(view) && !currentUser) {
       setIsAuthModalOpen(true);
       return;
     }
+
     setCurrentView(view);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -199,18 +238,28 @@ export function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleOpenRoadmap = () => {
+  const handleOpenRoadmap = (careerId?: string) => {
+    if (careerId) setSelectedCareerId(careerId);
     setCurrentView('roadmap');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const isAssessmentStage = ['onboarding', 'discovery', 'aptitude', 'dna'].includes(currentView);
+  const isAssessmentStage = ['onboarding', 'discovery', 'aptitude', 'dna', 'parent'].includes(currentView);
+  const isDecisionStage = ['dashboard', 'twin', 'whatif', 'roadmap'].includes(currentView);
 
-  const assessmentSteps = [
-    { id: 'onboarding' as AppView, num: '1', label: 'Goals & Budget' },
-    { id: 'discovery' as AppView, num: '2', label: 'Holland Interests' },
-    { id: 'aptitude' as AppView, num: '3', label: 'Cognitive Aptitude' },
-    { id: 'dna' as AppView, num: '4', label: 'Career DNA' },
+  const assessmentSteps: SubNavStep[] = [
+    { id: 'onboarding', num: '1', label: 'Goals & Budget' },
+    { id: 'discovery', num: '2', label: 'Holland Interests' },
+    { id: 'aptitude', num: '3', label: 'Cognitive Aptitude' },
+    { id: 'dna', num: '4', label: 'Career DNA' },
+    { id: 'parent', num: '5', label: 'Family Portal' },
+  ];
+
+  const decisionSteps: SubNavStep[] = [
+    { id: 'dashboard', num: '1', label: '5D Recommendations' },
+    { id: 'twin', num: '2', label: 'Career Twin Radar' },
+    { id: 'whatif', num: '3', label: 'What-if Lab' },
+    { id: 'roadmap', num: '4', label: 'Roadmap Blueprint' },
   ];
 
   if (inviteToken) {
@@ -222,98 +271,51 @@ export function App() {
       {/* Persistent Architectural Header */}
       <Header
         currentView={currentView}
-        onSelectView={(view) => {
-          setCurrentView(view);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
+        onSelectView={handleEnterApp}
         currentUser={currentUser}
         onOpenAuth={() => setIsAuthModalOpen(true)}
         onSignOut={handleSignOut}
         onResetSession={handleResetSession}
         hasSessionProgress={!!(sessionProgress?.completedStages?.onboarding || sessionProgress?.completedStages?.discovery || sessionProgress?.completedStages?.aptitude)}
+        hasAssessmentCompleted={hasAssessmentCompleted}
+        onAssessmentGateTrigger={(target) => {
+          setGateTargetView(target);
+          setIsAssessmentGateOpen(true);
+        }}
       />
 
       {/* Sleek Progressive Assessment Stepper Header */}
       {isAssessmentStage && (
-        <div
-          style={{
-            backgroundColor: 'var(--bg-surface)',
-            borderBottom: '1px solid var(--border-hairline)',
-            padding: '10px 24px'
+        <SubNavStepper
+          steps={assessmentSteps}
+          currentView={currentView}
+          completedStages={sessionProgress?.completedStages}
+          onSelectStep={(stepId) => {
+            if (!currentUser) {
+              setIsAuthModalOpen(true);
+              return;
+            }
+            setCurrentView(stepId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-        >
-          <div
-            style={{
-              maxWidth: '960px',
-              margin: '0 auto',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '12px',
-              overflowX: 'auto'
-            }}
-          >
-            {assessmentSteps.map((step, idx) => {
-              const isActive = currentView === step.id;
-              const stepIndex = assessmentSteps.findIndex((s) => s.id === currentView);
-              const isPast = idx < stepIndex;
+        />
+      )}
 
-              return (
-                <div
-                  key={step.id}
-                  onClick={() => {
-                    if (!currentUser) {
-                      setIsAuthModalOpen(true);
-                      return;
-                    }
-                    setCurrentView(step.id);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    cursor: 'pointer',
-                    opacity: isActive ? 1 : 0.75,
-                    whiteSpace: 'nowrap',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  <span
-                    style={{
-                      width: '22px',
-                      height: '22px',
-                      borderRadius: '0px',
-                      backgroundColor: isActive ? 'var(--accent)' : isPast ? 'var(--text-primary)' : 'var(--border-hairline)',
-                      color: isActive || isPast ? '#FFFFFF' : 'var(--text-muted)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.68rem',
-                      fontWeight: 700
-                    }}
-                  >
-                    {isPast ? '✓' : step.num}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '0.84rem',
-                      fontWeight: isActive ? 600 : 500,
-                      color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)'
-                    }}
-                  >
-                    {step.label}
-                  </span>
-                  {idx < assessmentSteps.length - 1 && (
-                    <span style={{ color: 'var(--border-subtle)', marginLeft: '12px' }}>—</span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+      {/* Sleek Progressive Decision Engine Stepper Header */}
+      {isDecisionStage && (
+        <SubNavStepper
+          steps={decisionSteps}
+          currentView={currentView}
+          onSelectStep={(stepId) => {
+            if (!hasAssessmentCompleted) {
+              setGateTargetView(stepId);
+              setIsAssessmentGateOpen(true);
+              return;
+            }
+            setCurrentView(stepId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
       )}
 
       {/* Main View Container */}
@@ -323,6 +325,12 @@ export function App() {
             onEnterApp={handleEnterApp}
             sessionProgress={sessionProgress}
             onResetSession={handleResetSession}
+          />
+        )}
+
+        {currentView === 'explore' && (
+          <TalentAtlasModule
+            onStartAssessment={handleEnterApp}
           />
         )}
 
@@ -443,6 +451,19 @@ export function App() {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         onAuthSuccess={handleAuthSuccess}
+      />
+
+      {/* Prerequisite Assessment Gate Modal */}
+      <AssessmentGateModal
+        isOpen={isAssessmentGateOpen}
+        onClose={() => setIsAssessmentGateOpen(false)}
+        targetView={gateTargetView}
+        sessionProgress={sessionProgress}
+        onStartAssessment={handleEnterApp}
+        onExploreAtlas={() => {
+          setCurrentView('explore');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
       />
     </div>
   );
