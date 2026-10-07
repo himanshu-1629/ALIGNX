@@ -18,6 +18,12 @@ import json
 import re
 from typing import Dict, Any, List, Optional
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 # Import Prompt Templates
 try:
     from backend.prompts.templates import (
