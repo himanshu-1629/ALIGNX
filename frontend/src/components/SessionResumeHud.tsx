@@ -85,9 +85,9 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
         className="titanium-card"
         style={{
           border: '1px solid var(--accent-border)',
-          backgroundColor: 'rgba(13, 15, 20, 0.92)',
+          backgroundColor: '#FFFFFF',
           padding: '28px 32px',
-          boxShadow: '0 12px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(197, 155, 109, 0.12)'
+          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.06)'
         }}
       >
         {/* Top Header Bar */}
@@ -145,12 +145,12 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
                 gap: '8px',
                 padding: '6px 14px',
                 borderRadius: '980px',
-                backgroundColor: 'rgba(197, 155, 109, 0.15)',
+                backgroundColor: 'var(--accent-dim)',
                 border: '1px solid var(--accent-border)'
               }}
             >
               <Sparkles size={14} color="var(--accent)" />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent-light)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent)' }}>
                 {percent}% COMPLETE
               </span>
             </div>
@@ -181,8 +181,8 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             style={{
               padding: '12px 14px',
               borderRadius: '8px',
-              backgroundColor: progress.completedStages.onboarding ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.4)',
-              border: progress.completedStages.onboarding ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid var(--border-hairline)',
+              backgroundColor: progress.completedStages.onboarding ? 'rgba(0, 0, 0, 0.03)' : 'var(--bg-surface)',
+              border: progress.completedStages.onboarding ? '1px solid var(--border-bright)' : '1px solid var(--border-hairline)',
               cursor: 'pointer',
               transition: 'all 0.2s ease'
             }}
@@ -202,8 +202,8 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             style={{
               padding: '12px 14px',
               borderRadius: '8px',
-              backgroundColor: progress.completedStages.discovery ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.4)',
-              border: progress.completedStages.discovery ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid var(--border-hairline)',
+              backgroundColor: progress.completedStages.discovery ? 'rgba(0, 0, 0, 0.03)' : 'var(--bg-surface)',
+              border: progress.completedStages.discovery ? '1px solid var(--border-bright)' : '1px solid var(--border-hairline)',
               cursor: 'pointer',
               transition: 'all 0.2s ease'
             }}
@@ -223,8 +223,8 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             style={{
               padding: '12px 14px',
               borderRadius: '8px',
-              backgroundColor: progress.completedStages.aptitude ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.4)',
-              border: progress.completedStages.aptitude ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid var(--border-hairline)',
+              backgroundColor: progress.completedStages.aptitude ? 'rgba(0, 0, 0, 0.03)' : 'var(--bg-surface)',
+              border: progress.completedStages.aptitude ? '1px solid var(--border-bright)' : '1px solid var(--border-hairline)',
               cursor: 'pointer',
               transition: 'all 0.2s ease'
             }}
@@ -244,7 +244,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             style={{
               padding: '12px 14px',
               borderRadius: '8px',
-              backgroundColor: progress.parentInputDone ? 'rgba(197, 155, 109, 0.12)' : 'rgba(0, 0, 0, 0.4)',
+              backgroundColor: progress.parentInputDone ? 'var(--accent-dim)' : 'var(--bg-surface)',
               border: progress.parentInputDone ? '1px solid var(--accent-border)' : '1px solid var(--border-hairline)',
               cursor: 'pointer',
               transition: 'all 0.2s ease'
@@ -254,7 +254,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-muted)' }}>04 / PARENT INPUT</span>
               {progress.parentInputDone ? <CheckCircle2 size={13} color="var(--accent)" /> : <Clock size={13} color="var(--text-muted)" />}
             </div>
-            <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 500, color: progress.parentInputDone ? 'var(--accent-light)' : 'var(--text-secondary)' }}>
+            <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 500, color: progress.parentInputDone ? 'var(--accent)' : 'var(--text-secondary)' }}>
               {progress.parentInputDone ? (progress.parentData?.maxBudgetAnnualLakhs ? `₹${progress.parentData.maxBudgetAnnualLakhs}L/yr Cap • Aligned` : 'Parent Aligned') : 'Pending Input'}
             </div>
           </div>
@@ -265,8 +265,8 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             style={{
               padding: '12px 14px',
               borderRadius: '8px',
-              backgroundColor: progress.completedStages.dashboard ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.4)',
-              border: progress.completedStages.dashboard ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid var(--border-hairline)',
+              backgroundColor: progress.completedStages.dashboard ? 'rgba(0, 0, 0, 0.03)' : 'var(--bg-surface)',
+              border: progress.completedStages.dashboard ? '1px solid var(--border-bright)' : '1px solid var(--border-hairline)',
               cursor: 'pointer',
               transition: 'all 0.2s ease'
             }}
@@ -289,7 +289,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             alignItems: 'center',
             flexWrap: 'wrap',
             gap: '16px',
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            backgroundColor: 'var(--bg-surface)',
             padding: '16px 20px',
             borderRadius: '10px',
             border: '1px solid var(--border-hairline)'

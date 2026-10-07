@@ -40,9 +40,11 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onSelectView }) => 
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        backgroundColor: 'rgba(7, 19, 29, 0.92)',
-        backdropFilter: 'blur(12px)',
+        backgroundColor: 'rgba(255, 255, 255, 0.88)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
         borderBottom: '1px solid var(--border-hairline)',
+        boxShadow: '0 1px 0 rgba(0, 0, 0, 0.05)',
         width: '100%',
         transition: 'all 0.3s ease'
       }}
@@ -146,8 +148,8 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onSelectView }) => 
                 key={item.id}
                 onClick={() => onSelectView(item.id)}
                 style={{
-                  background: isActive ? 'rgba(216, 111, 69, 0.12)' : 'transparent',
-                  border: isActive ? '1px solid rgba(216, 111, 69, 0.4)' : '1px solid transparent',
+                  background: isActive ? 'var(--accent-dim)' : 'transparent',
+                  border: isActive ? '1px solid var(--accent-border)' : '1px solid transparent',
                   color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
                   padding: '8px 12px',
                   cursor: 'pointer',
