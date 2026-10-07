@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { sendSuccess } from '../utils/apiResponse';
 import authRoutes from './authRoutes';
 import studentRoutes from './studentRoutes';
+import parentRoutes from './parentRoutes';
 
 const router = Router();
 
@@ -42,5 +43,8 @@ router.use('/auth', authRoutes);
 
 // Student profile & onboarding routes (/api/v1/students)
 router.use('/students', studentRoutes);
+
+// Parent invitation & family intelligence routes (/api/v1/parents)
+router.use('/parents', parentRoutes);
 
 export default router;
