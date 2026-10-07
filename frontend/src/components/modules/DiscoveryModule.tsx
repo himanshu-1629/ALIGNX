@@ -6,9 +6,10 @@ import { ArrowRight, ChevronLeft, CheckCircle2 } from 'lucide-react';
 
 interface DiscoveryModuleProps {
   onComplete: (discoveryResults: Record<number, string>) => void;
+  onSkipToAptitude?: () => void;
 }
 
-export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete }) => {
+export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, onSkipToAptitude }) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [isFinished, setIsFinished] = useState(false);
@@ -159,9 +160,29 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete }) 
                 <span>PREVIOUS SCENARIO</span>
               </button>
 
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                CHOOSE ONE ACTION TO ADVANCE
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  CHOOSE ONE ACTION TO ADVANCE
+                </span>
+
+                {onSkipToAptitude && (
+                  <button
+                    onClick={onSkipToAptitude}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--accent)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.72rem',
+                      cursor: 'pointer',
+                      padding: 0,
+                      textDecoration: 'underline'
+                    }}
+                  >
+                    SKIP TO APTITUDE →
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

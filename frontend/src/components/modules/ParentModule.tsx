@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import type { ParentInput } from '../../types/alignx';
 import { RollButton } from '../RollButton';
 import { saveSessionProgress, getSessionProgress } from '../../utils/sessionManager';
-import { ArrowRight, Copy, Check, Users, ShieldCheck, Plus, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Copy, Check, Users, ShieldCheck, Plus, CheckCircle2, ChevronLeft } from 'lucide-react';
 
 interface ParentModuleProps {
   onContinue: () => void;
+  onBack?: () => void;
 }
 
-export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue }) => {
+export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }) => {
   const [copiedLink, setCopiedLink] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -99,6 +100,20 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue }) => {
 
   return (
     <div style={{ maxWidth: '1100px', margin: '40px auto', padding: '0 24px' }}>
+      {/* Top Back Navigation */}
+      {onBack && (
+        <div style={{ marginBottom: '24px' }}>
+          <button
+            onClick={onBack}
+            className="alignx-key"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
+          >
+            <ChevronLeft size={14} />
+            <span>BACK TO CAREER DNA</span>
+          </button>
+        </div>
+      )}
+
       {/* Module Title */}
       <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '24px', marginBottom: '36px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
@@ -452,9 +467,20 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue }) => {
           paddingTop: '28px'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}>
-          <CheckCircle2 size={15} color="var(--accent)" />
-          <span>HOUSEHOLD CONSTRAINTS RECONCILED WITH 5D WEIGHTING PROTOCOL</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="alignx-key"
+              style={{ padding: '12px 18px', fontSize: '0.76rem' }}
+            >
+              <span>← CAREER DNA</span>
+            </button>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}>
+            <CheckCircle2 size={15} color="var(--accent)" />
+            <span>HOUSEHOLD CONSTRAINTS RECONCILED WITH 5D WEIGHTING PROTOCOL</span>
+          </div>
         </div>
 
         <RollButton

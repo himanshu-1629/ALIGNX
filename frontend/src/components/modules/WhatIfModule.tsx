@@ -11,14 +11,19 @@ import {
   ShieldAlert,
   Clock,
   Coins,
-  CheckCircle2
+  CheckCircle2,
+  ChevronLeft
 } from 'lucide-react';
 
 interface WhatIfModuleProps {
   onContinueToRoadmap?: () => void;
+  onBackToDashboard?: () => void;
 }
 
-export const WhatIfModule: React.FC<WhatIfModuleProps> = ({ onContinueToRoadmap }) => {
+export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
+  onContinueToRoadmap,
+  onBackToDashboard
+}) => {
   // Simulator input parameters
   const [budgetLakhs, setBudgetLakhs] = useState<number>(14);
   const [selectedLocation, setSelectedLocation] = useState<string>('Bangalore');
@@ -117,6 +122,20 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({ onContinueToRoadmap 
 
   return (
     <div style={{ maxWidth: '1400px', margin: '36px auto', padding: '0 24px' }}>
+      {/* Top Back Navigation */}
+      {onBackToDashboard && (
+        <div style={{ marginBottom: '24px' }}>
+          <button
+            onClick={onBackToDashboard}
+            className="alignx-key"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
+          >
+            <ChevronLeft size={14} />
+            <span>BACK TO 5D RECOMMENDATIONS</span>
+          </button>
+        </div>
+      )}
+
       {/* Editorial Header */}
       <div
         style={{
@@ -800,22 +819,33 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({ onContinueToRoadmap 
       </div>
 
       {/* Action Footer */}
-      {onContinueToRoadmap && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderTop: '1px solid var(--border-hairline)',
-            paddingTop: '28px',
-            flexWrap: 'wrap',
-            gap: '16px'
-          }}
-        >
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-            CURRENT SIMULATION READY TO BE CONVERTED TO MILESTONES
-          </div>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderTop: '1px solid var(--border-hairline)',
+          paddingTop: '28px',
+          flexWrap: 'wrap',
+          gap: '16px'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {onBackToDashboard && (
+            <button
+              onClick={onBackToDashboard}
+              className="alignx-key"
+              style={{ padding: '12px 20px', fontSize: '0.78rem' }}
+            >
+              <span>← 5D RECOMMENDATIONS</span>
+            </button>
+          )}
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+            CURRENT SIMULATION READY FOR EXECUTION
+          </span>
+        </div>
 
+        {onContinueToRoadmap && (
           <button
             onClick={onContinueToRoadmap}
             className="btn-alignx-primary"
@@ -824,8 +854,8 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({ onContinueToRoadmap 
             <span>GENERATE STRATEGIC ROADMAP FOR #{topResult.career.title}</span>
             <ArrowRight size={16} />
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Responsive Stacking Media Styles */}
       <style>{`

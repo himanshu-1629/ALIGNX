@@ -44,7 +44,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onSelectView }) => 
       badge: isAssessmentActive ? 'Active' : null
     },
     {
-      id: (isDecisionActive ? currentView : 'dashboard') as AppView,
+      id: 'dashboard' as AppView,
       label: 'Decision Engine',
       isActive: isDecisionActive,
       icon: <SlidersHorizontal size={14} />,

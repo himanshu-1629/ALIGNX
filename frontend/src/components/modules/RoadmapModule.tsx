@@ -1,18 +1,72 @@
 import React from 'react';
 import { INITIAL_CAREERS } from '../../data/mockAlignxData';
-import { Calendar, BookOpen, Award, GraduationCap } from 'lucide-react';
+import { Calendar, BookOpen, Award, GraduationCap, ChevronLeft, SlidersHorizontal, Printer } from 'lucide-react';
 
 interface RoadmapModuleProps {
   careerId?: string;
+  onBackToDashboard?: () => void;
+  onBackToTwin?: () => void;
+  onOpenWhatIf?: () => void;
 }
 
 export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
-  careerId = 'ai-engineer'
+  careerId = 'ai-engineer',
+  onBackToDashboard,
+  onBackToTwin,
+  onOpenWhatIf
 }) => {
   const career = INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0];
 
   return (
     <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 24px' }}>
+      {/* Top Action & Navigation Bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          {onBackToTwin && (
+            <button
+              onClick={onBackToTwin}
+              className="alignx-key"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
+            >
+              <ChevronLeft size={14} />
+              <span>CAREER TWIN</span>
+            </button>
+          )}
+
+          {onBackToDashboard && (
+            <button
+              onClick={onBackToDashboard}
+              className="alignx-key"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
+            >
+              <ChevronLeft size={14} />
+              <span>5D RECOMMENDATIONS</span>
+            </button>
+          )}
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+          {onOpenWhatIf && (
+            <button
+              onClick={onOpenWhatIf}
+              className="alignx-key"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
+            >
+              <SlidersHorizontal size={14} color="var(--accent)" />
+              <span>WHAT-IF LAB</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => window.print()}
+            className="alignx-key"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
+          >
+            <Printer size={14} />
+            <span>PRINT BLUEPRINT</span>
+          </button>
+        </div>
+      </div>
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '24px', marginBottom: '36px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
@@ -188,6 +242,54 @@ export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Connected Strategic Action Footer */}
+      <div
+        style={{
+          borderTop: '1px solid var(--border-hairline)',
+          paddingTop: '28px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '16px'
+        }}
+      >
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          {onBackToTwin && (
+            <button onClick={onBackToTwin} className="alignx-key" style={{ padding: '12px 18px', fontSize: '0.76rem' }}>
+              <span>← CAREER TWIN RADAR</span>
+            </button>
+          )}
+          {onBackToDashboard && (
+            <button onClick={onBackToDashboard} className="alignx-key" style={{ padding: '12px 18px', fontSize: '0.76rem' }}>
+              <span>5D RECOMMENDATIONS</span>
+            </button>
+          )}
+        </div>
+
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          {onOpenWhatIf && (
+            <button
+              onClick={onOpenWhatIf}
+              className="alignx-key"
+              style={{ padding: '12px 20px', fontSize: '0.76rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+            >
+              <SlidersHorizontal size={14} color="var(--accent)" />
+              <span>TEST WHAT-IF SIMULATIONS</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => window.print()}
+            className="btn-alignx-primary"
+            style={{ padding: '12px 24px', fontSize: '0.76rem' }}
+          >
+            <Printer size={14} />
+            <span>EXPORT ROADMAP BLUEPRINT</span>
+          </button>
         </div>
       </div>
 

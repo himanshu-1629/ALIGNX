@@ -6,9 +6,10 @@ import { ArrowRight, ChevronLeft, Activity, ShieldCheck, Sparkles } from 'lucide
 
 interface AptitudeModuleProps {
   onComplete: (score: number, dimensionScores: Record<string, number>) => void;
+  onSkipToDna?: () => void;
 }
 
-export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete }) => {
+export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSkipToDna }) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [isCalculating, setIsCalculating] = useState(false);
@@ -196,18 +197,38 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete }) =>
 
           {/* Singular, Necessary Navigation Controls */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '36px', paddingTop: '24px', borderTop: '1px solid var(--border-hairline)' }}>
-            <button
-              onClick={handlePrev}
-              disabled={currentIdx === 0}
-              className="alignx-key"
-              style={{
-                opacity: currentIdx === 0 ? 0.4 : 1,
-                cursor: currentIdx === 0 ? 'not-allowed' : 'pointer'
-              }}
-            >
-              <ChevronLeft size={14} />
-              <span>PREVIOUS</span>
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <button
+                onClick={handlePrev}
+                disabled={currentIdx === 0}
+                className="alignx-key"
+                style={{
+                  opacity: currentIdx === 0 ? 0.4 : 1,
+                  cursor: currentIdx === 0 ? 'not-allowed' : 'pointer'
+                }}
+              >
+                <ChevronLeft size={14} />
+                <span>PREVIOUS</span>
+              </button>
+
+              {onSkipToDna && (
+                <button
+                  type="button"
+                  onClick={onSkipToDna}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--text-muted)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.7rem',
+                    cursor: 'pointer',
+                    textDecoration: 'underline'
+                  }}
+                >
+                  SKIP TO DNA →
+                </button>
+              )}
+            </div>
 
             <RollButton
               onClick={handleNext}

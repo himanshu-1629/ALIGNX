@@ -1,20 +1,51 @@
 import React from 'react';
 import { INITIAL_CAREERS } from '../../data/mockAlignxData';
-import { ArrowRight, Cpu, CheckCircle2, AlertCircle, GitBranch } from 'lucide-react';
+import { ArrowRight, Cpu, CheckCircle2, AlertCircle, GitBranch, ChevronLeft, SlidersHorizontal } from 'lucide-react';
 
 interface CareerTwinModuleProps {
   careerId?: string;
   onOpenRoadmap: () => void;
+  onBackToDashboard?: () => void;
+  onOpenWhatIf?: () => void;
+  onSelectCareer?: (careerId: string) => void;
 }
 
 export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
   careerId = 'ai-engineer',
-  onOpenRoadmap
+  onOpenRoadmap,
+  onBackToDashboard,
+  onOpenWhatIf,
+  onSelectCareer
 }) => {
   const career = INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0];
 
   return (
     <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 24px' }}>
+      {/* Top Navigation Bar */}
+      {onBackToDashboard && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+          <button
+            onClick={onBackToDashboard}
+            className="alignx-key"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
+          >
+            <ChevronLeft size={14} />
+            <span>BACK TO 5D RECOMMENDATIONS</span>
+          </button>
+
+          {onOpenWhatIf && (
+            <button
+              onClick={onOpenWhatIf}
+              className="alignx-key"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
+            >
+              <SlidersHorizontal size={14} color="var(--accent)" />
+              <span>TEST WHAT-IF SIMULATOR</span>
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '24px', marginBottom: '36px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
@@ -189,13 +220,26 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
           {[
-            { title: 'Silicon Compiler Engineer', overlap: '78% Skill Overlap', rationale: 'Leverages your abstract logic into ASIC and FPGA synthesis.' },
-            { title: 'High-Frequency Quant Systems', overlap: '74% Skill Overlap', rationale: 'Requires low-latency C++ optimization and stochastic modeling.' },
-            { title: 'Autonomous Robotics Autonomy Lead', overlap: '71% Skill Overlap', rationale: 'Applies neural networks directly to physical sensor telemetry.' }
+            { id: 'silicon-architect', title: 'Silicon Compiler Engineer', overlap: '78% Skill Overlap', rationale: 'Leverages your abstract logic into ASIC and FPGA synthesis.' },
+            { id: 'quant-systems', title: 'High-Frequency Quant Systems', overlap: '74% Skill Overlap', rationale: 'Requires low-latency C++ optimization and stochastic modeling.' },
+            { id: 'robotics-lead', title: 'Autonomous Robotics Autonomy Lead', overlap: '71% Skill Overlap', rationale: 'Applies neural networks directly to physical sensor telemetry.' }
           ].map((alt, i) => (
-            <div key={i} style={{ border: '1px solid var(--border-subtle)', padding: '20px', backgroundColor: 'var(--bg-deep)' }}>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-                {alt.title}
+            <div
+              key={i}
+              onClick={() => onSelectCareer?.(alt.id)}
+              style={{
+                border: '1px solid var(--border-subtle)',
+                padding: '20px',
+                backgroundColor: 'var(--bg-deep)',
+                cursor: onSelectCareer ? 'pointer' : 'default',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                  {alt.title}
+                </div>
+                {onSelectCareer && <ArrowRight size={14} color="var(--accent)" />}
               </div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)', margin: '4px 0 10px' }}>
                 {alt.overlap}
@@ -208,8 +252,31 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
         </div>
       </div>
 
-      {/* Advance to Roadmap */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid var(--border-hairline)', paddingTop: '24px' }}>
+      {/* Connected Action Footer */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '16px',
+          borderTop: '1px solid var(--border-hairline)',
+          paddingTop: '24px'
+        }}
+      >
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          {onBackToDashboard && (
+            <button onClick={onBackToDashboard} className="alignx-key" style={{ padding: '12px 18px', fontSize: '0.76rem' }}>
+              <span>← 5D RECOMMENDATIONS</span>
+            </button>
+          )}
+          {onOpenWhatIf && (
+            <button onClick={onOpenWhatIf} className="alignx-key" style={{ padding: '12px 18px', fontSize: '0.76rem' }}>
+              <span>TEST WHAT-IF SIMULATOR</span>
+            </button>
+          )}
+        </div>
+
         <button onClick={onOpenRoadmap} className="btn-alignx-primary">
           <span>GENERATE PERSONALIZED SKILL-GAP ROADMAP</span>
           <ArrowRight size={16} />

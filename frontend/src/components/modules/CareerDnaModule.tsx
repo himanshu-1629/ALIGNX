@@ -1,16 +1,49 @@
 import React from 'react';
 import { DEFAULT_CAREER_DNA } from '../../data/mockAlignxData';
-import { ArrowRight, Dna } from 'lucide-react';
+import { ArrowRight, Dna, ChevronLeft, SlidersHorizontal } from 'lucide-react';
 
 interface CareerDnaModuleProps {
   onContinue: () => void;
+  onBack?: () => void;
+  onSkipToDashboard?: () => void;
 }
 
-export const CareerDnaModule: React.FC<CareerDnaModuleProps> = ({ onContinue }) => {
+export const CareerDnaModule: React.FC<CareerDnaModuleProps> = ({
+  onContinue,
+  onBack,
+  onSkipToDashboard
+}) => {
   const dna = DEFAULT_CAREER_DNA;
 
   return (
     <div style={{ maxWidth: '1100px', margin: '40px auto', padding: '0 24px' }}>
+      {/* Top Navigation Strip */}
+      {(onBack || onSkipToDashboard) && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="alignx-key"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
+            >
+              <ChevronLeft size={14} />
+              <span>BACK TO APTITUDE</span>
+            </button>
+          )}
+
+          {onSkipToDashboard && (
+            <button
+              onClick={onSkipToDashboard}
+              className="alignx-key"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
+            >
+              <SlidersHorizontal size={14} color="var(--accent)" />
+              <span>SKIP TO 5D DECISION ENGINE</span>
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '24px', marginBottom: '36px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
@@ -142,8 +175,15 @@ export const CareerDnaModule: React.FC<CareerDnaModuleProps> = ({ onContinue }) 
 
       {/* Next Step CTA */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-hairline)', paddingTop: '28px', flexWrap: 'wrap', gap: '16px' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-          CAREER DNA STORED • READY FOR FAMILY CONSTRAINTS MODELING
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          {onSkipToDashboard && (
+            <button onClick={onSkipToDashboard} className="alignx-key" style={{ padding: '12px 18px', fontSize: '0.76rem' }}>
+              <span>SKIP TO 5D DASHBOARD</span>
+            </button>
+          )}
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+            CAREER DNA STORED
+          </span>
         </div>
 
         <button onClick={onContinue} className="btn-alignx-primary">

@@ -260,7 +260,7 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
       {/* ======================================================
           SECTION 2 — PARALLAX CINEMATIC STORY (3 Punchy Stages)
           ====================================================== */}
-      <Parallax />
+      <Parallax onSelectSimulatorTab={setActiveTab} />
 
       {/* ========================================================
           SECTION 3 — INTERACTIVE SIMULATION LAB (User-Friendly & Engaging)

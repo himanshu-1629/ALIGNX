@@ -8,17 +8,20 @@ import {
   Compass,
   CheckCircle2,
   MapPin,
-  ExternalLink
+  ExternalLink,
+  Layers
 } from 'lucide-react';
 
 interface RecommendationsModuleProps {
   onSelectCareerTwin: (careerId: string) => void;
   onOpenWhatIf: () => void;
+  onOpenRoadmap?: (careerId: string) => void;
 }
 
 export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
   onSelectCareerTwin,
-  onOpenWhatIf
+  onOpenWhatIf,
+  onOpenRoadmap
 }) => {
   const [careers] = useState<CareerRecommendation[]>(INITIAL_CAREERS);
   const [selectedCareer, setSelectedCareer] = useState<CareerRecommendation>(INITIAL_CAREERS[0]);
@@ -150,6 +153,29 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
               <SlidersHorizontal size={14} />
               <span>What-If Lab</span>
             </button>
+
+            {onOpenRoadmap && (
+              <button
+                onClick={() => onOpenRoadmap(selectedCareer.id)}
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '980px',
+                  backgroundColor: 'transparent',
+                  border: '1px solid transparent',
+                  color: 'var(--text-secondary)',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.82rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  transition: 'all 0.18s ease'
+                }}
+              >
+                <Layers size={14} />
+                <span>Roadmap Blueprint</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -505,13 +531,33 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
                 <span>PRIMARY HUBS: {selectedCareer.topLocations.join(', ')}</span>
               </div>
 
-              <div style={{ display: 'flex', gap: '12px' }}>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <button
+                  onClick={onOpenWhatIf}
+                  className="alignx-key"
+                  style={{ padding: '10px 18px', fontSize: '0.76rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <SlidersHorizontal size={13} color="var(--accent)" />
+                  <span>SIMULATE WHAT-IF</span>
+                </button>
+
+                {onOpenRoadmap && (
+                  <button
+                    onClick={() => onOpenRoadmap(selectedCareer.id)}
+                    className="alignx-key"
+                    style={{ padding: '10px 18px', fontSize: '0.76rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <Layers size={13} color="var(--accent)" />
+                    <span>VIEW ROADMAP</span>
+                  </button>
+                )}
+
                 <button
                   onClick={() => onSelectCareerTwin(selectedCareer.id)}
                   className="btn-alignx-primary"
-                  style={{ padding: '12px 24px', fontSize: '0.78rem' }}
+                  style={{ padding: '10px 20px', fontSize: '0.76rem' }}
                 >
-                  <span>CAREER TWIN & SKILL GAPS</span>
+                  <span>CAREER TWIN & GAPS</span>
                   <ExternalLink size={14} />
                 </button>
               </div>

@@ -172,17 +172,17 @@ export function App() {
                 <div
                   key={step.id}
                   onClick={() => {
-                    if (isPast || isActive) {
-                      setCurrentView(step.id);
-                    }
+                    setCurrentView(step.id);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    cursor: isPast || isActive ? 'pointer' : 'default',
-                    opacity: isActive ? 1 : isPast ? 0.85 : 0.45,
-                    whiteSpace: 'nowrap'
+                    cursor: 'pointer',
+                    opacity: isActive ? 1 : 0.75,
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.2s ease'
                   }}
                 >
                   <span
@@ -233,29 +233,64 @@ export function App() {
         )}
 
         {currentView === 'onboarding' && (
-          <OnboardingModule onComplete={handleOnboardingComplete} />
+          <OnboardingModule
+            onComplete={handleOnboardingComplete}
+            onSkipToDemo={() => {
+              setCurrentView('dashboard');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
         )}
 
         {currentView === 'discovery' && (
-          <DiscoveryModule onComplete={handleDiscoveryComplete} />
+          <DiscoveryModule
+            onComplete={handleDiscoveryComplete}
+            onSkipToAptitude={() => {
+              setCurrentView('aptitude');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
         )}
 
         {currentView === 'aptitude' && (
-          <AptitudeModule onComplete={handleAptitudeComplete} />
+          <AptitudeModule
+            onComplete={handleAptitudeComplete}
+            onSkipToDna={() => {
+              setCurrentView('dna');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
         )}
 
         {currentView === 'dna' && (
-          <CareerDnaModule onContinue={handleDnaContinue} />
+          <CareerDnaModule
+            onContinue={handleDnaContinue}
+            onBack={() => {
+              setCurrentView('aptitude');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onSkipToDashboard={() => {
+              setCurrentView('dashboard');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
         )}
 
         {currentView === 'parent' && (
-          <ParentModule onContinue={handleParentContinue} />
+          <ParentModule
+            onContinue={handleParentContinue}
+            onBack={() => {
+              setCurrentView('dna');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
         )}
 
         {currentView === 'dashboard' && (
           <RecommendationsModule
             onSelectCareerTwin={handleSelectCareerTwin}
             onOpenWhatIf={handleOpenWhatIf}
+            onOpenRoadmap={handleOpenRoadmap}
           />
         )}
 
@@ -263,15 +298,41 @@ export function App() {
           <CareerTwinModule
             careerId={selectedCareerId}
             onOpenRoadmap={handleOpenRoadmap}
+            onBackToDashboard={() => {
+              setCurrentView('dashboard');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenWhatIf={handleOpenWhatIf}
+            onSelectCareer={(cId) => {
+              setSelectedCareerId(cId);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
         )}
 
         {currentView === 'whatif' && (
-          <WhatIfModule onContinueToRoadmap={handleOpenRoadmap} />
+          <WhatIfModule
+            onContinueToRoadmap={handleOpenRoadmap}
+            onBackToDashboard={() => {
+              setCurrentView('dashboard');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
         )}
 
         {currentView === 'roadmap' && (
-          <RoadmapModule careerId={selectedCareerId} />
+          <RoadmapModule
+            careerId={selectedCareerId}
+            onBackToDashboard={() => {
+              setCurrentView('dashboard');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onBackToTwin={() => {
+              setCurrentView('twin');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenWhatIf={handleOpenWhatIf}
+          />
         )}
       </main>
     </div>

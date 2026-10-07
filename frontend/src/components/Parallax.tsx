@@ -49,6 +49,15 @@ export const SECTIONS: SectionData[] = [
   }
 ];
 
+export interface ParallaxProps {
+  onSelectSimulatorTab?: (tab: 'refraction' | 'map' | 'trajectory') => void;
+}
+
+export interface ParallaxSectionProps extends SectionData {
+  index?: number;
+  onSelectSimulatorTab?: (tab: 'refraction' | 'map' | 'trajectory') => void;
+}
+
 export const ParallaxSection = ({
   image,
   badge,
@@ -59,8 +68,9 @@ export const ParallaxSection = ({
   insight,
   ctaText,
   ctaTarget,
-  index = 0
-}: SectionData & { index?: number }) => {
+  index = 0,
+  onSelectSimulatorTab
+}: ParallaxSectionProps) => {
   const ref = useRef<HTMLElement | null>(null);
   const bgRef = useRef<HTMLDivElement | null>(null);
 
@@ -83,10 +93,23 @@ export const ParallaxSection = ({
 
   const scrollToSection = (targetId?: string) => {
     if (!targetId) return;
-    const el = document.getElementById(targetId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+
+    if (onSelectSimulatorTab) {
+      if (targetId === 'tool-refraction') {
+        onSelectSimulatorTab('refraction');
+      } else if (targetId === 'tool-whatif') {
+        onSelectSimulatorTab('trajectory');
+      } else if (targetId === 'tool-map') {
+        onSelectSimulatorTab('map');
+      }
     }
+
+    setTimeout(() => {
+      const el = document.getElementById(targetId) || document.getElementById('interactive-lab');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 60);
   };
 
   return (
@@ -153,7 +176,7 @@ export const ParallaxSection = ({
   );
 };
 
-export default function Parallax() {
+export default function Parallax({ onSelectSimulatorTab }: ParallaxProps) {
   return (
     <div className="parallax-page" id="career-parallax-narrative">
       {/* Narrative Section Header */}
@@ -197,7 +220,12 @@ export default function Parallax() {
       </div>
 
       {SECTIONS.map((section, i) => (
-        <ParallaxSection key={i} index={i} {...section} />
+        <ParallaxSection
+          key={i}
+          index={i}
+          {...section}
+          onSelectSimulatorTab={onSelectSimulatorTab}
+        />
       ))}
     </div>
   );
