@@ -150,24 +150,24 @@ export const AlignxCanvas: React.FC<AlignxCanvasProps> = ({ scrollProgress = 0, 
       ctx.beginPath();
       ctx.moveTo(hitPoint.px, hitPoint.py);
       ctx.lineTo(exitPoint1.px, exitPoint1.py);
-      ctx.strokeStyle = 'rgba(158, 107, 56, 0.75)'; // Desert Titanium gold refraction
+      ctx.strokeStyle = 'rgba(45, 90, 67, 0.75)'; // Botanical pine refraction
       ctx.lineWidth = 1.8;
       ctx.stroke();
 
-      // Refracted exit beams (Desert Titanium Gold & Signature Blue, Apple Pro palette)
-      // Beam A: Desert Titanium Gold
+      // Refracted exit beams (Botanical Pine & subtle Slate)
+      // Beam A: Deep Botanical Pine
       ctx.beginPath();
       ctx.moveTo(exitPoint1.px, exitPoint1.py);
       ctx.lineTo(cx + baseScale * 1.9, cy + baseScale * 0.3);
-      ctx.strokeStyle = 'rgba(158, 107, 56, 0.9)';
+      ctx.strokeStyle = 'rgba(45, 90, 67, 0.9)';
       ctx.lineWidth = 1.8;
       ctx.stroke();
 
-      // Beam B: Apple Signature Blue
+      // Beam B: Secondary Pine Accent
       ctx.beginPath();
       ctx.moveTo(exitPoint1.px, exitPoint1.py);
       ctx.lineTo(cx + baseScale * 1.85, cy + baseScale * 0.6);
-      ctx.strokeStyle = 'rgba(0, 113, 227, 0.75)';
+      ctx.strokeStyle = 'rgba(45, 90, 67, 0.55)';
       ctx.lineWidth = 1.2;
       ctx.stroke();
 
@@ -179,7 +179,7 @@ export const AlignxCanvas: React.FC<AlignxCanvasProps> = ({ scrollProgress = 0, 
       ctx.lineWidth = 1.0;
       ctx.stroke();
 
-      // Render Facets (subtle desert titanium translucent tint)
+      // Render Facets (subtle botanical pine translucent tint)
       const renderFacet = (indices: number[], alpha: number) => {
         ctx.beginPath();
         indices.forEach((idx, i) => {
@@ -188,7 +188,7 @@ export const AlignxCanvas: React.FC<AlignxCanvasProps> = ({ scrollProgress = 0, 
           else ctx.lineTo(pt.px, pt.py);
         });
         ctx.closePath();
-        ctx.fillStyle = `rgba(158, 107, 56, ${alpha})`;
+        ctx.fillStyle = `rgba(45, 90, 67, ${alpha})`;
         ctx.fill();
       };
 
@@ -219,7 +219,7 @@ export const AlignxCanvas: React.FC<AlignxCanvasProps> = ({ scrollProgress = 0, 
         if (p.z < 0.2) {
           ctx.beginPath();
           ctx.arc(p.px, p.py, idx === 0 || idx === 13 ? 2.8 : 1.6, 0, Math.PI * 2);
-          ctx.fillStyle = idx === 0 ? '#9E6B38' : 'rgba(29, 29, 31, 0.75)';
+          ctx.fillStyle = idx === 0 ? '#2D5A43' : 'rgba(29, 29, 31, 0.75)';
           ctx.fill();
         }
       });

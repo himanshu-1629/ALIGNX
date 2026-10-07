@@ -182,9 +182,9 @@ export const InteractiveOpportunityMap: React.FC = () => {
       style={{
         border: '1px solid var(--border-hairline)',
         backgroundColor: 'var(--bg-surface)',
-        borderRadius: '16px',
+        borderRadius: '0px',
         overflow: 'hidden',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)'
+        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.05)'
       }}
       className="scroll-reveal-scale"
     >
@@ -207,9 +207,9 @@ export const InteractiveOpportunityMap: React.FC = () => {
             style={{
               width: '8px',
               height: '8px',
-              borderRadius: '50%',
+              borderRadius: '0px',
               backgroundColor: 'var(--accent)',
-              boxShadow: '0 0 8px rgba(158, 107, 56, 0.5)'
+              boxShadow: '0 0 8px rgba(45, 90, 67, 0.4)'
             }}
           />
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', letterSpacing: '0.14em', color: 'var(--text-primary)', fontWeight: 600 }}>
@@ -273,7 +273,7 @@ export const InteractiveOpportunityMap: React.FC = () => {
             <defs>
               {/* Radial gradient for map grid atmosphere */}
               <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="rgba(158, 107, 56, 0.06)" />
+                <stop offset="0%" stopColor="rgba(45, 90, 67, 0.08)" />
                 <stop offset="100%" stopColor="rgba(255, 255, 255, 0)" />
               </radialGradient>
               <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -340,14 +340,14 @@ export const InteractiveOpportunityMap: React.FC = () => {
             <path
               d="M 440 390 Q 300 300 210 200"
               fill="none"
-              stroke="rgba(158, 107, 56, 0.55)"
+              stroke="rgba(45, 90, 67, 0.55)"
               strokeWidth="1.2"
               strokeDasharray="4 4"
             />
             <path
               d="M 440 390 Q 240 180 120 90"
               fill="none"
-              stroke="rgba(158, 107, 56, 0.45)"
+              stroke="rgba(45, 90, 67, 0.45)"
               strokeWidth="1"
               strokeDasharray="6 6"
             />
@@ -387,7 +387,7 @@ export const InteractiveOpportunityMap: React.FC = () => {
                         cy={hub.y}
                         r="24"
                         fill="none"
-                        stroke={isGlobal ? 'rgba(41, 151, 255, 0.4)' : 'rgba(197, 155, 109, 0.4)'}
+                        stroke={isGlobal ? 'rgba(41, 151, 255, 0.4)' : 'rgba(45, 90, 67, 0.4)'}
                         strokeWidth="1"
                         className="animate-pulse-subtle"
                       />
@@ -396,7 +396,7 @@ export const InteractiveOpportunityMap: React.FC = () => {
                         cy={hub.y}
                         r="38"
                         fill="none"
-                        stroke={isGlobal ? 'rgba(41, 151, 255, 0.2)' : 'rgba(197, 155, 109, 0.2)'}
+                        stroke={isGlobal ? 'rgba(41, 151, 255, 0.2)' : 'rgba(45, 90, 67, 0.2)'}
                         strokeWidth="1"
                       />
                     </>
@@ -419,15 +419,15 @@ export const InteractiveOpportunityMap: React.FC = () => {
                       y="-12"
                       width={hub.city.length * 8 + 36}
                       height="22"
-                      rx="4"
-                      fill={isSelected ? 'rgba(197, 155, 109, 0.95)' : 'rgba(13, 16, 22, 0.88)'}
+                      rx="0"
+                      fill={isSelected ? 'rgba(45, 90, 67, 0.95)' : 'rgba(13, 16, 22, 0.88)'}
                       stroke={isSelected ? '#FFFFFF' : 'rgba(255, 255, 255, 0.16)'}
                       strokeWidth="1"
                     />
                     <text
                       x="8"
                       y="3"
-                      fill={isSelected ? '#000000' : '#FFFFFF'}
+                      fill="#FFFFFF"
                       fontFamily="var(--font-mono)"
                       fontSize="9.5"
                       fontWeight={isSelected ? '700' : '500'}
@@ -493,10 +493,10 @@ export const InteractiveOpportunityMap: React.FC = () => {
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.68rem',
                   padding: '3px 8px',
-                  borderRadius: '4px',
-                  backgroundColor: selectedHub.country === 'Global' ? 'rgba(41, 151, 255, 0.15)' : 'rgba(255, 255, 255, 0.08)',
+                  borderRadius: '0px',
+                  backgroundColor: selectedHub.country === 'Global' ? 'rgba(41, 151, 255, 0.15)' : 'rgba(0, 0, 0, 0.05)',
                   color: selectedHub.country === 'Global' ? '#2997FF' : 'var(--text-secondary)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                  border: '1px solid var(--border-hairline)'
                 }}
               >
                 {selectedHub.country.toUpperCase()} CORRIDOR
@@ -527,7 +527,7 @@ export const InteractiveOpportunityMap: React.FC = () => {
               <div
                 style={{
                   padding: '16px',
-                  borderRadius: '10px',
+                  borderRadius: '0px',
                   backgroundColor: 'var(--bg-surface)',
                   border: '1px solid var(--border-hairline)'
                 }}
@@ -547,7 +547,7 @@ export const InteractiveOpportunityMap: React.FC = () => {
               <div
                 style={{
                   padding: '16px',
-                  borderRadius: '10px',
+                  borderRadius: '0px',
                   backgroundColor: 'var(--bg-surface)',
                   border: '1px solid var(--border-hairline)'
                 }}
@@ -617,8 +617,8 @@ export const InteractiveOpportunityMap: React.FC = () => {
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.68rem',
                     padding: '4px 9px',
-                    borderRadius: '6px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                    borderRadius: '0px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.03)',
                     border: '1px solid var(--border-hairline)',
                     color: 'var(--text-secondary)'
                   }}

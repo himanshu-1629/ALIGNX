@@ -107,7 +107,7 @@ export const CareerDnaModule: React.FC<CareerDnaModuleProps> = ({
                 alignItems: 'center',
                 gap: '4px',
                 padding: '2px 8px',
-                borderRadius: '980px',
+                borderRadius: '0px',
                 backgroundColor: 'rgba(52, 199, 89, 0.12)',
                 color: '#28cd41',
                 fontSize: '0.65rem',
@@ -186,7 +186,7 @@ export const CareerDnaModule: React.FC<CareerDnaModuleProps> = ({
                   backgroundColor: 'var(--bg-deep)'
                 }}
               >
-                <div style={{ width: '6px', height: '6px', backgroundColor: 'var(--accent)', borderRadius: '50%' }} />
+                <div style={{ width: '6px', height: '6px', backgroundColor: 'var(--accent)', borderRadius: '0px' }} />
                 <span>{env}</span>
               </div>
             ))}

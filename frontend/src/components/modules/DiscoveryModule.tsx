@@ -95,14 +95,14 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
                       justifyContent: 'space-between',
                       textAlign: 'left',
                       padding: '20px 24px',
-                      borderRadius: '12px',
-                      backgroundColor: isSelected ? 'rgba(197, 155, 109, 0.12)' : 'var(--bg-deep)',
+                      borderRadius: '0px',
+                      backgroundColor: isSelected ? 'rgba(45, 90, 67, 0.09)' : 'var(--bg-deep)',
                       border: isSelected ? '1.5px solid var(--accent)' : '1px solid var(--border-subtle)',
                       color: 'var(--text-primary)',
                       cursor: 'pointer',
                       transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                       gap: '20px',
-                      boxShadow: isSelected ? '0 4px 20px rgba(197, 155, 109, 0.15)' : 'none',
+                      boxShadow: isSelected ? '0 4px 16px rgba(45, 90, 67, 0.12)' : 'none',
                       transform: isSelected ? 'translateY(-1px)' : 'none'
                     }}
                   >
@@ -120,7 +120,7 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
                               fontFamily: 'var(--font-mono)',
                               fontSize: '0.65rem',
                               padding: '2px 6px',
-                              borderRadius: '4px',
+                              borderRadius: '0px',
                               backgroundColor: 'var(--accent)',
                               color: '#FFFFFF',
                               fontWeight: 700
@@ -134,16 +134,16 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
 
                     <div
                       style={{
-                        width: '22px',
-                        height: '22px',
+                        width: '20px',
+                        height: '20px',
                         border: isSelected ? '2px solid var(--accent)' : '1.5px solid var(--border-subtle)',
-                        borderRadius: '50%',
+                        borderRadius: '0px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
                         marginTop: '4px',
-                        backgroundColor: isSelected ? 'rgba(197, 155, 109, 0.15)' : 'transparent',
+                        backgroundColor: isSelected ? 'rgba(45, 90, 67, 0.12)' : 'transparent',
                         transition: 'all 0.2s ease'
                       }}
                     >

@@ -265,7 +265,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
           style={{
             backgroundColor: '#FFFFFF',
             border: '1.5px dashed var(--accent)',
-            borderRadius: '20px',
+            borderRadius: '0px',
             padding: '48px 36px',
             textAlign: 'center',
             marginBottom: '36px',
@@ -276,8 +276,8 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
             style={{
               width: '56px',
               height: '56px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(197, 155, 109, 0.12)',
+              borderRadius: '0px',
+              backgroundColor: 'rgba(45, 90, 67, 0.09)',
               color: 'var(--accent)',
               display: 'flex',
               alignItems: 'center',
@@ -337,7 +337,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
               style={{
                 backgroundColor: 'rgba(239, 68, 68, 0.04)',
                 border: '1.5px solid #EF4444',
-                borderRadius: '16px',
+                borderRadius: '0px',
                 padding: '24px 28px',
                 marginBottom: '32px',
                 display: 'flex',
@@ -350,7 +350,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                 style={{
                   width: '44px',
                   height: '44px',
-                  borderRadius: '10px',
+                  borderRadius: '0px',
                   backgroundColor: 'rgba(239, 68, 68, 0.1)',
                   color: '#EF4444',
                   display: 'flex',
@@ -367,7 +367,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.14em', color: '#EF4444', fontWeight: 700 }}>
                     GATE ACTIVE: AWAITING PARENT DATA
                   </span>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#EF4444', animation: 'ping 1.5s infinite' }} />
+                  <span style={{ width: '6px', height: '6px', borderRadius: '0px', backgroundColor: '#EF4444', animation: 'ping 1.5s infinite' }} />
                 </div>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
                   Decision Engine is locked until parent perspectives are completed.
@@ -383,7 +383,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
               style={{
                 backgroundColor: 'rgba(16, 185, 129, 0.06)',
                 border: '1.5px solid #10B981',
-                borderRadius: '16px',
+                borderRadius: '0px',
                 padding: '22px 28px',
                 marginBottom: '32px',
                 display: 'flex',
@@ -395,7 +395,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                 style={{
                   width: '40px',
                   height: '40px',
-                  borderRadius: '10px',
+                  borderRadius: '0px',
                   backgroundColor: 'rgba(16, 185, 129, 0.12)',
                   color: '#10B981',
                   display: 'flex',
@@ -445,7 +445,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
               <div
                 style={{
                   border: '1px solid var(--border-subtle)',
-                  borderRadius: '10px',
+                  borderRadius: '0px',
                   padding: '14px 18px',
                   backgroundColor: 'rgba(0, 0, 0, 0.4)',
                   display: 'flex',
@@ -464,7 +464,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
             </div>
 
             {/* Cohesion Meter */}
-            <div style={{ height: '4px', backgroundColor: 'var(--border-hairline)', width: '100%', marginBottom: '10px', borderRadius: '2px', overflow: 'hidden' }}>
+            <div style={{ height: '4px', backgroundColor: 'var(--border-hairline)', width: '100%', marginBottom: '10px', borderRadius: '0px', overflow: 'hidden' }}>
               <div style={{ height: '100%', width: hasCompletedParent ? `${100 - conflictIndex}%` : '20%', backgroundColor: hasCompletedParent ? 'var(--accent)' : '#EF4444', transition: 'width 0.4s ease' }} />
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
@@ -527,7 +527,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                             color: '#10B981',
                             fontWeight: 700,
                             padding: '3px 8px',
-                            borderRadius: '980px',
+                            borderRadius: '0px',
                             backgroundColor: 'rgba(16, 185, 129, 0.1)'
                           }}
                         >
@@ -545,7 +545,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                             color: '#F59E0B',
                             fontWeight: 700,
                             padding: '3px 8px',
-                            borderRadius: '980px',
+                            borderRadius: '0px',
                             backgroundColor: 'rgba(245, 158, 11, 0.1)'
                           }}
                         >
@@ -579,7 +579,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                       <div
                         style={{
                           padding: '12px 14px',
-                          borderRadius: '8px',
+                          borderRadius: '0px',
                           backgroundColor: 'rgba(0,0,0,0.03)',
                           border: '1px solid var(--border-hairline)',
                           marginBottom: '20px',
@@ -608,7 +608,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                       onClick={() => handleOpenFillModal(p)}
                       style={{
                         padding: '8px 14px',
-                        borderRadius: '6px',
+                        borderRadius: '0px',
                         backgroundColor: isCompleted ? 'rgba(0,0,0,0.06)' : 'var(--accent)',
                         color: isCompleted ? 'var(--text-primary)' : '#FFFFFF',
                         border: 'none',
@@ -706,7 +706,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
               width: '100%',
               maxWidth: '480px',
               padding: '32px',
-              borderRadius: '20px',
+              borderRadius: '0px',
               boxShadow: '0 24px 60px rgba(0, 0, 0, 0.2)'
             }}
           >
@@ -728,7 +728,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                   style={{
                     width: '100%',
                     padding: '10px 12px',
-                    borderRadius: '8px',
+                    borderRadius: '0px',
                     border: '1px solid var(--border-hairline)',
                     backgroundColor: '#F9F9FA',
                     fontFamily: 'var(--font-body)',
@@ -754,7 +754,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                   style={{
                     width: '100%',
                     padding: '10px 12px',
-                    borderRadius: '8px',
+                    borderRadius: '0px',
                     border: '1px solid var(--border-hairline)',
                     backgroundColor: '#F9F9FA',
                     fontFamily: 'var(--font-body)',
@@ -775,7 +775,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                   style={{
                     width: '100%',
                     padding: '10px 12px',
-                    borderRadius: '8px',
+                    borderRadius: '0px',
                     border: '1px solid var(--border-hairline)',
                     backgroundColor: '#F9F9FA',
                     fontFamily: 'var(--font-body)',
@@ -838,7 +838,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
               width: '100%',
               maxWidth: '560px',
               padding: '36px',
-              borderRadius: '20px',
+              borderRadius: '0px',
               boxShadow: '0 24px 60px rgba(0, 0, 0, 0.25)',
               maxHeight: '90vh',
               overflowY: 'auto'
@@ -896,7 +896,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                   style={{
                     width: '100%',
                     padding: '10px 12px',
-                    borderRadius: '8px',
+                    borderRadius: '0px',
                     border: '1px solid var(--border-hairline)',
                     backgroundColor: '#F9F9FA',
                     fontFamily: 'var(--font-body)',
@@ -922,9 +922,9 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                       onClick={() => setFillRisk(risk)}
                       style={{
                         padding: '10px',
-                        borderRadius: '8px',
+                        borderRadius: '0px',
                         border: fillRisk === risk ? '1.5px solid var(--accent)' : '1px solid var(--border-hairline)',
-                        backgroundColor: fillRisk === risk ? 'rgba(197, 155, 109, 0.12)' : '#F9F9FA',
+                        backgroundColor: fillRisk === risk ? 'rgba(45, 90, 67, 0.09)' : '#F9F9FA',
                         fontFamily: 'var(--font-mono)',
                         fontSize: '0.76rem',
                         fontWeight: fillRisk === risk ? 700 : 500,
@@ -950,7 +950,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                   style={{
                     width: '100%',
                     padding: '10px 12px',
-                    borderRadius: '8px',
+                    borderRadius: '0px',
                     border: '1px solid var(--border-hairline)',
                     backgroundColor: '#F9F9FA',
                     fontFamily: 'var(--font-body)',
@@ -970,7 +970,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                   style={{
                     width: '100%',
                     padding: '10px 12px',
-                    borderRadius: '8px',
+                    borderRadius: '0px',
                     border: '1px solid var(--border-hairline)',
                     backgroundColor: '#F9F9FA',
                     fontFamily: 'var(--font-body)',

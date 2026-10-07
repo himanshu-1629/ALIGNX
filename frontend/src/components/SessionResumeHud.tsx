@@ -109,7 +109,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
               style={{
                 width: '32px',
                 height: '32px',
-                borderRadius: '50%',
+                borderRadius: '0px',
                 border: '1px solid var(--accent)',
                 display: 'flex',
                 alignItems: 'center',
@@ -125,7 +125,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.18em', color: 'var(--accent)', textTransform: 'uppercase' }}>
                   ACTIVE SESSION DETECTED
                 </span>
-                <span style={{ height: '4px', width: '4px', borderRadius: '50%', backgroundColor: 'var(--accent)' }} />
+                <span style={{ height: '4px', width: '4px', borderRadius: '0px', backgroundColor: 'var(--accent)' }} />
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
                   SAVED TO MEMORY
                 </span>
@@ -144,7 +144,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
                 alignItems: 'center',
                 gap: '8px',
                 padding: '6px 14px',
-                borderRadius: '980px',
+                borderRadius: '0px',
                 backgroundColor: 'var(--accent-dim)',
                 border: '1px solid var(--accent-border)'
               }}
@@ -180,7 +180,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             onClick={() => onResume('onboarding')}
             style={{
               padding: '12px 14px',
-              borderRadius: '8px',
+              borderRadius: '0px',
               backgroundColor: progress.completedStages.onboarding ? 'rgba(0, 0, 0, 0.03)' : 'var(--bg-surface)',
               border: progress.completedStages.onboarding ? '1px solid var(--border-bright)' : '1px solid var(--border-hairline)',
               cursor: 'pointer',
@@ -201,7 +201,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             onClick={() => onResume('discovery')}
             style={{
               padding: '12px 14px',
-              borderRadius: '8px',
+              borderRadius: '0px',
               backgroundColor: progress.completedStages.discovery ? 'rgba(0, 0, 0, 0.03)' : 'var(--bg-surface)',
               border: progress.completedStages.discovery ? '1px solid var(--border-bright)' : '1px solid var(--border-hairline)',
               cursor: 'pointer',
@@ -222,7 +222,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             onClick={() => onResume('aptitude')}
             style={{
               padding: '12px 14px',
-              borderRadius: '8px',
+              borderRadius: '0px',
               backgroundColor: progress.completedStages.aptitude ? 'rgba(0, 0, 0, 0.03)' : 'var(--bg-surface)',
               border: progress.completedStages.aptitude ? '1px solid var(--border-bright)' : '1px solid var(--border-hairline)',
               cursor: 'pointer',
@@ -243,7 +243,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             onClick={() => onResume('parent')}
             style={{
               padding: '12px 14px',
-              borderRadius: '8px',
+              borderRadius: '0px',
               backgroundColor: progress.parentInputDone ? 'var(--accent-dim)' : 'var(--bg-surface)',
               border: progress.parentInputDone ? '1px solid var(--accent-border)' : '1px solid var(--border-hairline)',
               cursor: 'pointer',
@@ -264,7 +264,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             onClick={() => onResume('dashboard')}
             style={{
               padding: '12px 14px',
-              borderRadius: '8px',
+              borderRadius: '0px',
               backgroundColor: progress.completedStages.dashboard ? 'rgba(0, 0, 0, 0.03)' : 'var(--bg-surface)',
               border: progress.completedStages.dashboard ? '1px solid var(--border-bright)' : '1px solid var(--border-hairline)',
               cursor: 'pointer',
@@ -291,7 +291,7 @@ export const SessionResumeHud: React.FC<SessionResumeHudProps> = ({
             gap: '16px',
             backgroundColor: 'var(--bg-surface)',
             padding: '16px 20px',
-            borderRadius: '10px',
+            borderRadius: '0px',
             border: '1px solid var(--border-hairline)'
           }}
         >

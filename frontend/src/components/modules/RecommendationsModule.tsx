@@ -325,8 +325,8 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
                 onClick={() => onStartAssessment(s.target)}
                 style={{
                   padding: '20px',
-                  borderRadius: '12px',
-                  backgroundColor: s.done ? 'rgba(197, 155, 109, 0.08)' : 'var(--bg-surface)',
+                  borderRadius: '0px',
+                  backgroundColor: s.done ? 'rgba(45, 90, 67, 0.08)' : 'var(--bg-surface)',
                   border: s.done ? '1px solid var(--accent)' : '1px solid var(--border-hairline)',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
@@ -531,11 +531,11 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
                 }}
                 style={{
                   backgroundColor: 'var(--bg-card)',
-                  borderRadius: '14px',
+                  borderRadius: '0px',
                   border: isSelected ? '1.5px solid var(--accent)' : '1px solid var(--border-hairline)',
                   padding: '22px 24px',
                   cursor: 'pointer',
-                  boxShadow: isSelected ? '0 4px 16px rgba(158, 107, 56, 0.12)' : '0 2px 6px rgba(0, 0, 0, 0.02)',
+                  boxShadow: isSelected ? '0 4px 16px rgba(45, 90, 67, 0.12)' : '0 2px 6px rgba(0, 0, 0, 0.02)',
                   transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                   position: 'relative'
                 }}

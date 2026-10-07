@@ -48,9 +48,9 @@ export const StudioNavTabs: React.FC<StudioNavTabsProps> = ({
         gap: '14px',
         padding: '10px 16px',
         backgroundColor: '#FFFFFF',
-        borderRadius: '16px',
+        borderRadius: '0px',
         border: '1px solid var(--border-hairline)',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
+        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
         marginBottom: '28px'
       }}
     >
@@ -64,8 +64,8 @@ export const StudioNavTabs: React.FC<StudioNavTabsProps> = ({
             color: 'var(--accent)',
             fontWeight: 700,
             padding: '3px 8px',
-            borderRadius: '6px',
-            backgroundColor: 'rgba(197, 155, 109, 0.1)'
+            borderRadius: '0px',
+            backgroundColor: 'rgba(45, 90, 67, 0.09)'
           }}
         >
           DECISION STUDIO
@@ -97,8 +97,8 @@ export const StudioNavTabs: React.FC<StudioNavTabsProps> = ({
           alignItems: 'center',
           gap: '4px',
           padding: '4px',
-          backgroundColor: '#F5F5F7',
-          borderRadius: '980px',
+          backgroundColor: 'var(--bg-surface)',
+          borderRadius: '0px',
           border: '1px solid var(--border-hairline)'
         }}
       >
@@ -113,19 +113,18 @@ export const StudioNavTabs: React.FC<StudioNavTabsProps> = ({
                 alignItems: 'center',
                 gap: '6px',
                 padding: '7px 16px',
-                borderRadius: '980px',
+                borderRadius: '0px',
                 backgroundColor: isActive ? '#FFFFFF' : 'transparent',
                 border: isActive ? '1px solid var(--border-hairline)' : '1px solid transparent',
-                color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                color: isActive ? '#2D5A43' : 'var(--text-secondary)',
                 fontWeight: isActive ? 600 : 500,
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.82rem',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.78rem',
                 cursor: 'pointer',
-                transition: 'all 0.18s ease',
-                boxShadow: isActive ? '0 2px 8px rgba(0, 0, 0, 0.06)' : 'none'
+                transition: 'all 0.18s ease'
               }}
             >
-              <span style={{ color: isActive ? 'var(--accent)' : 'inherit', display: 'flex', alignItems: 'center' }}>
+              <span style={{ color: isActive ? '#2D5A43' : 'inherit', display: 'flex', alignItems: 'center' }}>
                 {tab.icon}
               </span>
               <span>{tab.label}</span>

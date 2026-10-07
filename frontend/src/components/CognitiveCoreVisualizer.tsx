@@ -91,7 +91,7 @@ export const CognitiveCoreVisualizer: React.FC = () => {
         gap: '40px',
         alignItems: 'center',
         padding: '36px',
-        borderRadius: '20px',
+        borderRadius: '0px',
         backgroundColor: 'var(--bg-card)',
         border: '1px solid var(--border-hairline)',
         boxShadow: '0 16px 40px rgba(0, 0, 0, 0.05)'
@@ -116,8 +116,8 @@ export const CognitiveCoreVisualizer: React.FC = () => {
         >
           <defs>
             <radialGradient id="radarMesh" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(158, 107, 56, 0.22)" />
-              <stop offset="100%" stopColor="rgba(158, 107, 56, 0.04)" />
+              <stop offset="0%" stopColor="rgba(45, 90, 67, 0.22)" />
+              <stop offset="100%" stopColor="rgba(45, 90, 67, 0.04)" />
             </radialGradient>
           </defs>
 
@@ -251,8 +251,8 @@ export const CognitiveCoreVisualizer: React.FC = () => {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '12px 16px',
-                  borderRadius: '10px',
-                  backgroundColor: isSelected ? 'rgba(197, 155, 109, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                  borderRadius: '0px',
+                  backgroundColor: isSelected ? 'rgba(45, 90, 67, 0.09)' : 'var(--bg-panel)',
                   border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-hairline)',
                   cursor: 'pointer',
                   transition: 'all 0.18s var(--ease-apple)'
@@ -277,13 +277,13 @@ export const CognitiveCoreVisualizer: React.FC = () => {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   {/* Micro Progress Bar */}
-                  <div style={{ width: '64px', height: '4px', backgroundColor: 'rgba(255, 255, 255, 0.08)', borderRadius: '2px', overflow: 'hidden' }}>
+                  <div style={{ width: '64px', height: '4px', backgroundColor: 'rgba(0, 0, 0, 0.06)', borderRadius: '0px', overflow: 'hidden' }}>
                     <div
                       style={{
                         width: `${d.score}%`,
                         height: '100%',
                         backgroundColor: isSelected ? 'var(--accent)' : 'var(--text-muted)',
-                        borderRadius: '2px'
+                        borderRadius: '0px'
                       }}
                     />
                   </div>

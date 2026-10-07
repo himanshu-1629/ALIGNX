@@ -110,7 +110,7 @@ export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
                 alignItems: 'center',
                 gap: '4px',
                 padding: '2px 8px',
-                borderRadius: '980px',
+                borderRadius: '0px',
                 backgroundColor: 'rgba(52, 199, 89, 0.12)',
                 color: '#28cd41',
                 fontSize: '0.65rem',

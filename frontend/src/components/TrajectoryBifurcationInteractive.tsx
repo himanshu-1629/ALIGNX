@@ -47,9 +47,9 @@ export const TrajectoryBifurcationInteractive: React.FC = () => {
       style={{
         border: '1px solid var(--border-hairline)',
         backgroundColor: 'var(--bg-surface)',
-        borderRadius: '16px',
+        borderRadius: '0px',
         overflow: 'hidden',
-        boxShadow: '0 24px 60px rgba(0, 0, 0, 0.7)'
+        boxShadow: '0 24px 60px rgba(0, 0, 0, 0.05)'
       }}
       className="scroll-reveal-scale"
     >
@@ -138,7 +138,7 @@ export const TrajectoryBifurcationInteractive: React.FC = () => {
           style={{
             height: '240px',
             backgroundColor: '#F5F5F7',
-            borderRadius: '12px',
+            borderRadius: '0px',
             border: '1px solid var(--border-hairline)',
             position: 'relative',
             overflow: 'hidden',
@@ -152,7 +152,7 @@ export const TrajectoryBifurcationInteractive: React.FC = () => {
             <defs>
               <linearGradient id="trajGrad" x1="0%" y1="100%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#9E6B38" stopOpacity="1" />
+                <stop offset="100%" stopColor="#2D5A43" stopOpacity="1" />
               </linearGradient>
             </defs>
 
@@ -199,7 +199,7 @@ export const TrajectoryBifurcationInteractive: React.FC = () => {
         <div
           style={{
             padding: '28px',
-            borderRadius: '12px',
+            borderRadius: '0px',
             backgroundColor: 'var(--bg-card)',
             border: '1px solid var(--border-hairline)',
             display: 'flex',

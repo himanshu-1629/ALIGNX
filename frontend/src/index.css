@@ -49,6 +49,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  border-radius: 0 !important;
 }
 
 html {
@@ -212,17 +213,17 @@ body {
 }
 
 .btn-alignx-roll-primary {
-  background: linear-gradient(180deg, #B8824C 0%, #9E6B38 100%);
-  border-color: #8C5828;
+  background: #2D5A43;
+  border-color: #1E3F2E;
   color: #FFFFFF;
   font-weight: 600;
-  box-shadow: 0 3px 12px rgba(158, 107, 56, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 8px rgba(45, 90, 67, 0.25);
 }
 
 .btn-alignx-roll-primary:hover {
-  background: linear-gradient(180deg, #C58F58 0%, #A8733E 100%);
-  border-color: #96612F;
-  box-shadow: 0 6px 18px rgba(158, 107, 56, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  background: #1E3F2E;
+  border-color: #132B1F;
+  box-shadow: 0 4px 12px rgba(45, 90, 67, 0.35);
   color: #FFFFFF;
 }
 
@@ -251,7 +252,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: linear-gradient(180deg, #B8824C 0%, #9E6B38 100%);
+  background: #2D5A43;
   color: #FFFFFF;
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -259,18 +260,18 @@ body {
   text-transform: uppercase;
   font-weight: 600;
   padding: 13px 26px;
-  border-radius: 980px;
-  border: 1px solid #8C5828;
+  border-radius: 0px !important;
+  border: 1px solid #1E3F2E;
   cursor: pointer;
-  transition: all 0.3s var(--ease-apple);
+  transition: all 0.2s var(--ease-apple);
   text-decoration: none;
-  box-shadow: 0 3px 12px rgba(158, 107, 56, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 8px rgba(45, 90, 67, 0.2);
 }
 
 .btn-alignx-primary:hover {
-  background: linear-gradient(180deg, #C58F58 0%, #A8733E 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(158, 107, 56, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  background: #1E3F2E;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(45, 90, 67, 0.3);
 }
 
 .btn-alignx-primary:active {
@@ -282,7 +283,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: transparent;
   color: var(--text-primary);
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -290,12 +291,11 @@ body {
   text-transform: uppercase;
   font-weight: 500;
   padding: 13px 26px;
-  border-radius: 980px;
+  border-radius: 0px !important;
   border: 1px solid var(--border-subtle);
   cursor: pointer;
-  transition: all 0.3s var(--ease-apple);
+  transition: all 0.2s var(--ease-apple);
   text-decoration: none;
-  backdrop-filter: blur(12px);
 }
 
 .btn-alignx-outline:hover {
@@ -309,20 +309,16 @@ body {
   transform: scale(0.97) translateY(1px);
 }
 
-/* ========================================================
-   PHYSICAL TACTILE KEYS & KEYCAPS (Apple Pro Light Theme)
-   Crisp, clean, non-cyberpunk, luxury keycaps
-   ======================================================== */
+/* Physical Tactile Keys & Keycaps */
 .alignx-key {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 8px 15px;
-  border-radius: 9px;
-  background: linear-gradient(180deg, #FFFFFF 0%, #F5F5F7 100%);
+  border-radius: 0px !important;
+  background: var(--bg-card);
   border: 1px solid rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
   font-family: var(--font-mono);
   font-size: 0.74rem;
   letter-spacing: 0.08em;
@@ -334,24 +330,20 @@ body {
 }
 
 .alignx-key:hover {
-  border-color: rgba(0, 0, 0, 0.25);
-  background: linear-gradient(180deg, #FFFFFF 0%, #EDEDF0 100%);
-  color: #000000;
+  border-color: var(--accent);
+  color: var(--accent);
   transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 .alignx-key:active {
-  transform: translateY(1.5px);
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0.08), inset 0 1px 3px rgba(0, 0, 0, 0.08);
+  transform: translateY(1px);
 }
 
 .alignx-key.active {
   border-color: var(--accent);
-  background: linear-gradient(180deg, #FAF4ED 0%, #F3EAE0 100%);
-  color: #8C5828;
+  background: rgba(45, 90, 67, 0.09);
+  color: #2D5A43;
   font-weight: 600;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 /* ========================================================
@@ -462,7 +454,7 @@ body {
 .stagger-4 { transition-delay: 0.32s !important; }
 .stagger-5 { transition-delay: 0.40s !important; }
 
-/* Sticky Scroll Indicator HUD (Apple Pro Light Theme) */
+/* Sticky Scroll Indicator HUD */
 .scroll-timeline-nav {
   position: fixed;
   right: 24px;
@@ -473,59 +465,57 @@ body {
   gap: 12px;
   z-index: 90;
   padding: 12px 8px;
-  border-radius: 980px;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 0px !important;
+  background: rgba(246, 245, 241, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--border-hairline);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .timeline-dot {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.18);
+  border-radius: 0px !important;
+  background-color: rgba(24, 24, 22, 0.18);
   cursor: pointer;
-  transition: all 0.25s var(--ease-apple);
+  transition: all 0.2s var(--ease-apple);
 }
 
 .timeline-dot:hover {
-  background-color: rgba(0, 0, 0, 0.55);
+  background-color: var(--accent);
   transform: scale(1.4);
 }
 
 .timeline-dot.active {
   height: 18px;
-  border-radius: 4px;
+  border-radius: 0px !important;
   background-color: var(--accent);
 }
 
-/* Apple Pro Titanium Card (Pure White / Ceramic Light) */
+/* Square Instrument Cards & Badges */
 .titanium-card {
   background: var(--bg-card);
   border: 1px solid var(--border-hairline);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-radius: 16px;
+  border-radius: 0px !important;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s var(--ease-apple);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .titanium-card:hover {
   border-color: var(--border-bright);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .titanium-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
-  border-radius: 980px;
-  background: rgba(0, 0, 0, 0.035);
+  padding: 5px 12px;
+  border-radius: 0px !important;
+  background: rgba(24, 24, 22, 0.04);
   border: 1px solid var(--border-hairline);
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -650,7 +640,7 @@ body {
 
 .parallax-meta-item {
   padding: 16px 20px;
-  border-radius: 12px;
+  border-radius: 0px !important;
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid var(--border-hairline);
   backdrop-filter: blur(12px);
@@ -658,12 +648,12 @@ body {
   text-align: left;
 }
 
-/* Light Theme Form Controls (Apple Pro Aesthetic) */
+/* Light Theme Form Controls (Square Craft Instrument) */
 input, select, textarea {
   background-color: #FFFFFF;
   color: var(--text-primary);
   border: 1px solid var(--border-subtle);
-  border-radius: 8px;
+  border-radius: 0px !important;
   padding: 10px 14px;
   font-family: var(--font-body);
   font-size: 0.9rem;
@@ -674,7 +664,7 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(158, 107, 56, 0.12);
+  box-shadow: 0 0 0 2px rgba(45, 90, 67, 0.18);
 }
 
 input::placeholder, textarea::placeholder {

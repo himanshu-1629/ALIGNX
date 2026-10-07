@@ -239,7 +239,7 @@ export function App() {
                     style={{
                       width: '22px',
                       height: '22px',
-                      borderRadius: '980px',
+                      borderRadius: '0px',
                       backgroundColor: isActive ? 'var(--accent)' : isPast ? 'var(--text-primary)' : 'var(--border-hairline)',
                       color: isActive || isPast ? '#FFFFFF' : 'var(--text-muted)',
                       display: 'flex',

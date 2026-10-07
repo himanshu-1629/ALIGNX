@@ -597,7 +597,7 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
                   gridTemplateColumns: '2.5fr 1fr 1fr 1fr 1.4fr',
                   alignItems: 'center',
                   gap: '20px',
-                  boxShadow: isTopRank ? '0 4px 16px rgba(158, 107, 56, 0.12)' : 'none',
+                  boxShadow: isTopRank ? '0 4px 16px rgba(45, 90, 67, 0.12)' : 'none',
                   transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
               >
@@ -744,10 +744,10 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
                       fontWeight: 600,
                       letterSpacing: '0.08em',
                       padding: '5px 12px',
-                      borderRadius: '6px',
+                      borderRadius: '0px',
                       border: '1px solid var(--border-hairline)',
                       backgroundColor: isPromoted
-                        ? 'rgba(158, 107, 56, 0.08)'
+                        ? 'rgba(45, 90, 67, 0.09)'
                         : isDemoted
                         ? 'rgba(0, 0, 0, 0.03)'
                         : 'transparent',

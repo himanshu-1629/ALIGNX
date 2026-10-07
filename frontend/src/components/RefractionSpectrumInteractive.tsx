@@ -29,9 +29,9 @@ export const RefractionSpectrumInteractive: React.FC = () => {
       style={{
         border: '1px solid var(--border-hairline)',
         backgroundColor: 'var(--bg-surface)',
-        borderRadius: '16px',
+        borderRadius: '0px',
         overflow: 'hidden',
-        boxShadow: '0 24px 60px rgba(0, 0, 0, 0.7)'
+        boxShadow: '0 24px 60px rgba(0, 0, 0, 0.05)'
       }}
       className="scroll-reveal-scale"
     >
@@ -67,7 +67,7 @@ export const RefractionSpectrumInteractive: React.FC = () => {
               backgroundColor: 'rgba(255, 255, 255, 0.92)',
               backdropFilter: 'blur(16px)',
               padding: '10px 16px',
-              borderRadius: '8px',
+              borderRadius: '0px',
               border: '1px solid var(--border-hairline)',
               boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)'
             }}
@@ -145,8 +145,8 @@ export const RefractionSpectrumInteractive: React.FC = () => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '10px 14px',
-                    borderRadius: '8px',
-                    backgroundColor: isSelected ? 'rgba(197, 155, 109, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                    borderRadius: '0px',
+                    backgroundColor: isSelected ? 'rgba(45, 90, 67, 0.09)' : 'var(--bg-panel)',
                     border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-hairline)',
                     cursor: 'pointer',
                     transition: 'all 0.18s var(--ease-apple)'
@@ -157,7 +157,7 @@ export const RefractionSpectrumInteractive: React.FC = () => {
                       style={{
                         width: '8px',
                         height: '8px',
-                        borderRadius: '50%',
+                        borderRadius: '0px',
                         backgroundColor: spec.color
                       }}
                     />
@@ -165,7 +165,7 @@ export const RefractionSpectrumInteractive: React.FC = () => {
                       style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: '0.74rem',
-                        color: isSelected ? '#FFFFFF' : 'var(--text-secondary)',
+                        color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)',
                         fontWeight: isSelected ? 600 : 400
                       }}
                     >
@@ -190,8 +190,8 @@ export const RefractionSpectrumInteractive: React.FC = () => {
           <div
             style={{
               padding: '12px 16px',
-              borderRadius: '8px',
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '0px',
+              backgroundColor: 'rgba(0, 0, 0, 0.03)',
               border: '1px solid var(--border-hairline)',
               display: 'flex',
               justifyContent: 'space-between',

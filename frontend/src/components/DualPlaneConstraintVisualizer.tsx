@@ -22,9 +22,9 @@ export const DualPlaneConstraintVisualizer: React.FC = () => {
       style={{
         border: '1px solid var(--border-hairline)',
         backgroundColor: 'var(--bg-card)',
-        borderRadius: '16px',
+        borderRadius: '0px',
         padding: '36px',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)'
+        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.05)'
       }}
       className="scroll-reveal-scale"
     >
@@ -63,7 +63,7 @@ export const DualPlaneConstraintVisualizer: React.FC = () => {
           style={{
             height: '280px',
             backgroundColor: '#F5F5F7',
-            borderRadius: '12px',
+            borderRadius: '0px',
             border: '1px solid var(--border-hairline)',
             position: 'relative',
             overflow: 'hidden',
@@ -81,8 +81,8 @@ export const DualPlaneConstraintVisualizer: React.FC = () => {
                 <stop offset="100%" stopColor="var(--accent)" stopOpacity="0.4" />
               </linearGradient>
               <linearGradient id="viableField" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="rgba(158, 107, 56, 0.18)" />
-                <stop offset="100%" stopColor="rgba(158, 107, 56, 0.02)" />
+                <stop offset="0%" stopColor="rgba(45, 90, 67, 0.16)" />
+                <stop offset="100%" stopColor="rgba(45, 90, 67, 0.02)" />
               </linearGradient>
             </defs>
 
@@ -135,8 +135,8 @@ export const DualPlaneConstraintVisualizer: React.FC = () => {
 
             {/* Outcome Target Label */}
             <g transform="translate(420, 100)">
-              <rect x="0" y="-12" width="70" height="20" rx="4" fill="rgba(197, 155, 109, 0.2)" stroke="var(--accent)" strokeWidth="1" />
-              <text x="35" y="2" textAnchor="middle" fill="#FFFFFF" fontFamily="var(--font-mono)" fontSize="9" fontWeight="600">
+              <rect x="0" y="-12" width="70" height="20" rx="0" fill="rgba(45, 90, 67, 0.15)" stroke="var(--accent)" strokeWidth="1" />
+              <text x="35" y="2" textAnchor="middle" fill="var(--accent)" fontFamily="var(--font-mono)" fontSize="9" fontWeight="700">
                 ALIGNMENT
               </text>
             </g>

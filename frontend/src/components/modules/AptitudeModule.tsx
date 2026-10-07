@@ -101,7 +101,7 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
           </span>
         </div>
 
-        <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%', borderRadius: '2px', overflow: 'hidden' }}>
+        <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%', borderRadius: '0px', overflow: 'hidden' }}>
           <div
             style={{
               height: '100%',
@@ -184,15 +184,15 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
                     justifyContent: 'space-between',
                     padding: '18px 24px',
                     textAlign: 'left',
-                    borderRadius: '12px',
-                    backgroundColor: isSelected ? 'rgba(197, 155, 109, 0.12)' : 'rgba(0, 0, 0, 0.4)',
+                    borderRadius: '0px',
+                    backgroundColor: isSelected ? 'rgba(45, 90, 67, 0.09)' : 'var(--bg-deep)',
                     border: isSelected ? '1.5px solid var(--accent)' : '1px solid var(--border-hairline)',
                     color: 'var(--text-primary)',
                     fontFamily: 'var(--font-body)',
                     fontSize: '0.96rem',
                     cursor: 'pointer',
                     transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                    boxShadow: isSelected ? '0 4px 20px rgba(197, 155, 109, 0.2)' : 'none',
+                    boxShadow: isSelected ? '0 4px 16px rgba(45, 90, 67, 0.15)' : 'none',
                     transform: isSelected ? 'translateY(-1px)' : 'none',
                     gap: '16px'
                   }}
@@ -202,8 +202,8 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
                       style={{
                         width: '28px',
                         height: '28px',
-                        borderRadius: '8px',
-                        backgroundColor: isSelected ? 'var(--accent)' : 'rgba(255, 255, 255, 0.06)',
+                        borderRadius: '0px',
+                        backgroundColor: isSelected ? 'var(--accent)' : 'rgba(0, 0, 0, 0.05)',
                         color: isSelected ? '#FFFFFF' : 'var(--text-secondary)',
                         fontFamily: 'var(--font-mono)',
                         fontSize: '0.8rem',
@@ -223,15 +223,15 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
 
                   <div
                     style={{
-                      width: '22px',
-                      height: '22px',
+                      width: '20px',
+                      height: '20px',
                       border: isSelected ? '2px solid var(--accent)' : '1px solid var(--border-subtle)',
-                      borderRadius: '50%',
+                      borderRadius: '0px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
-                      backgroundColor: isSelected ? 'rgba(197, 155, 109, 0.15)' : 'transparent'
+                      backgroundColor: isSelected ? 'rgba(45, 90, 67, 0.12)' : 'transparent'
                     }}
                   >
                     {isSelected && (
@@ -240,7 +240,7 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
                           width: '10px',
                           height: '10px',
                           backgroundColor: 'var(--accent)',
-                          borderRadius: '50%'
+                          borderRadius: '0px'
                         }}
                       />
                     )}
@@ -327,9 +327,9 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
             <div
               style={{
                 border: '1px solid var(--accent-border)',
-                borderRadius: '12px',
+                borderRadius: '0px',
                 padding: '16px 22px',
-                backgroundColor: 'rgba(197, 155, 109, 0.12)'
+                backgroundColor: 'rgba(45, 90, 67, 0.09)'
               }}
             >
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--accent)', letterSpacing: '0.14em' }}>DECISION STATUS</div>
@@ -350,16 +350,16 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
                 key={i}
                 style={{
                   border: '1px solid var(--border-hairline)',
-                  borderRadius: '10px',
+                  borderRadius: '0px',
                   padding: '18px',
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                  backgroundColor: 'var(--bg-panel)'
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', marginBottom: '8px' }}>
                   <span>{d.dim}</span>
                   <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{d.score}%</span>
                 </div>
-                <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%', borderRadius: '2px', overflow: 'hidden' }}>
+                <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%', borderRadius: '0px', overflow: 'hidden' }}>
                   <div style={{ height: '100%', width: `${d.score}%`, backgroundColor: 'var(--accent)' }} />
                 </div>
               </div>
