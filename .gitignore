@@ -73,3 +73,5 @@ dist/
 !.vscode/settings.json
 *.sublime-workspace
 *.sublime-project
+*.swp
+*.swo
