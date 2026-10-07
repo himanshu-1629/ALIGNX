@@ -129,9 +129,6 @@ const StudentSchema = new Schema<IStudent>(
   }
 );
 
-// Indexes
-StudentSchema.index({ email: 1 });
-StudentSchema.index({ location: 1 });
 
 export const Student: Model<IStudent> =
   mongoose.models.Student || mongoose.model<IStudent>('Student', StudentSchema);
