@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { INITIAL_CAREERS } from '../../data/mockAlignxData';
-import type { CareerRecommendation } from '../../types/alignx';
+import type { CareerRecommendation, AlignxSessionProgress } from '../../types/alignx';
+import { ApiService } from '../../services/api';
+import { RollButton } from '../RollButton';
+import type { AppView } from '../Header';
 import {
   Columns,
   Sparkles,
@@ -9,25 +12,273 @@ import {
   CheckCircle2,
   MapPin,
   ExternalLink,
-  Layers
+  Layers,
+  Lock,
+  Clock,
+  ArrowRight
 } from 'lucide-react';
 
 interface RecommendationsModuleProps {
   onSelectCareerTwin: (careerId: string) => void;
   onOpenWhatIf: () => void;
   onOpenRoadmap?: (careerId: string) => void;
+  sessionProgress: AlignxSessionProgress;
+  onStartAssessment: (view?: AppView) => void;
 }
 
 export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
   onSelectCareerTwin,
   onOpenWhatIf,
-  onOpenRoadmap
+  onOpenRoadmap,
+  sessionProgress,
+  onStartAssessment
 }) => {
-  const [careers] = useState<CareerRecommendation[]>(INITIAL_CAREERS);
+  const [careers, setCareers] = useState<CareerRecommendation[]>(INITIAL_CAREERS);
   const [selectedCareer, setSelectedCareer] = useState<CareerRecommendation>(INITIAL_CAREERS[0]);
   const [comparisonCareer, setComparisonCareer] = useState<CareerRecommendation | null>(null);
   const [isCompareMode, setIsCompareMode] = useState(false);
   const [selectedDomain, setSelectedDomain] = useState<string>('all');
+
+  // Verify whether student has completed assessment calibration
+  const isCalibrated =
+    Boolean(sessionProgress?.completedStages?.onboarding) &&
+    (Boolean(sessionProgress?.completedStages?.aptitude) || Boolean(sessionProgress?.completedStages?.dashboard));
+
+  // Sync with live backend database and personalized parameters
+  useEffect(() => {
+    if (!isCalibrated) return;
+    let isMounted = true;
+
+    const syncLiveProfile = async () => {
+      try {
+        const res = await ApiService.getDashboard();
+        if (res.data?.recommendations && res.data.recommendations.length > 0 && isMounted) {
+          const mapped = res.data.recommendations.map((rec: any, index: number) => {
+            const matchInitial = INITIAL_CAREERS.find(c => c.id === rec.careerSlug || c.title.toLowerCase().includes((rec.careerName || '').toLowerCase()));
+            return {
+              id: rec.careerSlug || matchInitial?.id || `career-${index}`,
+              title: rec.careerName || matchInitial?.title || 'Specialist',
+              domain: matchInitial?.domain || 'Technology & Engineering',
+              tagline: matchInitial?.tagline || 'Calibrated through 5D Decision Protocol',
+              scores: {
+                studentFit: rec.studentFit || matchInitial?.scores.studentFit || 85,
+                financialFit: rec.financialFit || matchInitial?.scores.financialFit || 80,
+                familyAlignment: rec.familyAlignment || matchInitial?.scores.familyAlignment || 75,
+                marketFit: rec.marketFit || matchInitial?.scores.marketFit || 88,
+                locationFit: rec.locationFit || matchInitial?.scores.locationFit || 82,
+                overallScore: rec.overallScore || matchInitial?.scores.overallScore || 84
+              },
+              growthRate: matchInitial?.growthRate || '+32% YoY',
+              salaryRange: matchInitial?.salaryRange || '₹18L - ₹45L',
+              riskLevel: matchInitial?.riskLevel || 'Moderate',
+              topLocations: matchInitial?.topLocations || ['Bangalore', 'Hyderabad', 'Singapore'],
+              requiredSkills: matchInitial?.requiredSkills || ['Analytical Thinking', 'Systems Decomposition'],
+              studentSkillGaps: matchInitial?.studentSkillGaps || ['Advanced Specialization Frameworks'],
+              strengthsMatch: rec.explanationData?.whyItMatches || matchInitial?.strengthsMatch || ['High abstract problem solving'],
+              whyRecommended: rec.explanationData?.summary ? [rec.explanationData.summary] : matchInitial?.whyRecommended || ['Top alignment across aptitude and market telemetry'],
+              educationPath: matchInitial?.educationPath || 'Undergraduate STEM Foundation',
+              entranceExams: matchInitial?.entranceExams || ['Tier-1 Entrance Standards'],
+              scholarships: matchInitial?.scholarships || ['Merit-Based Research Grant']
+            };
+          });
+          setCareers(mapped);
+          setSelectedCareer(mapped[0]);
+        }
+      } catch {
+        // Fallback: Compute personalized scores based on the actual sessionProgress profile
+        if (sessionProgress.aptitudeScore || sessionProgress.studentProfile) {
+          const studentScore = sessionProgress.aptitudeScore || 85;
+          const budget = sessionProgress.studentProfile?.budgetAnnualLakhs || 14;
+          const parentBudget = sessionProgress.parentData?.maxBudgetAnnualLakhs || budget;
+          
+          const personalized = INITIAL_CAREERS.map(c => {
+            const sFit = Math.min(99, Math.round(c.scores.studentFit * (studentScore / 88)));
+            const fFit = parentBudget >= 20 ? Math.min(98, c.scores.financialFit + 10) : parentBudget <= 10 ? Math.max(55, c.scores.financialFit - 12) : c.scores.financialFit;
+            const overall = Math.round(0.35 * sFit + 0.20 * fFit + 0.15 * c.scores.familyAlignment + 0.20 * c.scores.marketFit + 0.10 * c.scores.locationFit);
+            return {
+              ...c,
+              scores: {
+                ...c.scores,
+                studentFit: sFit,
+                financialFit: fFit,
+                overallScore: overall
+              }
+            };
+          }).sort((a, b) => b.scores.overallScore - a.scores.overallScore);
+          setCareers(personalized);
+          setSelectedCareer(personalized[0]);
+        }
+      }
+    };
+
+    syncLiveProfile();
+    return () => { isMounted = false; };
+  }, [isCalibrated, sessionProgress]);
+
+  // If student is not calibrated, show the authentic locked Decision Engine
+  if (!isCalibrated) {
+    const nextPendingStage: AppView = !sessionProgress?.completedStages?.onboarding
+      ? 'onboarding'
+      : !sessionProgress?.completedStages?.discovery
+      ? 'discovery'
+      : !sessionProgress?.completedStages?.aptitude
+      ? 'aptitude'
+      : !sessionProgress?.parentInputDone
+      ? 'parent'
+      : 'dashboard';
+
+    return (
+      <div style={{ maxWidth: '1000px', margin: '60px auto', padding: '0 24px' }}>
+        <div
+          className="titanium-card animate-fade-in"
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '20px',
+            border: '1px solid var(--accent-border)',
+            padding: '56px 48px',
+            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.06)',
+            textAlign: 'center'
+          }}
+        >
+          {/* Lock Icon */}
+          <div
+            style={{
+              width: '68px',
+              height: '68px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--accent-dim)',
+              border: '1.5px solid var(--accent)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '20px'
+            }}
+          >
+            <Lock size={28} color="var(--accent)" />
+          </div>
+
+          {/* Badge */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+            <div className="titanium-badge" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+              <span>5D DECISION ENGINE LOCKED • CALIBRATION REQUIRED</span>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h1
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
+              letterSpacing: '-0.03em',
+              margin: '0 0 16px 0'
+            }}
+          >
+            Your True Path Requires Real Data.
+          </h1>
+
+          {/* Subtitle */}
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '1.1rem',
+              color: 'var(--text-secondary)',
+              maxWidth: '680px',
+              margin: '0 auto 36px auto',
+              lineHeight: 1.6
+            }}
+          >
+            ALIGNX does not generate generic or static career guesses. To calculate your multidimensional fit across Student Aptitude (35%), Financial Reality (20%), Family Alignment (15%), and Market Demand (20%), you must complete your psychometric evaluation.
+          </p>
+
+          {/* 4-Step Calibration Readiness Checklist */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '16px',
+              marginBottom: '40px',
+              textAlign: 'left'
+            }}
+          >
+            {[
+              {
+                step: '01 / FOUNDATION',
+                title: 'Goals & Budget',
+                desc: 'Academic baseline & tuition ceiling',
+                done: Boolean(sessionProgress?.completedStages?.onboarding),
+                target: 'onboarding' as AppView
+              },
+              {
+                step: '02 / INTERESTS',
+                title: 'Holland RIASEC',
+                desc: 'Workplace problem-solving archetype',
+                done: Boolean(sessionProgress?.completedStages?.discovery),
+                target: 'discovery' as AppView
+              },
+              {
+                step: '03 / COGNITIVE',
+                title: '5D Aptitude Matrix',
+                desc: 'Abstract logic & systems thinking',
+                done: Boolean(sessionProgress?.completedStages?.aptitude),
+                target: 'aptitude' as AppView
+              },
+              {
+                step: '04 / FAMILY',
+                title: 'Family Bounds',
+                desc: 'Parent consensus & risk tolerance',
+                done: Boolean(sessionProgress?.parentInputDone),
+                target: 'parent' as AppView
+              }
+            ].map((s, idx) => (
+              <div
+                key={idx}
+                onClick={() => onStartAssessment(s.target)}
+                style={{
+                  padding: '20px',
+                  borderRadius: '12px',
+                  backgroundColor: s.done ? 'rgba(197, 155, 109, 0.08)' : 'var(--bg-surface)',
+                  border: s.done ? '1px solid var(--accent)' : '1px solid var(--border-hairline)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: s.done ? 'var(--accent)' : 'var(--text-muted)' }}>
+                    {s.step}
+                  </span>
+                  {s.done ? (
+                    <CheckCircle2 size={16} color="var(--accent)" />
+                  ) : (
+                    <Clock size={16} color="var(--text-muted)" />
+                  )}
+                </div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
+                  {s.title}
+                </div>
+                <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                  {s.desc}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Primary Action Button */}
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <RollButton
+              onClick={() => onStartAssessment(nextPendingStage)}
+              variant="primary"
+              icon={<ArrowRight size={16} />}
+              style={{ padding: '16px 36px', fontSize: '0.9rem' }}
+            >
+              START ASSESSMENT TO UNLOCK DECISION ENGINE
+            </RollButton>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const domains = ['all', 'AI & Data Science', 'Hardware & Robotics', 'Product & Design', 'CleanTech & Systems'];
 

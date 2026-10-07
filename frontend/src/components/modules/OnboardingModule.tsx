@@ -6,10 +6,9 @@ import { ArrowRight, Check } from 'lucide-react';
 
 interface OnboardingModuleProps {
   onComplete: (profile: StudentProfile) => void;
-  onSkipToDemo?: () => void;
 }
 
-export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, onSkipToDemo }) => {
+export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete }) => {
   const [name, setName] = useState('Daksh');
   const [stage, setStage] = useState<LifeStage>('ug');
   const [currentField, setCurrentField] = useState('Computer Science & Engineering');
@@ -316,18 +315,7 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, 
           </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px', flexWrap: 'wrap', gap: '16px' }}>
-          {onSkipToDemo && (
-            <button
-              type="button"
-              onClick={onSkipToDemo}
-              className="alignx-key"
-              style={{ padding: '12px 20px', fontSize: '0.78rem' }}
-            >
-              <span>EXPLORE DEMO 5D DASHBOARD DIRECTLY</span>
-            </button>
-          )}
-
+        <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px' }}>
           <RollButton type="submit" variant="primary" icon={<ArrowRight size={15} />}>
             SAVE PROFILE & ENTER DISCOVERY
           </RollButton>

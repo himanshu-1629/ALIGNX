@@ -13,17 +13,41 @@ import { WhatIfModule } from './components/modules/WhatIfModule';
 import { RoadmapModule } from './components/modules/RoadmapModule';
 import type { StudentProfile, AlignxSessionProgress } from './types/alignx';
 import { getSessionProgress, saveSessionProgress, clearSessionProgress } from './utils/sessionManager';
+import { AuthModal } from './components/auth/AuthModal';
+import { ApiService } from './services/api';
 
 export function App() {
   const [currentView, setCurrentView] = useState<AppView>('home');
   const [selectedCareerId, setSelectedCareerId] = useState<string>('ai-engineer');
   const [, setStudentProfile] = useState<StudentProfile | null>(null);
   const [sessionProgress, setSessionProgress] = useState<AlignxSessionProgress>(getSessionProgress());
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  // Authenticated user state
+  const [currentUser, setCurrentUser] = useState<{ id: string; name: string; email: string } | null>(() => {
+    try {
+      const saved = localStorage.getItem('alignx_current_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
 
   // Refresh session progress whenever view changes
   useEffect(() => {
     setSessionProgress(getSessionProgress());
   }, [currentView]);
+
+  const handleAuthSuccess = (user: { id: string; name: string; email: string }) => {
+    setCurrentUser(user);
+    localStorage.setItem('alignx_current_user', JSON.stringify(user));
+  };
+
+  const handleSignOut = () => {
+    ApiService.clearToken();
+    localStorage.removeItem('alignx_current_user');
+    setCurrentUser(null);
+  };
 
   const handleEnterApp = (view: AppView = 'onboarding') => {
     setCurrentView(view);
@@ -141,6 +165,9 @@ export function App() {
           setCurrentView(view);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
+        currentUser={currentUser}
+        onOpenAuth={() => setIsAuthModalOpen(true)}
+        onSignOut={handleSignOut}
       />
 
       {/* Sleek Progressive Assessment Stepper Header */}
@@ -233,13 +260,7 @@ export function App() {
         )}
 
         {currentView === 'onboarding' && (
-          <OnboardingModule
-            onComplete={handleOnboardingComplete}
-            onSkipToDemo={() => {
-              setCurrentView('dashboard');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          />
+          <OnboardingModule onComplete={handleOnboardingComplete} />
         )}
 
         {currentView === 'discovery' && (
@@ -291,6 +312,8 @@ export function App() {
             onSelectCareerTwin={handleSelectCareerTwin}
             onOpenWhatIf={handleOpenWhatIf}
             onOpenRoadmap={handleOpenRoadmap}
+            sessionProgress={sessionProgress}
+            onStartAssessment={(stage) => handleEnterApp(stage || 'onboarding')}
           />
         )}
 
@@ -335,6 +358,13 @@ export function App() {
           />
         )}
       </main>
+
+      {/* Lightweight Authentication & Profile Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onAuthSuccess={handleAuthSuccess}
+      />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, ArrowRight, Sparkles, SlidersHorizontal, Users2, Compass, Layers } from 'lucide-react';
+import { Menu, X, ArrowRight, Sparkles, SlidersHorizontal, Users2, Compass, Layers, User, LogOut } from 'lucide-react';
 
 export type AppView =
   | 'home'
@@ -16,9 +16,18 @@ export type AppView =
 interface HeaderProps {
   currentView: AppView;
   onSelectView: (view: AppView) => void;
+  currentUser?: { id: string; name: string; email: string } | null;
+  onOpenAuth?: () => void;
+  onSignOut?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentView, onSelectView }) => {
+export const Header: React.FC<HeaderProps> = ({
+  currentView,
+  onSelectView,
+  currentUser,
+  onOpenAuth,
+  onSignOut
+}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Group views into 5 human-centered core pillars (eliminates 10-button cognitive overload)
@@ -216,8 +225,52 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onSelectView }) => 
           ))}
         </nav>
 
-        {/* Action Button & Mobile Hamburger */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {/* Action Button & User State */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {currentUser ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 12px',
+                  borderRadius: '980px',
+                  backgroundColor: 'var(--accent-dim)',
+                  border: '1px solid var(--accent-border)',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  color: 'var(--accent)',
+                  fontWeight: 600
+                }}
+              >
+                <User size={12} />
+                <span>{currentUser.name}</span>
+              </div>
+              {onSignOut && (
+                <button
+                  onClick={onSignOut}
+                  className="alignx-key"
+                  style={{ padding: '6px 10px', fontSize: '0.68rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                  title="Sign Out"
+                >
+                  <LogOut size={12} />
+                  <span>EXIT</span>
+                </button>
+              )}
+            </div>
+          ) : (
+            onOpenAuth && (
+              <button
+                onClick={onOpenAuth}
+                className="alignx-key"
+                style={{ padding: '7px 14px', fontSize: '0.72rem' }}
+              >
+                SIGN IN
+              </button>
+            )
+          )}
+
           <button
             onClick={() => onSelectView(isHomeActive ? 'onboarding' : 'dashboard')}
             className="btn-alignx-primary"

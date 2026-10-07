@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { ParentInput } from '../../types/alignx';
 import { RollButton } from '../RollButton';
 import { saveSessionProgress, getSessionProgress } from '../../utils/sessionManager';
+import { ApiService } from '../../services/api';
 import { ArrowRight, Copy, Check, Users, ShieldCheck, Plus, CheckCircle2, ChevronLeft } from 'lucide-react';
 
 interface ParentModuleProps {
@@ -71,9 +72,8 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
     setShowAddModal(false);
   };
 
-  const handleSaveAndContinue = () => {
-
-    // Save exact schema payload to session storage
+  const handleSaveAndContinue = async () => {
+    // Save exact schema payload to session storage and unlock 5D dashboard
     saveSessionProgress({
       parentInputDone: true,
       lastActiveView: 'dashboard',
@@ -89,9 +89,16 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
       completedStages: {
         ...getSessionProgress().completedStages,
         parent: true,
-        dashboard: false
+        dashboard: true // Unlocks 5D Decision Engine!
       }
     });
+
+    // If backend is active and user is authenticated, trigger live recommendation scoring
+    try {
+      await ApiService.generateRecommendations();
+    } catch {
+      // Graceful offline fallback
+    }
 
     onContinue();
   };

@@ -440,11 +440,17 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
             </RollButton>
 
             <RollButton
-              onClick={() => onEnterApp('dashboard')}
+              onClick={() => {
+                if (hasSessionProgress && sessionProgress) {
+                  onEnterApp(sessionProgress.lastActiveView as any || 'onboarding');
+                } else {
+                  document.getElementById('interactive-lab')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               variant="outline"
-              icon={<Sparkles size={14} />}
+              icon={hasSessionProgress ? <ArrowRight size={14} /> : <Sliders size={14} />}
             >
-              VIEW DEMO RESULTS
+              {hasSessionProgress ? 'RESUME CALIBRATION' : 'TEST SIMULATORS'}
             </RollButton>
           </div>
         </div>
