@@ -1,23 +1,71 @@
 # ALIGNX 🚀
 
-> **AI-powered Career Alignment & Discovery Platform**
+> ## **Aligning Talent With Opportunity**
+>
+> **AI-Powered Multi-Dimensional Career Intelligence Platform**
 
-ALIGNX is an intelligent career discovery platform designed to help students identify career paths that align with their **skills, interests, aptitude, personality, preferences, and goals**.
+ALIGNX is an intelligent career discovery and decision-support platform designed to help students discover career paths that align with **who they are, what they can do, what their family can support, and where real-world opportunities exist**.
 
-Instead of forcing students to choose a career by simply browsing through hundreds of job roles, ALIGNX uses an **interactive assessment and recommendation system** to understand the student and gradually narrow down suitable career paths.
+Unlike traditional career quizzes that primarily focus on interests or personality, ALIGNX combines three major dimensions:
+
+```text
+              ┌─────────────────────┐
+              │      STUDENT        │
+              │                     │
+              │ Aptitude            │
+              │ Skills              │
+              │ Interests           │
+              │ Career DNA          │
+              │ Goals               │
+              └──────────┬──────────┘
+                         │
+                         ▼
+                  ┌───────────────┐
+                  │    ALIGNX     │
+                  │ Decision      │
+                  │ Engine        │
+                  └───────┬───────┘
+                         ▲
+              ┌──────────┴──────────┐
+              │                     │
+      ┌───────┴────────┐   ┌───────┴────────┐
+      │     FAMILY     │   │   OPPORTUNITY  │
+      │                │   │                │
+      │ Budget         │   │ Market Demand  │
+      │ Contributions  │   │ Salary         │
+      │ Risk Appetite  │   │ Geography      │
+      │ Expectations   │   │ Growth         │
+      └────────────────┘   └────────────────┘
+                         │
+                         ▼
+             Personalized Career Paths
+```
+
+The goal is not to tell a student what career they **must** choose.
+
+Instead, ALIGNX explains:
+
+> **Why a career fits, what may prevent the student from pursuing it, what alternatives exist, and what the student can do next.**
 
 ---
 
-## 📌 Table of Contents
+# 📌 Table of Contents
 
 - [About ALIGNX](#-about-alignx)
 - [Problem Statement](#-problem-statement)
 - [Our Solution](#-our-solution)
+- [What Makes ALIGNX Different](#-what-makes-alignx-different)
 - [Key Features](#-key-features)
 - [How ALIGNX Works](#-how-alignx-works)
+- [ALIGNX Decision Engine](#-alignx-decision-engine)
+- [Career DNA](#-career-dna)
+- [Family Intelligence](#-family-intelligence)
+- [Market Intelligence](#-market-intelligence)
+- [Career Twin](#-career-twin)
+- [What-If Career Simulator](#-what-if-career-simulator)
+- [Interdisciplinary Career Discovery](#-interdisciplinary-career-discovery)
 - [Target Users](#-target-users)
 - [Core Modules](#-core-modules)
-- [Career Recommendation Engine](#-career-recommendation-engine)
 - [User Journey](#-user-journey)
 - [System Architecture](#-system-architecture)
 - [Technology Stack](#-technology-stack)
@@ -29,7 +77,9 @@ Instead of forcing students to choose a career by simply browsing through hundre
 - [Getting Started](#-getting-started)
 - [Environment Variables](#-environment-variables)
 - [Testing](#-testing)
+- [Security](#-security)
 - [Future Scope](#-future-scope)
+- [MVP Scope](#-mvp-scope)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -39,281 +89,503 @@ Instead of forcing students to choose a career by simply browsing through hundre
 
 Choosing a career is one of the most important decisions a student makes.
 
-However, many students choose careers based on:
+However, students often make career decisions based on:
 
 - Peer pressure
 - Family expectations
-- Popularity of a particular field
 - Salary alone
-- Random online quizzes
+- Popular careers
 - Social media trends
-- Limited awareness of available careers
+- Limited awareness of alternative careers
+- Generic online quizzes
+- Incomplete understanding of their own strengths
 
-ALIGNX aims to make this process more **personalized, interactive, and data-driven**.
+At the same time, a career that looks perfect on paper may not be financially realistic for a particular family.
 
-The platform does not simply ask:
+Similarly, a financially feasible career may not align with the student's aptitude, interests, or long-term goals.
 
-> "Which career do you like?"
+ALIGNX addresses this by bringing together:
 
-Instead, ALIGNX tries to understand **why a particular career might fit a student**.
-
-It analyzes multiple dimensions of the student profile and produces a ranked set of career paths with explanations.
+```text
+Student Potential
+        +
+Family Reality
+        +
+Market Opportunity
+        ↓
+Career Alignment
+```
 
 ---
 
 # ❗ Problem Statement
 
-Students often struggle with questions such as:
+Traditional career guidance often focuses primarily on the student.
 
-- Which career is suitable for me?
-- Am I actually interested in this field?
-- Do my current skills match this career?
-- What skills am I missing?
-- Should I choose software development, cybersecurity, data science, UI/UX, management, research, etc.?
-- What should I learn next?
-- How can I compare two possible career paths?
+It may ask:
 
-Existing career platforms often rely heavily on:
+> "What are you interested in?"
 
-- Generic personality tests
-- Static questionnaires
-- Job searches
-- Self-selected interests
+or:
 
-This can make career discovery feel overwhelming and impersonal.
+> "Which career sounds attractive to you?"
+
+But a real career decision involves much more.
+
+### Student-side questions
+
+- What am I naturally good at?
+- What kind of problems do I enjoy solving?
+- What is my aptitude?
+- What skills do I already have?
+- What type of work environment suits me?
+- What careers match my interests and abilities?
+
+### Family-side questions
+
+- How much can my family realistically spend on education?
+- What level of financial risk is acceptable?
+- What career expectations do my parents have?
+- Are there disagreements between student aspirations and family expectations?
+- Can scholarships or alternative pathways make an expensive career feasible?
+
+### Opportunity-side questions
+
+- Is the industry growing?
+- Where is demand concentrated?
+- What is the earning potential?
+- What skills are required?
+- What education pathway is required?
+- Are there better interdisciplinary alternatives?
 
 ### The core problem
 
-> **Students need a simple and engaging way to discover career paths based on who they are, what they know, what they enjoy, and where they want to go.**
+> **Students need career guidance that considers not only who they are, but also what their family can support and where real opportunities exist.**
 
 ---
 
 # 💡 Our Solution
 
-ALIGNX creates a personalized career discovery journey.
+ALIGNX creates a personalized career discovery and decision-support journey.
 
-Instead of presenting students with a huge list of careers, the platform gradually understands them through **interactive questions and assessments**.
-
-The system considers factors such as:
+Instead of asking students to browse hundreds of careers, ALIGNX gradually builds a structured representation of the student.
 
 ```text
-Interests
-   +
-Aptitude
-   +
-Skills
-   +
-Preferences
-   +
-Personality / Work Style
-   +
-Goals
-   +
-Career Requirements
-        ↓
-Career Alignment Score
-        ↓
-Personalized Career Recommendations
+Interactive Career Discovery
+             ↓
+      Career Preferences
+             ↓
+       Aptitude Snapshot
+             ↓
+         Career DNA
+             ↓
+        Student Vector
+             ↓
+      Family Information
+             ↓
+    Financial Constraint Solver
+             ↓
+ Parent–Student Conflict Index
+             ↓
+      Market Intelligence
+             ↓
+     ALIGNX Decision Engine
+             ↓
+     Ranked Career Paths
+             ↓
+    Explanation + Alternatives
+             ↓
+ Career Twin + What-If Simulator
+             ↓
+     Personalized Roadmap
 ```
 
-The student receives:
+---
 
-1. Recommended career paths
-2. Alignment scores
-3. Reasons behind each recommendation
-4. Strengths
-5. Skill gaps
-6. Suggested learning roadmap
-7. Career comparison
-8. Next steps
+# 🔥 What Makes ALIGNX Different?
+
+ALIGNX is not designed as another generic career quiz or chatbot.
+
+### 1. Student + Family + Market
+
+Most career tools focus mainly on the student.
+
+ALIGNX considers:
+
+```text
+Student
++
+Family
++
+Market
+```
+
+before producing its recommendations.
+
+### 2. Multiple Paying Parents/Guardians
+
+A student can add multiple contributors:
+
+```text
+Student
+│
+└── Family
+    ├── Father
+    ├── Mother
+    └── Guardian
+```
+
+Each contributor can receive a unique invitation link/code and independently provide relevant financial and career-expectation information.
+
+### 3. Deterministic Decision Engine + LLM Explanation
+
+The recommendation score is generated by the ALIGNX decision engine.
+
+The LLM is used to:
+
+- Explain recommendations
+- Explain skill gaps
+- Suggest alternatives
+- Generate learning roadmaps
+
+The LLM does **not** independently decide which career should rank first.
+
+### 4. Career What-If Simulation
+
+Students can change conditions such as:
+
+- Education budget
+- Risk appetite
+- Location
+- Time-to-employment
+
+and observe how career rankings change.
+
+### 5. Career Twin
+
+ALIGNX creates a visual representation of the student's Career DNA and connects it to suitable career pathways.
+
+### 6. Interdisciplinary Discovery
+
+ALIGNX can identify career paths that the student may not have considered.
+
+For example:
+
+```text
+Strong Biology
++
+Strong Technology
++
+Interest in Healthcare
+        ↓
+Medical AI
+Bioinformatics
+Biomedical Engineering
+Computational Biology
+```
 
 ---
 
 # ✨ Key Features
 
-## 1. 🧠 Interactive Career Assessment
+## 1. 🧠 Interactive Career Discovery
 
-ALIGNX asks carefully designed questions instead of simply asking users to select a career.
+The assessment should feel like an interactive experience rather than a long form.
 
-Questions can evaluate:
-
-- Logical thinking
-- Creativity
-- Problem solving
-- Communication
-- Analytical thinking
-- Leadership
-- Risk tolerance
-- Work preferences
-- Technical interests
-- Collaboration preferences
-- Learning preferences
-
-The questions are designed to feel more like an **interactive experience** rather than an exam.
-
----
-
-## 2. 🎯 Career Preference Discovery
-
-Instead of showing hundreds of careers and asking the user to choose manually, ALIGNX gradually identifies preferences.
-
-For example:
+Example:
 
 ```text
-Question:
-You are given a complex problem with no obvious solution.
-What would you naturally prefer?
+You are given a problem nobody has solved before.
 
-A → Break it into logical parts
-B → Discuss it with people
-C → Experiment and build something
-D → Research existing solutions
-E → Design a creative approach
+What excites you most?
+
+┌────────────────────────────┐
+│ Break it into logical      │
+│ parts and find the cause   │
+└────────────────────────────┘
+
+┌────────────────────────────┐
+│ Build something and test   │
+│ different approaches       │
+└────────────────────────────┘
+
+┌────────────────────────────┐
+│ Find an unusual or         │
+│ creative solution          │
+└────────────────────────────┘
+
+┌────────────────────────────┐
+│ Understand how it affects  │
+│ people                     │
+└────────────────────────────┘
 ```
 
-The answer contributes to different career dimensions.
+Each answer contributes to multiple Career DNA dimensions.
 
 ---
 
-## 3. 📊 Aptitude Evaluation
+# 2. 📊 PRISM Aptitude Snapshot
 
-The platform can evaluate areas such as:
+ALIGNX includes a short quiz-style aptitude assessment.
 
-- Logical reasoning
-- Numerical reasoning
-- Analytical thinking
-- Pattern recognition
-- Problem solving
-- Verbal reasoning
+Suggested dimensions:
 
-The goal is not merely to produce an aptitude score.
+- Logical Reasoning
+- Numerical Reasoning
+- Analytical Thinking
+- Spatial / Pattern Recognition
+- Verbal Reasoning
 
-The score is used as one factor in determining career alignment.
-
----
-
-## 4. 🧩 Skill Profile
-
-Students can create or build a skill profile containing:
-
-### Technical Skills
-
-Examples:
+Example result:
 
 ```text
-C++
-Java
+Logical        ██████████████████  91
+Numerical      █████████████████   84
+Analytical     ██████████████████  89
+Spatial        ███████████████     77
+Verbal         ██████████████      73
+```
+
+The aptitude snapshot is one input into career alignment, not a standalone career diagnosis.
+
+---
+
+# 3. 🧬 Career DNA
+
+The student's answers generate a multidimensional Career DNA.
+
+Example:
+
+```text
+Analytical      91
+Builder        87
+Research       82
+Creative       74
+Leadership     61
+Social         55
+Risk           72
+```
+
+ALIGNX can summarize the profile as:
+
+> **Analytical Builder**
+
+The Career DNA is then compared against career requirements.
+
+---
+
+# 4. 👨‍👩‍👧 Family Intelligence
+
+Students can add one or more paying parents/guardians.
+
+### Student Flow
+
+```text
+Student Dashboard
+        ↓
++ Add Paying Parent / Guardian
+        ↓
+Enter Name + Relationship
+        ↓
+Generate Unique Link / Code
+```
+
+### Parent Flow
+
+```text
+Open Invitation
+        ↓
+Verification
+        ↓
+Parent Form
+        ↓
+Submit
+        ↓
+Status = Completed
+```
+
+Parent status can appear on the student dashboard:
+
+```text
+Father      🟢 Completed
+Mother      🟡 Filling Pending
+Guardian    ⚪ Invitation Pending
+```
+
+Parents do not need a full account for this workflow.
+
+---
+
+# 5. 💰 Financial Constraint Solver
+
+ALIGNX considers:
+
+- Parent contributions
+- Education budget
+- Education cost
+- Scholarships
+- Financial aid
+- Career risk
+- Expected earning potential
+
+Instead of simply rejecting an expensive career, ALIGNX can classify it as:
+
+```text
+Financially Feasible
+        ↓
+Feasible With Scholarship
+        ↓
+Stretch Option
+        ↓
+Currently Unsuitable
+```
+
+This allows the system to recommend realistic pathways rather than simply high-paying careers.
+
+---
+
+# 6. ⚖️ Parent–Student Conflict Index
+
+ALIGNX identifies possible gaps between student aspirations and family expectations.
+
+Example:
+
+```text
+Student:
+AI / Startup / High Growth
+
+Parent:
+Traditional Engineering / Stable Career / Low Risk
+```
+
+ALIGNX may identify:
+
+```text
+Conflict Index: 72 / 100
+```
+
+The system can then surface alternative or compromise pathways.
+
+The conflict index is intended as a decision-support signal, not a judgment about the family.
+
+---
+
+# 7. 📈 Market Intelligence
+
+Career recommendations also consider opportunity-side information such as:
+
+- Industry demand
+- Job-market demand
+- Geographic demand
+- Salary range
+- Career growth
+- Education cost
+- Required skills
+- Career risk
+
+Example:
+
+```text
+AI Engineer
+
+Market Demand        93
+Growth Potential     91
+Location Fit         88
+Salary Potential     89
+```
+
+---
+
+# 8. 🎯 ALIGNX Career Recommendations
+
+Each career receives a transparent score.
+
+Example:
+
+```text
+AI Engineer
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ALIGNX Score          91%
+
+Student Fit           94%
+Financial Fit         82%
+Family Alignment      76%
+Market Fit            93%
+Location Fit          88%
+```
+
+The system should also explain **why** the career received its score.
+
+---
+
+# 9. 🔍 Explainable Recommendations
+
+Example:
+
+### AI Engineer — 91%
+
+**Why it matches**
+
+- Strong analytical aptitude
+- High logical reasoning score
+- Builder-oriented Career DNA
+- Strong interest in technology
+- Favorable market demand
+
+**Potential challenges**
+
+- Education pathway may require additional investment
+- Advanced mathematics may need improvement
+- Parent preference has moderate disagreement
+
+**Possible alternatives**
+
+- Data Scientist
+- Robotics Engineer
+- Healthcare AI
+- ML Engineer
+
+---
+
+# 10. 📈 Skill Gap Analysis
+
+ALIGNX compares the student's current skills with the target career.
+
+Example:
+
+```text
+Target Career: Data Scientist
+
 Python
-JavaScript
-Flutter
-React
+████████░░
+
+Statistics
+█████░░░░░
+
 SQL
-Git
+███████░░░
+
 Machine Learning
-Cybersecurity
+██░░░░░░░░
+
+Data Visualization
+████░░░░░░
 ```
 
-### Soft Skills
-
-Examples:
+Priority gaps:
 
 ```text
-Communication
-Leadership
-Teamwork
-Problem Solving
-Presentation
-Time Management
-```
-
-The system compares these skills with career requirements.
-
----
-
-## 5. 🎯 Career Alignment Score
-
-Each career receives an alignment score based on multiple factors.
-
-Example:
-
-```text
-Software Engineer
-━━━━━━━━━━━━━━━━━━━━
-Overall Alignment     87%
-
-Aptitude              91%
-Technical Skills      82%
-Interest              90%
-Work Style            85%
-Goals                 88%
-```
-
-The score should be explainable rather than being a mysterious number.
-
----
-
-# 🔍 Explainable Recommendations
-
-ALIGNX should answer:
-
-> **"Why am I getting this career recommendation?"**
-
-Example:
-
-### Software Engineering — 87%
-
-**Why it matches you**
-
-- Strong logical reasoning
-- High interest in technology
-- Good problem-solving preference
-- Existing programming experience
-- Preference for independent technical work
-
-**Areas to improve**
-
-- Data structures & algorithms
-- System design
-- Software engineering practices
-
-This makes the recommendation more useful than simply saying:
-
-> "You should become a software engineer."
-
----
-
-# 📈 Skill Gap Analysis
-
-ALIGNX compares the student's current profile against the requirements of a target career.
-
-Example:
-
-```text
-Target Career:
-Data Scientist
-
-Current Skills
-────────────────────────────
-Python              ████████░░
-Statistics          █████░░░░░
-SQL                 ███████░░░
-Machine Learning    ██░░░░░░░░
-Data Visualization  ████░░░░░░
-```
-
-The system then identifies:
-
-### Priority Skills
-
 1. Statistics
 2. Machine Learning
 3. Data Visualization
+```
 
 ---
 
-# 🛣️ Personalized Career Roadmap
+# 11. 🛣️ Personalized Career Roadmap
 
-After identifying a suitable career, ALIGNX can generate a learning roadmap.
+ALIGNX can convert the identified skill gaps into an actionable roadmap.
 
 Example:
 
@@ -337,10 +609,10 @@ Internships
 Data Scientist
 ```
 
-The roadmap can contain:
+A roadmap can contain:
 
 - Skills
-- Courses/resources
+- Learning resources
 - Projects
 - Practice tasks
 - Milestones
@@ -348,227 +620,121 @@ The roadmap can contain:
 
 ---
 
-# ⚖️ Career Comparison
+# 12. 🪞 Career Twin
 
-Students may be confused between multiple careers.
+Career Twin provides a visual representation of:
 
-ALIGNX allows users to compare them.
+```text
+Your Career DNA
+        +
+Your Aptitude
+        +
+Your Skills
+        +
+Your Goals
+        ↓
+Potential Career Universe
+```
 
-Example:
+It can show:
 
-| Factor | Software Engineer | Data Scientist |
-|---|---:|---:|
-| Interest Match | 92% | 86% |
-| Aptitude Match | 90% | 88% |
-| Current Skills | 84% | 62% |
-| Learning Effort | Medium | High |
-| Overall Alignment | **89%** | **79%** |
-
-This helps the student make a more informed decision.
-
----
-
-# 👤 Target Users
-
-### Primary Users
-
-- College students
-- High-school students
-- Students exploring career options
-- Students looking to switch domains
-- Students unsure about specialization
-
-### Secondary Users
-
-Future versions may support:
-
-- Career counselors
-- Colleges
-- Universities
-- Placement cells
-- Mentors
-- Recruiters
+- Core career matches
+- Strong alternatives
+- Unexpected interdisciplinary matches
+- Strengths
+- Development areas
 
 ---
 
-# 🧩 Core Modules
+# 13. 🎮 What-If Career Simulator
 
-ALIGNX will initially contain the following modules.
-
-## Module 1 — Authentication
-
-Responsible for:
-
-- Registration
-- Login
-- Logout
-- Password management
-- User sessions
-- Profile management
-
----
-
-## Module 2 — User Profile
-
-Stores:
-
-- Name
-- Education
-- Branch
-- Year
-- Skills
-- Interests
-- Goals
-- Preferences
-
----
-
-## Module 3 — Assessment Engine
-
-Responsible for:
-
-- Question management
-- Question categories
-- Answer collection
-- Scoring
-- Assessment progress
-
----
-
-## Module 4 — Career Engine
-
-Contains information about careers.
+The What-If simulator allows students to experiment with their future.
 
 Example:
 
 ```text
-Career
-├── Name
-├── Description
-├── Required Skills
-├── Preferred Aptitude
-├── Interest Areas
-├── Work Style
-├── Education
-└── Career Paths
+Education Budget
+₹3,00,000 ─────────●──── ₹6,00,000
+
+Risk Appetite
+Low ───────────────●──── High
+
+Preferred Location
+India ─────────────●──── Global
+
+Time to Employment
+2 years ───────────●──── 5 years
 ```
+
+The ALIGNX engine recalculates career rankings using the same underlying decision model.
+
+Example:
+
+```text
+Before
+
+AI Engineer       84
+Data Scientist    82
+Robotics          76
+
+
+After increasing education budget
+
+AI Engineer       91 ↑
+Data Scientist    85 ↑
+Robotics          81 ↑
+```
+
+This makes the recommendation system dynamic rather than static.
 
 ---
 
-## Module 5 — Recommendation Engine
+# 🧠 ALIGNX Decision Engine
 
-Combines:
+The core recommendation engine combines:
 
 ```text
-User Profile
+Student Vector
       +
-Assessment Results
+Family Vector
       +
-Skills
+Career Knowledge
       +
-Career Data
+Market Intelligence
       ↓
-Recommendation Engine
+ALIGNX Decision Engine
       ↓
-Ranked Careers
+Career Scores
 ```
 
----
-
-## Module 6 — Skill Gap Engine
-
-Compares:
+The initial scoring model can use configurable weights:
 
 ```text
-Current Skills
-        VS
-Career Requirements
+Student Fit          35%
+Financial Fit        20%
+Family Alignment     15%
+Market Demand        20%
+Location Fit         10%
 ```
 
-and identifies missing skills.
-
----
-
-## Module 7 — Roadmap Engine
-
-Generates a structured learning path based on:
-
-- Target career
-- Existing skills
-- Missing skills
-- Learning level
-
----
-
-## Module 8 — Dashboard
-
-The dashboard can display:
+Therefore:
 
 ```text
-Hello, Himanshu 👋
-
-Your Career Alignment
-        87%
-
-Top Matches
-────────────────
-Software Engineer    89%
-Cybersecurity        84%
-Data Scientist       79%
-
-Skill Gaps
-────────────────
-DSA
-System Design
-Cloud
-
-Your Next Step
-────────────────
-Complete DSA Fundamentals
+ALIGNX Score =
+0.35 × Student Fit
++
+0.20 × Financial Fit
++
+0.15 × Family Alignment
++
+0.20 × Market Demand
++
+0.10 × Location Fit
 ```
 
----
+These weights are configurable and can be refined during development.
 
-# 🧠 Career Recommendation Engine
-
-The recommendation engine is one of the most important components of ALIGNX.
-
-A basic version can use a weighted scoring model.
-
-For example:
-
-```text
-Career Score =
-
-0.25 × Interest Match
-+
-0.20 × Aptitude Match
-+
-0.20 × Skill Match
-+
-0.15 × Work Style Match
-+
-0.10 × Goal Match
-+
-0.10 × Preference Match
-```
-
-The weights can later be improved using data and machine learning.
-
-### Example
-
-If:
-
-```text
-Interest Match      = 90
-Aptitude Match      = 85
-Skill Match         = 80
-Work Style Match    = 88
-Goal Match          = 90
-Preference Match    = 82
-```
-
-ALIGNX calculates an overall alignment score and ranks the career accordingly.
+The important principle is that the recommendation should remain **explainable**.
 
 ---
 
@@ -576,97 +742,144 @@ ALIGNX calculates an overall alignment score and ranks the career accordingly.
 
 ```text
                     ┌──────────────┐
-                    │    Landing   │
-                    │     Page     │
+                    │   Landing    │
                     └──────┬───────┘
-                           │
-                           ▼
+                           ↓
                     ┌──────────────┐
-                    │ Sign Up /    │
-                    │ Login        │
+                    │   Student    │
+                    │  Onboarding  │
                     └──────┬───────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │ Build        │
-                    │ Profile      │
-                    └──────┬───────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │ Interactive  │
-                    │ Assessment   │
-                    └──────┬───────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │ Aptitude     │
-                    │ Assessment   │
-                    └──────┬───────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │ Alignment    │
-                    │ Engine       │
-                    └──────┬───────┘
-                           │
-                           ▼
-                 ┌─────────────────────┐
-                 │ Career              │
-                 │ Recommendations     │
-                 └──────────┬──────────┘
-                            │
-             ┌──────────────┼──────────────┐
-             ▼              ▼              ▼
-       Skill Gap       Compare        Roadmap
-       Analysis        Careers        Generation
+                           ↓
+                 ┌────────────────────┐
+                 │ Career Discovery   │
+                 │ Interactive        │
+                 │ Questions          │
+                 └─────────┬──────────┘
+                           ↓
+                 ┌────────────────────┐
+                 │ Aptitude Snapshot  │
+                 └─────────┬──────────┘
+                           ↓
+                 ┌────────────────────┐
+                 │    Career DNA      │
+                 └─────────┬──────────┘
+                           ↓
+                 ┌────────────────────┐
+                 │ Add Parent /       │
+                 │ Guardian            │
+                 └─────────┬──────────┘
+                           ↓
+                 ┌────────────────────┐
+                 │ Parent Invitation  │
+                 └─────────┬──────────┘
+                           ↓
+                 ┌────────────────────┐
+                 │ Parent Financial   │
+                 │ + Expectations     │
+                 └─────────┬──────────┘
+                           ↓
+                 ┌────────────────────┐
+                 │ Family Analysis    │
+                 └─────────┬──────────┘
+                           ↓
+              ┌────────────┴────────────┐
+              ↓                         ↓
+     Financial Solver          Conflict Index
+              └────────────┬────────────┘
+                           ↓
+                 ┌────────────────────┐
+                 │ Market Intelligence│
+                 └─────────┬──────────┘
+                           ↓
+                 ┌────────────────────┐
+                 │ ALIGNX Decision    │
+                 │ Engine             │
+                 └─────────┬──────────┘
+                           ↓
+                 ┌────────────────────┐
+                 │ Career Rankings    │
+                 └─────────┬──────────┘
+                           ↓
+             ┌─────────────┼──────────────┐
+             ↓             ↓              ↓
+       Career Twin      What-If        Roadmap
+                        Simulator
 ```
 
 ---
 
 # 🏗️ System Architecture
 
-Initial architecture:
-
 ```text
-                ┌───────────────────┐
-                │   Web / Mobile    │
-                │     Frontend      │
-                └─────────┬─────────┘
-                          │
-                          │ REST API
-                          ▼
-                ┌───────────────────┐
-                │     Backend       │
-                │ Node.js / Express │
-                └─────────┬─────────┘
-                          │
-             ┌────────────┼────────────┐
-             │            │            │
-             ▼            ▼            ▼
-        ┌────────┐   ┌─────────┐   ┌──────────┐
-        │Database│   │ AI / ML │   │ External │
-        │        │   │ Engine  │   │ Services │
-        └────────┘   └─────────┘   └──────────┘
+┌────────────────────────────────────────────┐
+│              FRONTEND                      │
+│                                            │
+│ Student UI │ Parent UI │ Dashboard        │
+└──────────────────────┬─────────────────────┘
+                       │
+                       │ REST API
+                       ▼
+┌────────────────────────────────────────────┐
+│              BACKEND                       │
+│                                            │
+│ Auth │ Family │ Assessment │ Recommendations│
+└──────────────┬───────────────┬─────────────┘
+               │               │
+               ▼               ▼
+        ┌────────────┐   ┌─────────────────┐
+        │  DATABASE  │   │ ALIGNX ENGINE   │
+        │            │   │                 │
+        │ Students   │   │ Career DNA      │
+        │ Parents    │   │ Aptitude        │
+        │ Careers    │   │ Financial Fit   │
+        │ Assessments│  │ Conflict Index  │
+        └────────────┘   │ Market Fit      │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │ LLM EXPLANATION │
+                         │                 │
+                         │ Why             │
+                         │ Alternatives    │
+                         │ Skill Gaps      │
+                         │ Roadmap         │
+                         └─────────────────┘
 ```
 
-The exact architecture will be finalized in:
+### Architecture Principle
 
-`docs/TRD.md`
+```text
+Frontend
+   ↓
+Experience
 
-and
+Backend
+   ↓
+Data + APIs
 
-`docs/SYSTEM_ARCHITECTURE.md`
+ALIGNX Engine
+   ↓
+Decision
+
+Career Dataset
+   ↓
+Knowledge
+
+LLM
+   ↓
+Explanation
+```
+
+The LLM should not replace the deterministic decision engine.
 
 ---
 
 # 🛠️ Technology Stack
 
-The stack may evolve during development.
+The stack can evolve during development, but the initial architecture is expected to use:
 
 ## Frontend
-
-Potential technologies:
 
 - React
 - TypeScript
@@ -681,25 +894,13 @@ Potential technologies:
 
 ## Database
 
-Potential options:
+- PostgreSQL / Supabase
 
-- PostgreSQL
-- Supabase
+## AI / Intelligence
 
-## Authentication
-
-- JWT
-- Secure password hashing
-- Session management
-
-## AI / Recommendation
-
-Potential technologies:
-
-- Python
-- Machine Learning
-- LLM APIs
-- Rule-based recommendation engine for MVP
+- Deterministic recommendation engine
+- Rule/weighted scoring for MVP
+- LLM API for explanations and roadmap generation
 
 ## Development Tools
 
@@ -713,12 +914,13 @@ Potential technologies:
 
 # 📁 Project Structure
 
-The repository will follow a modular structure.
-
 ```text
 ALIGNX/
 │
 ├── README.md
+├── PROJECT.md
+├── TEAM.md
+├── TASKS.md
 │
 ├── docs/
 │   ├── PRD.md
@@ -728,186 +930,273 @@ ALIGNX/
 │   ├── DATABASE_SCHEMA.md
 │   ├── API_DOCUMENTATION.md
 │   ├── USER_FLOW.md
-│   ├── MVP_SCOPE.md
 │   └── ROADMAP.md
 │
 ├── frontend/
-│   ├── src/
-│   ├── public/
-│   └── package.json
 │
 ├── backend/
-│   ├── src/
-│   ├── routes/
-│   ├── controllers/
-│   ├── services/
-│   ├── models/
-│   ├── middleware/
-│   └── package.json
 │
 ├── database/
-│   ├── schema/
-│   ├── migrations/
-│   └── seed/
 │
-├── assets/
-│   ├── wireframes/
-│   ├── diagrams/
-│   └── screenshots/
-│
-└── .gitignore
+└── assets/
+    ├── wireframes/
+    ├── diagrams/
+    └── screenshots/
 ```
 
 ---
 
 # 📚 Documentation
 
-All major project decisions will be documented.
-
-| Document | Description |
+| Document | Purpose |
 |---|---|
-| `PRD.md` | Product requirements and features |
-| `TRD.md` | Technical requirements and implementation |
+| `PROJECT.md` | Product vision, requirements and principles |
+| `TEAM.md` | Team responsibilities and ownership |
+| `TASKS.md` | Master implementation checklist |
+| `PRD.md` | Product requirements |
+| `TRD.md` | Technical requirements |
 | `UI_UX.md` | UI/UX specifications |
-| `SYSTEM_ARCHITECTURE.md` | Overall system architecture |
-| `DATABASE_SCHEMA.md` | Database structure |
-| `API_DOCUMENTATION.md` | Backend APIs |
-| `USER_FLOW.md` | User journeys |
-| `MVP_SCOPE.md` | MVP boundaries |
+| `SYSTEM_ARCHITECTURE.md` | System architecture |
+| `DATABASE_SCHEMA.md` | Database design |
+| `API_DOCUMENTATION.md` | API contracts |
+| `USER_FLOW.md` | Complete user journeys |
 | `ROADMAP.md` | Development roadmap |
 
 ---
 
 # 🚀 Development Roadmap
 
-## Phase 0 — Planning
+## Phase 0 — Foundation
 
-### Deliverables
-
-- [ ] Problem definition
-- [ ] PRD
-- [ ] User personas
-- [ ] User flow
-- [ ] MVP definition
-- [ ] UI/UX wireframes
-- [ ] Technical architecture
-- [ ] Database schema
+- [ ] Finalize PRD
+- [ ] Finalize TRD
+- [ ] Finalize UI/UX
+- [ ] Finalize system architecture
+- [ ] Finalize database schema
+- [ ] Finalize API contracts
+- [ ] Finalize user flow
+- [ ] Create career dataset
 
 ---
 
-# Phase 1 — MVP
+## Phase 1 — Student MVP
 
-### Authentication
+- [ ] Student onboarding
+- [ ] Interactive Career Discovery
+- [ ] Aptitude Snapshot
+- [ ] Career DNA generation
+- [ ] Student vector
 
-- [ ] Registration
-- [ ] Login
-- [ ] Logout
-- [ ] Profile
+---
 
-### Assessment
-
-- [ ] Interest assessment
-- [ ] Aptitude assessment
-- [ ] Preference questions
-- [ ] Assessment scoring
-
-### Career Engine
+## Phase 2 — Career Intelligence
 
 - [ ] Career database
+- [ ] Career profiles
 - [ ] Career matching
-- [ ] Alignment score
-
-### Dashboard
-
-- [ ] User profile
-- [ ] Top career recommendations
-- [ ] Score visualization
+- [ ] Student Fit
+- [ ] Market Fit
+- [ ] Location Fit
+- [ ] Initial recommendation ranking
 
 ---
 
-# Phase 2 — Intelligence
+## Phase 3 — Family Intelligence
 
-- [ ] Explainable recommendations
-- [ ] Skill gap analysis
-- [ ] Career comparison
-- [ ] Personalized roadmap
-- [ ] Improved recommendation algorithm
-
----
-
-# Phase 3 — Advanced Features
-
-Potential features:
-
-- [ ] AI career assistant
-- [ ] LLM-powered explanations
-- [ ] Resume analysis
-- [ ] Project recommendations
-- [ ] Course recommendations
-- [ ] Internship recommendations
-- [ ] Mentor matching
-- [ ] Career progress tracking
+- [ ] Add Paying Parent/Guardian
+- [ ] Parent invitation
+- [ ] Verification
+- [ ] Multiple parent support
+- [ ] Parent status
+- [ ] Financial Constraint Solver
+- [ ] Parent–Student Conflict Index
+- [ ] Family Alignment
 
 ---
 
-# 🧪 Testing Strategy
+## Phase 4 — ALIGNX Engine
 
-ALIGNX will use multiple levels of testing.
-
-### Frontend
-
-- Component testing
-- UI testing
-- Responsive testing
-
-### Backend
-
-- Unit testing
-- API testing
-- Authentication testing
-- Validation testing
-
-### Database
-
-- Schema validation
-- Relationship testing
-- Query testing
-
-### System
-
-- End-to-end testing
-- User journey testing
-- Performance testing
+- [ ] Combine Student + Family + Market vectors
+- [ ] Calculate component scores
+- [ ] Calculate overall ALIGNX score
+- [ ] Generate explainable recommendations
 
 ---
 
-# 🔐 Security
+## Phase 5 — AI Explanation
 
-Security will be considered from the beginning.
+- [ ] LLM integration
+- [ ] Recommendation explanation
+- [ ] Alternative careers
+- [ ] Skill gap explanation
+- [ ] Roadmap generation
 
-Important practices include:
+---
 
-- Password hashing
-- JWT/session security
-- Input validation
-- API authentication
-- Authorization
-- Environment variables
-- Secure database access
-- Rate limiting
-- CORS configuration
-- Protection against common web vulnerabilities
+## Phase 6 — Differentiating Features
 
-Sensitive credentials must **never** be committed to GitHub.
+- [ ] Career Twin
+- [ ] What-If Career Simulator
+- [ ] Interdisciplinary Career Discovery
 
-Example:
+---
+
+## Phase 7 — Final Polish
+
+- [ ] Full end-to-end testing
+- [ ] UI animations
+- [ ] Score visualizations
+- [ ] Responsive design
+- [ ] Demo data
+- [ ] Deployment
+- [ ] Hackathon presentation
+
+---
+
+# 👥 Team Workflow
+
+ALIGNX is developed by a four-member team.
+
+### Himanshu — AI/ML + Decision Engine
+
+Responsible for:
+
+- Career DNA
+- Aptitude scoring
+- Student vector
+- Financial Constraint Solver
+- Conflict Index
+- Career matching
+- Career ranking
+- Market integration
+- What-If engine
+
+### Arpit — Data + LLM
+
+Responsible for:
+
+- Career knowledge base
+- Career profiles
+- Skills
+- Education costs
+- Salary ranges
+- Market data
+- Geographic data
+- Exams
+- Scholarships
+- Alternative careers
+- LLM prompts
+- Explanations
+- Roadmaps
+
+### OM — Backend + Database
+
+Responsible for:
+
+- Database
+- APIs
+- Student records
+- Family relationships
+- Parent invitations
+- Verification
+- Parent status
+- Assessment APIs
+- Recommendation APIs
+- Data persistence
+
+### Daksh — Frontend + UI/UX
+
+Responsible for:
+
+- Landing page
+- Student onboarding
+- Career Discovery
+- Aptitude UI
+- Career DNA visualization
+- Parent invitation UI
+- Parent status
+- Recommendation dashboard
+- Career Twin
+- What-If Simulator
+- Roadmap
+- Animations and visual polish
+
+### Ownership Principle
 
 ```text
-.env
-.env.local
+Himanshu → Decision
+Arpit    → Knowledge + Explanation
+OM       → Infrastructure
+Daksh    → Experience
 ```
 
-must remain inside `.gitignore`.
+---
+
+# 🌿 Git Workflow
+
+We use feature branches.
+
+### Main branch
+
+```text
+main
+```
+
+Production-ready code only.
+
+### Feature branches
+
+```text
+feature/student-assessment
+feature/career-engine
+feature/family-module
+feature/database
+feature/dashboard
+feature/ui
+feature/llm
+```
+
+### Development Flow
+
+```bash
+git checkout -b feature/your-feature
+
+git add .
+
+git commit -m "feat: add assessment module"
+
+git push origin feature/your-feature
+```
+
+Then:
+
+```text
+Feature Branch
+      ↓
+Pull Request
+      ↓
+Code Review
+      ↓
+Testing
+      ↓
+Merge → main
+```
+
+---
+
+# 📝 Commit Convention
+
+Use conventional commit messages:
+
+```text
+feat: add career assessment
+fix: resolve recommendation calculation
+docs: update PRD
+style: improve dashboard UI
+refactor: restructure recommendation service
+test: add assessment tests
+chore: update dependencies
+```
 
 ---
 
@@ -920,11 +1209,11 @@ Install:
 - Node.js
 - npm
 - Git
-- PostgreSQL/Supabase
+- PostgreSQL / Supabase
 - VS Code
 - Postman
 
-Verify installations:
+Verify:
 
 ```bash
 node --version
@@ -943,7 +1232,7 @@ cd ALIGNX
 
 ---
 
-# ▶️ Frontend Setup
+## Frontend Setup
 
 ```bash
 cd frontend
@@ -953,7 +1242,7 @@ npm run dev
 
 ---
 
-# ▶️ Backend Setup
+## Backend Setup
 
 Open another terminal:
 
@@ -987,187 +1276,130 @@ JWT_SECRET=your_secret
 AI_API_KEY=your_api_key
 ```
 
-Never commit the `.env` file.
+Never commit `.env` files.
 
----
-
-# 🌿 Git Workflow
-
-We will use feature branches.
-
-### Main branch
+Add them to `.gitignore`:
 
 ```text
-main
-```
-
-Production-ready code only.
-
-### Feature branches
-
-Examples:
-
-```text
-feature/authentication
-feature/assessment
-feature/recommendation-engine
-feature/dashboard
-feature/database
-feature/ui
+.env
+.env.local
 ```
 
 ---
 
-## Development Flow
+# 🧪 Testing
 
-```bash
-git checkout -b feature/your-feature
-```
-
-Make changes.
-
-Then:
-
-```bash
-git add .
-git commit -m "feat: add assessment module"
-git push origin feature/your-feature
-```
-
-Create a Pull Request.
-
-After review:
-
-```text
-Feature Branch
-      ↓
-Pull Request
-      ↓
-Code Review
-      ↓
-Testing
-      ↓
-Merge → main
-```
-
----
-
-# 📝 Commit Convention
-
-We will follow conventional commit messages.
-
-```text
-feat: add career assessment
-fix: resolve recommendation calculation
-docs: update PRD
-style: improve dashboard UI
-refactor: restructure recommendation service
-test: add assessment tests
-chore: update dependencies
-```
-
----
-
-# 👥 Team Workflow
-
-ALIGNX is designed to be developed collaboratively.
-
-### Product / Research
-
-Responsible for:
-
-- Problem research
-- PRD
-- Career research
-- Question design
-- Career dataset
+ALIGNX should be tested at multiple levels.
 
 ### Frontend
 
-Responsible for:
+- Component testing
+- UI testing
+- Responsive testing
+- Assessment flow testing
 
-- UI implementation
-- Dashboard
-- Assessment screens
-- Career recommendation screens
-- Responsive design
+### Backend
 
-### Backend / Data
+- API testing
+- Validation testing
+- Authentication testing
+- Parent invitation testing
 
-Responsible for:
+### Decision Engine
 
-- API
-- Database
-- Authentication
-- Recommendation engine
-- Skill matching
-- Integration
+- Career scoring
+- Financial fit
+- Conflict index
+- Market fit
+- What-If recalculation
 
-Team members should communicate before making major architecture changes.
+### End-to-End
 
----
+Test scenarios including:
 
-# 🎨 UI/UX Principles
-
-ALIGNX should feel:
-
-### Simple
-
-The user should never feel overwhelmed.
-
-### Interactive
-
-Assessment should feel engaging rather than like a traditional examination.
-
-### Personalized
-
-The user should feel that recommendations are based on their individual profile.
-
-### Explainable
-
-Every major recommendation should have a reason.
-
-### Actionable
-
-ALIGNX should answer:
-
-> "What should I do next?"
-
-not just:
-
-> "What career should I choose?"
+- One parent
+- Multiple parents
+- Parent pending
+- Parent completed
+- High student-parent conflict
+- Expensive career
+- Scholarship-supported career
+- High local demand
+- Low local demand
+- What-If budget change
+- What-If location change
+- What-If risk change
 
 ---
 
-# 🧠 Design Philosophy
+# 🔐 Security
 
-ALIGNX should **not tell students what career they must choose**.
+Security must be considered from the beginning.
 
-Instead:
+Important practices:
+
+- Password hashing
+- Secure authentication
+- Authorization
+- Input validation
+- API protection
+- Environment variables
+- Secure database access
+- Rate limiting
+- CORS configuration
+- Protection against common web vulnerabilities
+
+Sensitive credentials must never be committed to GitHub.
+
+---
+
+# 🎯 MVP Scope
+
+The hackathon MVP focuses on the following complete journey:
 
 ```text
-ALIGNX
-   ↓
-Understands the student
-   ↓
-Identifies possible matches
-   ↓
-Explains the reasoning
-   ↓
-Shows strengths & gaps
-   ↓
-Provides possible paths
-   ↓
-Student makes the final decision
+Student Onboarding
+       ↓
+Career Discovery
+       ↓
+Aptitude Snapshot
+       ↓
+Career DNA
+       ↓
+Add Parent/Guardian
+       ↓
+Family Information
+       ↓
+Financial Constraint Solver
+       ↓
+Conflict Index
+       ↓
+Market Intelligence
+       ↓
+ALIGNX Decision Engine
+       ↓
+Top Career Recommendations
+       ↓
+Explainable Results
+       ↓
+Career Twin
+       ↓
+What-If Simulator
+       ↓
+Personalized Roadmap
 ```
 
-The platform is intended to be a **career guidance and discovery tool**, not an authority that determines a student's future.
+### MVP priority
+
+> **Working end-to-end flow > feature quantity**
+
+The team should not add major features until the core journey works reliably.
 
 ---
 
 # 🔮 Future Scope
 
-Future versions of ALIGNX could evolve into a complete career ecosystem.
+Future versions of ALIGNX could expand into a broader career ecosystem.
 
 ### AI Career Assistant
 
@@ -1179,94 +1411,131 @@ or:
 
 > "What should I learn after Python?"
 
----
-
 ### Resume Analysis
 
-Upload a resume and receive:
+Analyze:
 
-- Skill extraction
+- Skills
+- Experience
+- Projects
+- Career alignment
 - Missing skills
-- Career matches
-- Resume improvement suggestions
-
----
 
 ### Project Recommendations
 
-Based on career goals:
-
-```text
-Target:
-Software Engineer
-
-Recommended Projects:
-
-1. REST API
-2. Full Stack Application
-3. Authentication System
-4. Distributed System
-```
-
----
+Recommend projects based on target careers.
 
 ### Internship Discovery
 
-ALIGNX could eventually connect career alignment with relevant internships.
-
----
+Connect students with relevant internship opportunities.
 
 ### Mentor Matching
 
-Students could be connected with mentors working in their target fields.
+Connect students with mentors working in their target domains.
+
+### Career Progress Tracking
+
+Track:
+
+- Skills completed
+- Projects completed
+- Roadmap progress
+- Career development
+
+---
+
+# 🎨 UI/UX Principles
+
+ALIGNX should feel:
+
+### Simple
+
+Students should never feel overwhelmed.
+
+### Interactive
+
+Assessment should feel engaging rather than like a traditional examination.
+
+### Personalized
+
+Recommendations should clearly reflect the student's profile.
+
+### Explainable
+
+Every major recommendation should have a reason.
+
+### Actionable
+
+ALIGNX should answer:
+
+> **"What should I do next?"**
+
+not simply:
+
+> **"What career should I choose?"**
+
+---
+
+# 🧠 Design Philosophy
+
+ALIGNX should **not decide a student's future**.
+
+Instead:
+
+```text
+             ALIGNX
+                ↓
+       Understand the Student
+                ↓
+        Understand the Family
+                ↓
+        Understand the Market
+                ↓
+       Identify Career Matches
+                ↓
+         Explain the Reason
+                ↓
+       Show Strengths & Gaps
+                ↓
+       Explore Alternatives
+                ↓
+        Build Possible Paths
+                ↓
+       Student Makes the Choice
+```
+
+ALIGNX is a **career guidance and decision-support platform**, not an authority that determines a student's future.
 
 ---
 
 # 📊 Success Metrics
 
-The success of ALIGNX can be measured through:
+Potential success metrics include:
 
 ### Engagement
 
 - Assessment completion rate
-- Daily/weekly active users
-- Session duration
+- Career exploration rate
+- Session completion rate
 
 ### Recommendation Quality
 
 - Recommendation feedback
-- Career exploration rate
+- Career exploration after recommendation
 - User satisfaction
+- Career comparison usage
 
 ### Learning Progress
 
-- Skills completed
+- Skill completion
 - Roadmap completion
 - Projects completed
 
----
+### Family Engagement
 
-# ⚠️ MVP Principle
-
-The first version of ALIGNX will **not attempt to solve everything**.
-
-The MVP should focus on:
-
-```text
-Profile
-   ↓
-Assessment
-   ↓
-Career Matching
-   ↓
-Explainable Recommendation
-   ↓
-Skill Gap
-   ↓
-Next Steps
-```
-
-Additional features will be added only after the core experience works reliably.
+- Parent invitation completion
+- Parent response rate
+- Family alignment analysis usage
 
 ---
 
@@ -1279,10 +1548,12 @@ Before contributing:
 1. Create a feature branch.
 2. Make your changes.
 3. Test your changes.
-4. Commit using the project convention.
+4. Follow the commit convention.
 5. Push your branch.
 6. Open a Pull Request.
 7. Request review from another team member.
+
+Before making major architectural changes, discuss them with the team and update the relevant documentation.
 
 ---
 
@@ -1296,27 +1567,35 @@ License information will be added before public release.
 
 # 🚧 Project Status
 
-**Status:** 🟡 Planning / Early Development
+**Status:** 🟡 Active Development
 
 Current focus:
 
 ```text
-[x] Project idea
-[x] Initial concept
+[x] Project Concept
+[x] Product Direction
+[x] Core User Journey
+[x] Team Responsibilities
+
 [ ] PRD
-[ ] UI/UX
-[ ] Technical Design
+[ ] TRD
+[ ] UI/UX Specification
+[ ] System Architecture
 [ ] Database Design
+[ ] API Design
 [ ] MVP Development
+[ ] Integration
 [ ] Testing
 [ ] Deployment
+[ ] Hackathon Demo
 ```
 
 ---
 
 # 🚀 ALIGNX
 
-> **Don't choose a career blindly.  
-> Understand yourself. Discover your alignment. Build your path.**
+> **Don't choose a career blindly.**
+>
+> **Understand yourself. Understand your reality. Discover where you align.**
 
-**ALIGNX — Find where your skills, interests, and future align.**
+### **ALIGNX — Aligning Talent With Opportunity.**
