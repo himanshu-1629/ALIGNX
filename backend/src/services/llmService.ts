@@ -8,6 +8,7 @@ import { IRoadmapMilestone } from '../models/Roadmap';
 // Initialize Gemini Client if API key is provided
 let genAIClient: GoogleGenAI | null = null;
 const apiKey = process.env.GEMINI_API_KEY;
+const defaultModelName = process.env.GEMINI_MODEL_NAME || 'gemini-3.5-flash-lite';
 
 if (apiKey && apiKey.trim() !== '') {
   try {
@@ -87,7 +88,7 @@ Only output raw JSON without markdown code fences.
 `;
 
       const response = await genAIClient.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: defaultModelName,
         contents: prompt
       });
 
@@ -162,7 +163,7 @@ Only output raw JSON without markdown code fences.
 `;
 
       const response = await genAIClient.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: defaultModelName,
         contents: prompt
       });
 

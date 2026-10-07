@@ -123,6 +123,15 @@ export function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const isAssessmentStage = ['onboarding', 'discovery', 'aptitude', 'dna'].includes(currentView);
+
+  const assessmentSteps = [
+    { id: 'onboarding' as AppView, num: '1', label: 'Goals & Budget' },
+    { id: 'discovery' as AppView, num: '2', label: 'Holland Interests' },
+    { id: 'aptitude' as AppView, num: '3', label: 'Cognitive Aptitude' },
+    { id: 'dna' as AppView, num: '4', label: 'Career DNA' },
+  ];
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-deep)', display: 'flex', flexDirection: 'column' }}>
       {/* Persistent Architectural Header */}
@@ -133,6 +142,85 @@ export function App() {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
       />
+
+      {/* Sleek Progressive Assessment Stepper Header */}
+      {isAssessmentStage && (
+        <div
+          style={{
+            backgroundColor: 'var(--bg-surface)',
+            borderBottom: '1px solid var(--border-hairline)',
+            padding: '10px 24px'
+          }}
+        >
+          <div
+            style={{
+              maxWidth: '960px',
+              margin: '0 auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              overflowX: 'auto'
+            }}
+          >
+            {assessmentSteps.map((step, idx) => {
+              const isActive = currentView === step.id;
+              const stepIndex = assessmentSteps.findIndex((s) => s.id === currentView);
+              const isPast = idx < stepIndex;
+
+              return (
+                <div
+                  key={step.id}
+                  onClick={() => {
+                    if (isPast || isActive) {
+                      setCurrentView(step.id);
+                    }
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    cursor: isPast || isActive ? 'pointer' : 'default',
+                    opacity: isActive ? 1 : isPast ? 0.85 : 0.45,
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  <span
+                    style={{
+                      width: '22px',
+                      height: '22px',
+                      borderRadius: '980px',
+                      backgroundColor: isActive ? 'var(--accent)' : isPast ? 'var(--text-primary)' : 'var(--border-hairline)',
+                      color: isActive || isPast ? '#FFFFFF' : 'var(--text-muted)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.68rem',
+                      fontWeight: 700
+                    }}
+                  >
+                    {isPast ? '✓' : step.num}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.84rem',
+                      fontWeight: isActive ? 600 : 500,
+                      color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)'
+                    }}
+                  >
+                    {step.label}
+                  </span>
+                  {idx < assessmentSteps.length - 1 && (
+                    <span style={{ color: 'var(--border-subtle)', marginLeft: '12px' }}>—</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Main View Container */}
       <main style={{ flex: 1 }}>

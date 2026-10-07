@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-07T14:49:00.000Z",
+  "title": "Design System: ALIGNX",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Desert Titanium Gold",
+        "canonical": "#9E6B38",
+        "tonalRamp": ["#3D2912", "#593D1E", "#775129", "#9E6B38", "#B8824C", "#D1A375", "#E8CBB0", "#F7ECE2"]
+      },
+      "primary-light": {
+        "role": "primary",
+        "displayName": "Warm Gold Highlight",
+        "canonical": "#B8824C",
+        "tonalRamp": ["#472F18", "#684624", "#8D5F32", "#B8824C", "#CA9969", "#DCB58E", "#EDD3BA", "#F9EEE3"]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Apple Signature Blue",
+        "canonical": "#0071E3",
+        "tonalRamp": ["#00244D", "#003E82", "#0057B8", "#0071E3", "#3392FF", "#66ADFF", "#99C7FF", "#E6F1FF"]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Ceramic Pure White",
+        "canonical": "#FFFFFF",
+        "tonalRamp": ["#1D1D1F", "#3A3A3C", "#515154", "#86868B", "#D2D2D7", "#E5E5EA", "#F5F5F7", "#FFFFFF"]
+      },
+      "neutral-surface": {
+        "role": "neutral",
+        "displayName": "Neutral Surface Gray",
+        "canonical": "#F5F5F7",
+        "tonalRamp": ["#1D1D1F", "#3A3A3C", "#515154", "#86868B", "#C7C7CC", "#E5E5EA", "#F5F5F7", "#FFFFFF"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero Section headlines and top career announcements." },
+      "headline": { "displayName": "Headline", "purpose": "Module headers and primary section titles." },
+      "title": { "displayName": "Title", "purpose": "Card titles, quadrant headers, and radar labels." },
+      "body": { "displayName": "Body", "purpose": "Methodology explanations and descriptive commentary." },
+      "label": { "displayName": "Label", "purpose": "Technical metadata, eyebrow tags, and slider units." }
+    },
+    "shadows": [
+      { "name": "card-rest", "value": "0 2px 8px rgba(0, 0, 0, 0.05)", "purpose": "Default card resting elevation." },
+      { "name": "card-hover", "value": "0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04)", "purpose": "Active card hover lift." },
+      { "name": "keycap-rest", "value": "0 2px 0 rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95)", "purpose": "Tactile mechanical key baseline." },
+      { "name": "accent-glow", "value": "0 4px 16px rgba(158, 107, 56, 0.28)", "purpose": "Top recommendation highlight glow." }
+    ],
+    "motion": [
+      { "name": "ease-apple", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Standard kinetic easing for state transitions." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1600px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Roll Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Signature 3D roll button in Desert Titanium gold with kinetic hover roll.",
+      "html": "<button class=\"ds-btn-roll\"><span class=\"ds-roll-track\"><span class=\"ds-roll-item\">LAUNCH SIMULATOR</span></span></button>",
+      "css": ".ds-btn-roll { background: linear-gradient(180deg, #B8824C 0%, #9E6B38 100%); color: #ffffff; padding: 13px 26px; border-radius: 980px; border: 1px solid #8C5828; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease; box-shadow: 0 3px 12px rgba(158, 107, 56, 0.28); } .ds-btn-roll:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(158, 107, 56, 0.35); }"
+    },
+    {
+      "name": "Tactile Keycap",
+      "kind": "custom",
+      "refersTo": "keycap",
+      "description": "Physical tactile keycap with inset highlight and micro-depression on active click.",
+      "html": "<button class=\"ds-keycap\"><span>⌘ OPTION A</span></button>",
+      "css": ".ds-keycap { background: linear-gradient(180deg, #FFFFFF 0%, #F5F5F7 100%); color: #1D1D1F; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: 9px; padding: 8px 15px; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; letter-spacing: 0.08em; cursor: pointer; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95); transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1); } .ds-keycap:hover { border-color: rgba(0, 0, 0, 0.25); transform: translateY(-1px); } .ds-keycap:active { transform: translateY(1.5px); box-shadow: 0 0 0 rgba(0, 0, 0, 0.08); }"
+    },
+    {
+      "name": "Floating Card Container",
+      "kind": "card",
+      "refersTo": "card-floating",
+      "description": "Pure ceramic white floating card with subtle hairline border and ambient shadow.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-eyebrow\">RECOMMENDATION #1</div><h3 class=\"ds-card-title\">AI Systems Architect</h3><p class=\"ds-card-desc\">93.9% Fit Alignment across Aptitude, Market Demand, and Family Capacity.</p></div>",
+      "css": ".ds-card { background: #FFFFFF; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); font-family: 'Plus Jakarta Sans', sans-serif; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease; } .ds-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); } .ds-card-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: #9E6B38; margin-bottom: 8px; font-weight: 600; } .ds-card-title { font-size: 1.25rem; font-weight: 600; color: #1D1D1F; margin-bottom: 8px; letter-spacing: -0.015em; } .ds-card-desc { font-size: 0.95rem; color: #515154; line-height: 1.5; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Precision Observatory",
+    "overview": "ALIGNX’s visual identity is modeled as a high-precision optical instrument. Rather than an aggressive gaming HUD or a generic corporate dashboard, ALIGNX feels like an architectural observatory where complex human psychometrics, parental expectations, and labor market telemetry are brought into crisp, unambiguous focus.",
+    "keyCharacteristics": [
+      "Ceramic Light Editorial Atmosphere",
+      "Desert Titanium Accents",
+      "Architectural Hairlines",
+      "Tactile Affordances"
+    ],
+    "rules": [
+      {
+        "name": "The Rarity Rule",
+        "body": "The Desert Titanium primary accent is reserved for top recommendations and primary affirmative actions (≤10% of surface area).",
+        "section": "colors"
+      },
+      {
+        "name": "The Double-Border Rule",
+        "body": "High-priority floating cards pair a 1px subtle outer border with an inner 1px inset highlight to create crisp material realism.",
+        "section": "colors"
+      },
+      {
+        "name": "The Monospace Eyebrow Rule",
+        "body": "Every primary section headline is prefaced by an uppercase monospace eyebrow badge in wide tracking providing taxonomic orientation.",
+        "section": "typography"
+      },
+      {
+        "name": "The Kinetic Easing Rule",
+        "body": "All state transitions utilize Apple-grade cubic bezier curve cubic-bezier(0.16, 1, 0.3, 1).",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do format all financial metrics with explicit Rupee denomination (e.g. ₹8.5L, ₹25,000/mo).",
+      "Do preface complex quantitative scores with diagnostic status badges.",
+      "Do maintain high typographic contrast between headings and metadata labels.",
+      "Do use var(--ease-apple) for all interactive transitions."
+    ],
+    "donts": [
+      "Don't use neon or saturated purple/green cyberpunk palettes; ALIGNX is an authoritative, architectural observatory.",
+      "Don't display black-box percentages without the underlying 5D dimensional breakdown.",
+      "Don't use sharp 0px corners on interactive buttons; use the signature 980px pill radius.",
+      "Don't allow slider handles to overlap labels on mobile viewports."
+    ]
+  }
+}

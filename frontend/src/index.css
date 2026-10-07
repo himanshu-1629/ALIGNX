@@ -1,34 +1,35 @@
 :root {
   /* ========================================================
-     APPLE PRO COLOR SYSTEM (Space Black / Desert Titanium)
+     APPLE PRO LIGHT COLOR SYSTEM (Ceramic White / Desert Titanium)
+     Clean, modern, luxury light theme
      ======================================================== */
-  --bg-deep: #000000;              /* True Obsidian Black */
-  --bg-surface: #07080B;           /* Dark Titanium Surface */
-  --bg-card: #0D0F14;              /* Brushed Titanium Card */
-  --bg-elevated: #13161F;          /* Elevated Dynamic Island */
-  --bg-frosted: rgba(13, 15, 20, 0.78);
-  --bg-dim: rgba(0, 0, 0, 0.88);
+  --bg-deep: #FFFFFF;              /* Crisp Pure White */
+  --bg-surface: #F5F5F7;           /* Apple Classic Neutral Light Gray */
+  --bg-card: #FFFFFF;              /* Pure White Floating Cards */
+  --bg-elevated: #FAFAFC;          /* Elevated Light Surface */
+  --bg-frosted: rgba(255, 255, 255, 0.85);
+  --bg-dim: rgba(255, 255, 255, 0.94);
 
   /* Typography Colors */
-  --text-primary: #F5F5F7;         /* Apple Keynote Crisp White */
-  --text-secondary: #86868B;       /* Titanium Specular Gray */
-  --text-muted: #515154;          /* Precision Micro Metadata */
+  --text-primary: #1D1D1F;         /* Apple Keynote Rich Obsidian */
+  --text-secondary: #515154;       /* Refined Slate Gray */
+  --text-muted: #86868B;          /* Precision Metadata Gray */
 
-  /* Titanium Accents */
-  --accent: #C59B6D;              /* Desert Titanium Metallic Gold */
-  --accent-light: #DFC09A;        /* Champagne Titanium Highlight */
-  --accent-dim: rgba(197, 155, 109, 0.12);
-  --accent-border: rgba(197, 155, 109, 0.32);
+  /* Titanium Accents - Calibrated for high readability on white */
+  --accent: #9E6B38;              /* Rich Desert Titanium Gold */
+  --accent-light: #B8824C;        /* Warm Gold Highlight */
+  --accent-dim: rgba(158, 107, 56, 0.08);
+  --accent-border: rgba(158, 107, 56, 0.28);
 
-  --titanium-raw: #E5E5EA;         /* Natural Titanium */
-  --titanium-blue: #2997FF;        /* Cosmic Ionized Cobalt */
-  --titanium-blue-dim: rgba(41, 151, 255, 0.12);
+  --titanium-raw: #3A3A3C;         /* Natural Titanium Graphite */
+  --titanium-blue: #0071E3;        /* Apple Signature Blue */
+  --titanium-blue-dim: rgba(0, 113, 227, 0.08);
 
-  /* Apple Pro Hairlines */
-  --border-hairline: rgba(255, 255, 255, 0.08);
-  --border-subtle: rgba(255, 255, 255, 0.14);
-  --border-bright: rgba(255, 255, 255, 0.28);
-  --grid-line: rgba(255, 255, 255, 0.028);
+  /* Apple Pro Light Hairlines */
+  --border-hairline: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.14);
+  --border-bright: rgba(0, 0, 0, 0.24);
+  --grid-line: rgba(0, 0, 0, 0.035);
 
   /* Typography */
   --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
@@ -168,6 +169,10 @@ body {
    APPLE PRO 3D ROLL BUTTON & PHYSICAL KEY ANIMATIONS
    ======================================================== */
 
+/* ========================================================
+   APPLE PRO 3D ROLL BUTTON & PHYSICAL KEY ANIMATIONS (Light Theme)
+   ======================================================== */
+
 /* 3D Roll Button */
 .btn-alignx-roll {
   position: relative;
@@ -178,7 +183,7 @@ body {
   padding: 12px 24px;
   border-radius: 980px; /* Apple signature pill button */
   border: 1px solid var(--border-subtle);
-  background: linear-gradient(180deg, #181A22 0%, #0F1116 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5F5F7 100%);
   color: var(--text-primary);
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -188,35 +193,35 @@ body {
   text-decoration: none;
   cursor: pointer;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.18s var(--ease-apple);
   user-select: none;
 }
 
 .btn-alignx-roll:hover {
-  border-color: var(--accent);
-  box-shadow: 0 8px 28px rgba(197, 155, 109, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(0, 0, 0, 0.28);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transform: translateY(-1.5px);
 }
 
 .btn-alignx-roll:active {
   transform: scale(0.97) translateY(1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
 }
 
 .btn-alignx-roll-primary {
-  background: linear-gradient(180deg, #D4A373 0%, #A97C4E 100%);
-  border-color: #E2B788;
-  color: #000000;
+  background: linear-gradient(180deg, #B8824C 0%, #9E6B38 100%);
+  border-color: #8C5828;
+  color: #FFFFFF;
   font-weight: 600;
-  box-shadow: 0 6px 24px rgba(197, 155, 109, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  box-shadow: 0 3px 12px rgba(158, 107, 56, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .btn-alignx-roll-primary:hover {
-  background: linear-gradient(180deg, #DFC09A 0%, #B88959 100%);
-  border-color: #F0D4B2;
-  box-shadow: 0 10px 32px rgba(197, 155, 109, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  color: #000000;
+  background: linear-gradient(180deg, #C58F58 0%, #A8733E 100%);
+  border-color: #96612F;
+  box-shadow: 0 6px 18px rgba(158, 107, 56, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  color: #FFFFFF;
 }
 
 /* Roll Track Container for Text */
@@ -244,8 +249,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: linear-gradient(180deg, #D4A373 0%, #A97C4E 100%);
-  color: #000000;
+  background: linear-gradient(180deg, #B8824C 0%, #9E6B38 100%);
+  color: #FFFFFF;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.14em;
@@ -253,17 +258,17 @@ body {
   font-weight: 600;
   padding: 13px 26px;
   border-radius: 980px;
-  border: 1px solid #E2B788;
+  border: 1px solid #8C5828;
   cursor: pointer;
   transition: all 0.3s var(--ease-apple);
   text-decoration: none;
-  box-shadow: 0 6px 20px rgba(197, 155, 109, 0.32);
+  box-shadow: 0 3px 12px rgba(158, 107, 56, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .btn-alignx-primary:hover {
-  background: linear-gradient(180deg, #DFC09A 0%, #B88959 100%);
+  background: linear-gradient(180deg, #C58F58 0%, #A8733E 100%);
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(197, 155, 109, 0.45);
+  box-shadow: 0 6px 18px rgba(158, 107, 56, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .btn-alignx-primary:active {
@@ -275,7 +280,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(0, 0, 0, 0.03);
   color: var(--text-primary);
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -293,7 +298,7 @@ body {
 
 .btn-alignx-outline:hover {
   border-color: var(--accent);
-  color: var(--accent-light);
+  color: var(--accent);
   background-color: var(--accent-dim);
   transform: translateY(-1.5px);
 }
@@ -303,44 +308,48 @@ body {
 }
 
 /* ========================================================
-   PHYSICAL TACTILE KEYS & KEYCAPS
+   PHYSICAL TACTILE KEYS & KEYCAPS (Apple Pro Light Theme)
+   Crisp, clean, non-cyberpunk, luxury keycaps
    ======================================================== */
 .alignx-key {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 9px 16px;
-  border-radius: 8px;
-  background: linear-gradient(180deg, #181A22 0%, #0F1116 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  padding: 8px 15px;
+  border-radius: 9px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5F5F7 100%);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
   font-family: var(--font-mono);
   font-size: 0.74rem;
   letter-spacing: 0.08em;
   color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.18s var(--ease-apple);
+  transition: all 0.16s var(--ease-apple);
   user-select: none;
+  position: relative;
 }
 
 .alignx-key:hover {
-  border-color: var(--accent);
-  color: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.25);
+  background: linear-gradient(180deg, #FFFFFF 0%, #EDEDF0 100%);
+  color: #000000;
   transform: translateY(-1px);
-  box-shadow: 0 5px 14px rgba(197, 155, 109, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 .alignx-key:active {
-  transform: translateY(2px);
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0.8), inset 0 2px 4px rgba(0, 0, 0, 0.6);
+  transform: translateY(1.5px);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.08), inset 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .alignx-key.active {
   border-color: var(--accent);
-  background: linear-gradient(180deg, rgba(197, 155, 109, 0.25) 0%, rgba(197, 155, 109, 0.1) 100%);
-  color: var(--accent-light);
-  box-shadow: 0 0 16px rgba(197, 155, 109, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  background: linear-gradient(180deg, #FAF4ED 0%, #F3EAE0 100%);
+  color: #8C5828;
+  font-weight: 600;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 /* ========================================================
@@ -396,12 +405,12 @@ body {
 }
 
 /* ========================================================
-   SCROLL ANIMATIONS & TITANIUM SHEEN
+   SCROLL ANIMATIONS & REVEAL SYSTEM (Apple Pro Cinematic)
    ======================================================== */
 .scroll-reveal {
   opacity: 0;
   transform: translateY(32px);
-  transition: opacity 0.8s var(--ease-apple), transform 0.8s var(--ease-apple);
+  transition: opacity 0.85s var(--ease-apple), transform 0.85s var(--ease-apple);
   will-change: opacity, transform;
 }
 
@@ -410,20 +419,102 @@ body {
   transform: translateY(0);
 }
 
-.titanium-card {
-  background: linear-gradient(145deg, rgba(20, 23, 31, 0.7) 0%, rgba(10, 11, 15, 0.85) 100%);
+.scroll-reveal-scale {
+  opacity: 0;
+  transform: scale(0.94) translateY(24px);
+  transition: opacity 0.9s var(--ease-apple), transform 0.9s var(--ease-apple);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-36px);
+  transition: opacity 0.85s var(--ease-apple), transform 0.85s var(--ease-apple);
+}
+
+.scroll-reveal-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-reveal-right {
+  opacity: 0;
+  transform: translateX(36px);
+  transition: opacity 0.85s var(--ease-apple), transform 0.85s var(--ease-apple);
+}
+
+.scroll-reveal-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stagger Delays */
+.stagger-1 { transition-delay: 0.08s !important; }
+.stagger-2 { transition-delay: 0.16s !important; }
+.stagger-3 { transition-delay: 0.24s !important; }
+.stagger-4 { transition-delay: 0.32s !important; }
+.stagger-5 { transition-delay: 0.40s !important; }
+
+/* Sticky Scroll Indicator HUD (Apple Pro Light Theme) */
+.scroll-timeline-nav {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 90;
+  padding: 12px 8px;
+  border-radius: 980px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--border-hairline);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.timeline-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: all 0.25s var(--ease-apple);
+}
+
+.timeline-dot:hover {
+  background-color: rgba(0, 0, 0, 0.55);
+  transform: scale(1.4);
+}
+
+.timeline-dot.active {
+  height: 18px;
+  border-radius: 4px;
+  background-color: var(--accent);
+}
+
+/* Apple Pro Titanium Card (Pure White / Ceramic Light) */
+.titanium-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hairline);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-radius: 16px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s var(--ease-apple);
 }
 
 .titanium-card:hover {
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  border-color: var(--border-bright);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .titanium-badge {
@@ -432,13 +523,160 @@ body {
   gap: 8px;
   padding: 6px 14px;
   border-radius: 980px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.035);
+  border: 1px solid var(--border-hairline);
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.14em;
   color: var(--text-secondary);
   text-transform: uppercase;
+}
+
+/* ========================================================
+   PARALLAX SECTION SYSTEM (Light Theme Cinematic Story)
+   Matches user specification & elevates with Apple aesthetics
+   ======================================================== */
+.parallax-page {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.parallax-section {
+  position: relative;
+  width: 100%;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-hairline);
+  background-color: var(--bg-deep);
+}
+
+.parallax-bg {
+  position: absolute;
+  top: -15%;
+  left: 0;
+  width: 100%;
+  height: 130%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  will-change: transform;
+  transition: transform 0.15s ease-out;
+}
+
+.parallax-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.85) contrast(1.05) brightness(1.02);
+  opacity: 0.42;
+  transition: opacity 0.5s ease;
+}
+
+.parallax-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.94) 75%, #FFFFFF 100%),
+              linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.85) 100%);
+  pointer-events: none;
+}
+
+.parallax-content {
+  position: relative;
+  z-index: 3;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 80px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.parallax-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 980px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-hairline);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.parallax-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5.2vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.038em;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  max-width: 820px;
+}
+
+.parallax-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 1.8vw, 1.32rem);
+  line-height: 1.55;
+  color: var(--text-secondary);
+  letter-spacing: -0.015em;
+  max-width: 720px;
+  margin-bottom: 32px;
+}
+
+.parallax-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 760px;
+  margin-top: 12px;
+}
+
+.parallax-meta-item {
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border-hairline);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  text-align: left;
+}
+
+/* Light Theme Form Controls (Apple Pro Aesthetic) */
+input, select, textarea {
+  background-color: #FFFFFF;
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(158, 107, 56, 0.12);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
 }
 
 /* Accessible focus ring */
