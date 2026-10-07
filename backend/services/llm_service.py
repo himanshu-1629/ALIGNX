@@ -89,18 +89,45 @@ def clean_json_response(raw_text: str) -> Dict[str, Any]:
         raise ValueError(f"Could not parse valid JSON from LLM response: {raw_text[:200]}...")
 
 
+import time
+
 class LLMExplanationService:
-    def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None):
+    def __init__(
+        self,
+        api_key: Optional[str] = None,
+        model_name: Optional[str] = None,
+        timeout_seconds: Optional[float] = None
+    ):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
-        self.model_name = model_name or os.getenv("GEMINI_MODEL_NAME", "gemini-3.8-flash")
+        self.model_name = model_name or os.getenv("GEMINI_MODEL_NAME", "gemini-3.5-flash-lite")
+        
+        # Enforce configurable execution timeout limit (default 10s)
+        env_timeout = os.getenv("GEMINI_TIMEOUT_SECONDS")
+        self.timeout_seconds = float(timeout_seconds if timeout_seconds is not None else (env_timeout or 10.0))
+        
         self.client = None
         self.legacy_model = None
         self.is_online = False
+        self.last_call_status: Dict[str, Any] = {}
+
+        # High-speed candidate model cascade prioritizing active, responsive tiers
+        self.model_candidates = [
+            self.model_name,
+            "gemini-3.5-flash-lite",
+            "gemini-3.5-flash",
+            "gemini-3.7-flash"
+        ]
+        # Deduplicate while preserving priority order
+        seen = set()
+        self.model_candidates = [m for m in self.model_candidates if not (m in seen or seen.add(m))]
 
         if self.api_key:
             if USE_MODERN_GENAI:
                 try:
-                    self.client = genai.Client(api_key=self.api_key)
+                    self.client = genai.Client(
+                        api_key=self.api_key,
+                        http_options={"api_version": "v1beta", "timeout": int(self.timeout_seconds * 1000)}
+                    )
                     self.is_online = True
                 except Exception as e:
                     print(f"⚠️ Google GenAI Client initialization notice: {e}")
@@ -116,25 +143,82 @@ class LLMExplanationService:
                     print(f"⚠️ Legacy Gemini SDK initialization notice: {e}")
 
     def _generate(self, prompt: str) -> str:
-        """Centralized generation helper utilizing modern or legacy SDK."""
+        """Centralized generation helper with strict timeout limit, telemetry, and fallback."""
         if not self.is_online:
             raise RuntimeError("LLM Explanation Service is offline.")
-        
+
+        last_error = None
+        start_time = time.time()
+
         if self.client:
             config = types.GenerateContentConfig(
                 system_instruction=SYSTEM_INSTRUCTION,
                 temperature=0.2,
                 response_mime_type="application/json"
             )
-            response = self.client.models.generate_content(
-                model=self.model_name,
-                contents=prompt,
-                config=config
-            )
-            return response.text
+
+            for candidate in self.model_candidates:
+                elapsed = time.time() - start_time
+                if elapsed >= self.timeout_seconds:
+                    msg = f"Operation exceeded timeout threshold of {self.timeout_seconds:.1f}s before trying {candidate}"
+                    print(f"⏱️ [LLM SERVICE TIMEOUT] {msg}")
+                    self.last_call_status = {
+                        "success": False,
+                        "timed_out": True,
+                        "latency_s": round(elapsed, 2),
+                        "limit_s": self.timeout_seconds,
+                        "error": msg
+                    }
+                    raise TimeoutError(msg)
+
+                try:
+                    t_sub = time.time()
+                    response = self.client.models.generate_content(
+                        model=candidate,
+                        contents=prompt,
+                        config=config
+                    )
+                    call_duration = time.time() - t_sub
+                    total_duration = time.time() - start_time
+                    self.last_call_status = {
+                        "success": True,
+                        "model": candidate,
+                        "latency_s": round(call_duration, 2),
+                        "total_latency_s": round(total_duration, 2),
+                        "source": "live_gemini"
+                    }
+                    return response.text
+                except Exception as ex:
+                    last_error = ex
+                    err_str = str(ex)
+                    dur = time.time() - start_time
+                    if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                        print(f"⚠️ Model '{candidate}' quota reached. Trying next model candidate...")
+                        continue
+                    elif "503" in err_str or "504" in err_str or "DEADLINE_EXCEEDED" in err_str or dur >= self.timeout_seconds:
+                        print(f"❌ [LLM SERVICE FAILED] Model '{candidate}' timed out or high demand ({dur:.2f}s elapsed / limit: {self.timeout_seconds:.1f}s): {ex}")
+                        continue
+                    else:
+                        print(f"❌ [LLM SERVICE FAILED] Model '{candidate}' error ({dur:.2f}s): {ex}")
+                        continue
+
+            total_elapsed = time.time() - start_time
+            print(f"❌ [LLM SERVICE CALL FAILED] All candidate models failed or timed out after {total_elapsed:.2f}s (Limit: {self.timeout_seconds:.1f}s). Error: {last_error}")
+            self.last_call_status = {
+                "success": False,
+                "latency_s": round(total_elapsed, 2),
+                "limit_s": self.timeout_seconds,
+                "error": str(last_error)
+            }
+            raise RuntimeError(f"All live Gemini calls failed/timed out after {total_elapsed:.2f}s: {last_error}")
+
         elif self.legacy_model:
-            response = self.legacy_model.generate_content(prompt)
-            return response.text
+            try:
+                response = self.legacy_model.generate_content(prompt)
+                return response.text
+            except Exception as ex:
+                raise RuntimeError(f"Legacy model generation error: {ex}")
+
         raise RuntimeError("No active Gemini model client.")
 
     # =========================================================================
