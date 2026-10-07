@@ -80,144 +80,626 @@ export const LIFE_STAGE_DATA = [
   }
 ];
 
+// Authenticated Cognitive Aptitude Questions from database/seeds/assessment_questions.json
 export const APTITUDE_QUESTIONS = [
   {
-    id: 1,
-    dimension: 'Abstract Logic',
-    llmTag: 'cognitive.abstract_logic',
-    weight: 0.20,
-    prompt: 'In a distributed state machine, if node A transmits a consensus token every 3ms and node B pulses every 5ms, what is the earliest instant past 100ms when both nodes synchronize pulses?',
-    options: [
-      { text: '105 ms (Least Common Multiple harmonic)', score: 20 },
-      { text: '115 ms', score: 0 },
-      { text: '120 ms (Sub-harmonic pulse)', score: 10 },
-      { text: '100 ms', score: 0 }
+    "id": 1,
+    "dimension": "Logical & Deductive Reasoning",
+    "llmTag": "cognitive.logical",
+    "weight": 0.2,
+    "prompt": "If all Quantum models require Linear Algebra, and System X is a Quantum model, which statement is definitely true?",
+    "options": [
+      {
+        "text": "[A] System X does not use Linear Algebra",
+        "score": 5
+      },
+      {
+        "text": "[B] System X requires Linear Algebra",
+        "score": 20
+      },
+      {
+        "text": "[C] All Linear Algebra algorithms are Quantum models",
+        "score": 5
+      },
+      {
+        "text": "[D] None of the above",
+        "score": 5
+      }
     ],
-    rationale: 'LCM of 3 and 5 is 15. The first multiple of 15 strictly greater than 100 is 105.'
+    "rationale": "Correct answer is B: System X requires Linear Algebra."
   },
   {
-    id: 2,
-    dimension: 'Systems Thinking',
-    llmTag: 'cognitive.systems_thinking',
-    weight: 0.20,
-    prompt: 'When server latency surges by 40% under peak load, cache misses spike 300%. Which first-principles intervention minimizes systemic degradation?',
-    options: [
-      { text: 'Probabilistic cache eviction + adaptive load shedding at API ingress', score: 20 },
-      { text: 'Double CPU core allocation without diagnosing bottleneck profile', score: 6 },
-      { text: 'Simultaneously restart all active worker nodes', score: 0 },
-      { text: 'Temporarily bypass token authentication checks to reduce roundtrips', score: 0 }
+    "id": 2,
+    "dimension": "Numerical Facility & Estimation",
+    "llmTag": "cognitive.numerical",
+    "weight": 0.2,
+    "prompt": "A cloud server costs \u20b912,000/month. By migrating to serverless, the cost drops by 35%. What is the annual saving?",
+    "options": [
+      {
+        "text": "[A] \u20b942,000",
+        "score": 5
+      },
+      {
+        "text": "[B] \u20b950,400",
+        "score": 20
+      },
+      {
+        "text": "[C] \u20b948,000",
+        "score": 5
+      },
+      {
+        "text": "[D] \u20b954,200",
+        "score": 5
+      }
     ],
-    rationale: 'Adaptive load shedding protects downstream relational stores from catastrophic stampedes.'
+    "rationale": "Correct answer is B: \u20b950,400."
   },
   {
-    id: 3,
-    dimension: 'Quantitative Estimation',
-    llmTag: 'cognitive.quantitative_estimation',
-    weight: 0.20,
-    prompt: 'An autonomous EV battery pack discharges from 90% to 20% over 280 km of highway cruising. Under 15% headwind aerodynamic drag, how many km will a 50% charge yield?',
-    options: [
-      { text: 'Approximately 170 km', score: 20 },
-      { text: 'Approximately 240 km', score: 5 },
-      { text: 'Approximately 110 km', score: 8 },
-      { text: 'Approximately 310 km', score: 0 }
+    "id": 3,
+    "dimension": "Systemic & Analytical Problem Solving",
+    "llmTag": "cognitive.analytical",
+    "weight": 0.2,
+    "prompt": "In a distributed pipeline, Node B processes 2x data of Node A, and Node C processes 3x data of Node B. If total records are 180,000, how many does Node B process?",
+    "options": [
+      {
+        "text": "[A] 20,000",
+        "score": 5
+      },
+      {
+        "text": "[B] 40,000",
+        "score": 20
+      },
+      {
+        "text": "[C] 60,000",
+        "score": 5
+      },
+      {
+        "text": "[D] 120,000",
+        "score": 5
+      }
     ],
-    rationale: '70% drop = 280 km (4 km/%). 50% nominal = 200 km. Deducting 15% aerodynamic drag yields ~170 km.'
+    "rationale": "Correct answer is B: 40,000."
   },
   {
-    id: 4,
-    dimension: 'Spatial & Architecture',
-    llmTag: 'cognitive.spatial_architecture',
-    weight: 0.20,
-    prompt: 'A 3D silicon cube of 4x4x4 micro-cores is sliced diagonally along opposing vertex planes. How many planar communication interconnect buses cross the cut boundary?',
-    options: [
-      { text: '16 orthogonal planar interconnects', score: 20 },
-      { text: '8 planar interconnect buses', score: 6 },
-      { text: '32 planar interconnect buses', score: 8 },
-      { text: '4 planar interconnect buses', score: 0 }
+    "id": 4,
+    "dimension": "Spatial Orientation & 3D Visualization",
+    "llmTag": "cognitive.spatial",
+    "weight": 0.2,
+    "prompt": "A 3D coordinate frame is rotated 90\u00b0 clockwise around the Z-axis. What happens to the positive X-axis orientation?",
+    "options": [
+      {
+        "text": "[A] Points along positive Y-axis",
+        "score": 5
+      },
+      {
+        "text": "[B] Points along negative Y-axis",
+        "score": 20
+      },
+      {
+        "text": "[C] Points along negative X-axis",
+        "score": 5
+      },
+      {
+        "text": "[D] Remains unchanged",
+        "score": 5
+      }
     ],
-    rationale: 'A planar cross-section along the 4x4 internal grid slices exactly 16 orthogonal bus lines.'
+    "rationale": "Correct answer is B: Points along negative Y-axis."
   },
   {
-    id: 5,
-    dimension: 'Ambiguity & Risk Tolerance',
-    llmTag: 'cognitive.risk_tolerance',
-    weight: 0.20,
-    prompt: 'You must allocate research capital between Option A (90% chance of 1.2x steady yield) and Option B (30% chance of 5.5x breakthrough upside, 70% chance of zero return). How do you decide?',
-    options: [
-      { text: 'Compute Expected Value (A=1.08x vs B=1.65x) and hedge downside with a barbell allocation', score: 20 },
-      { text: 'Commit 100% to Option A to eliminate failure risk completely', score: 10 },
-      { text: 'Commit 100% to Option B purely for maximum theoretical upside without downside reserve', score: 12 },
-      { text: 'Postpone decision indefinitely until complete market certainty emerges', score: 0 }
+    "id": 5,
+    "dimension": "Verbal & Conceptual Analogy",
+    "llmTag": "cognitive.verbal",
+    "weight": 0.2,
+    "prompt": "Choose the word most analogous to: 'HEURISTIC' : 'DISCOVERY' :: 'ALGORITHM' : '______'",
+    "options": [
+      {
+        "text": "[A] AMBIGUITY",
+        "score": 5
+      },
+      {
+        "text": "[B] PRECISION",
+        "score": 20
+      },
+      {
+        "text": "[C] CONJECTURE",
+        "score": 5
+      },
+      {
+        "text": "[D] INTUITION",
+        "score": 5
+      }
     ],
-    rationale: 'Option B offers higher expected return (1.65x vs 1.08x); a barbell strategy captures asymmetric convex upside while capping catastrophic drawdown.'
+    "rationale": "Correct answer is B: PRECISION."
   }
 ];
 
+// Authenticated 18 Holland RIASEC Questions from database/seeds/assessment_questions.json
 export const DISCOVERY_SCENARIOS = [
   {
-    id: 1,
-    category: 'Realistic & Hands-on (R)',
-    scenario: 'You are given access to a makerspace with robotics microcontrollers, 3D printers, and code debuggers. Where do you naturally gravitate first?',
-    choices: [
-      { text: 'Assembling and soldering micro-controllers and wiring physical sensor actuators.', tag: 'Realistic / Hardware Builder' },
-      { text: 'Writing algorithmic firmware code to optimize computational PID control loops.', tag: 'Investigative / Algorithmist' },
-      { text: 'Designing the ergonomic physical casing and aesthetic industrial CAD enclosure.', tag: 'Artistic / Industrial Designer' },
-      { text: 'Organizing the sprint roadmap and orchestrating team member milestones.', tag: 'Enterprising / Project Lead' }
+    "id": 1,
+    "category": "Realistic \u2014 Hands-on, Physical & Hardware Systems",
+    "scenario": "How much do you enjoy assembling hardware, operating tools, or building physical prototypes?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Realistic - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Realistic - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Realistic - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Realistic - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Realistic - Strongly Dislike (1/5)"
+      }
     ]
   },
   {
-    id: 2,
-    category: 'Investigative & Research (I)',
-    scenario: 'You encounter a complex system anomaly with inconsistent telemetry data. How do you approach the problem?',
-    choices: [
-      { text: 'Formulate mathematical hypotheses and inspect system logs to derive the root cause.', tag: 'Investigative / Analytical Debugger' },
-      { text: 'Swap hardware boards and test physical voltage rails with an oscilloscope.', tag: 'Realistic / Diagnostic Technician' },
-      { text: 'Interview user cohorts to observe how their interaction triggers the anomaly.', tag: 'Social / User Advocate' },
-      { text: 'Document standard operating procedures and write automated compliance checks.', tag: 'Conventional / Quality Assurance' }
+    "id": 2,
+    "category": "Realistic \u2014 Hands-on, Physical & Hardware Systems",
+    "scenario": "Do you prefer working outdoors or in a laboratory/workshop with physical equipment rather than at an office desk?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Realistic - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Realistic - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Realistic - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Realistic - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Realistic - Strongly Dislike (1/5)"
+      }
     ]
   },
   {
-    id: 3,
-    category: 'Artistic & Expressive (A)',
-    scenario: 'When evaluating a software application or technological platform, what bothers you most?',
-    choices: [
-      { text: 'Clunky visual design, poor typography hierarchy, and unintuitive user experience.', tag: 'Artistic / UX Architect' },
-      { text: 'Sub-optimal algorithmic latency, unindexed database queries, and memory leaks.', tag: 'Investigative / Performance Engineer' },
-      { text: 'Fragile business model with negative unit economics and no customer moat.', tag: 'Enterprising / Venture Strategist' },
-      { text: 'Lack of accessible onboarding guides and patient customer empathy.', tag: 'Social / Community Mentor' }
+    "id": 3,
+    "category": "Realistic \u2014 Hands-on, Physical & Hardware Systems",
+    "scenario": "How interested are you in diagnosing mechanical, electrical, or robotic hardware malfunctions?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Realistic - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Realistic - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Realistic - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Realistic - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Realistic - Strongly Dislike (1/5)"
+      }
     ]
   },
   {
-    id: 4,
-    category: 'Social & Collaborative (S)',
-    scenario: 'During an intensive technical hackathon, what role energizes you the most?',
-    choices: [
-      { text: 'Mentoring teammates, resolving cross-functional friction, and synthesizing team clarity.', tag: 'Social / Team Catalyst' },
-      { text: 'Pitching to hackathon judges with persuasive narratives and commercial viability.', tag: 'Enterprising / Visionary Pitcher' },
-      { text: 'Deep solitary focus writing core algorithmic pipelines without interruptions.', tag: 'Investigative / Deep Coder' },
-      { text: 'Building the continuous deployment pipeline and setting up Git branching rules.', tag: 'Conventional / Infrastructure Lead' }
+    "id": 4,
+    "category": "Investigative \u2014 Research, Mathematics & Analytical Modeling",
+    "scenario": "How much do you enjoy researching complex scientific problems, exploring mathematical theories, or analyzing data?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Investigative - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Investigative - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Investigative - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Investigative - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Investigative - Strongly Dislike (1/5)"
+      }
     ]
   },
   {
-    id: 5,
-    category: 'Enterprising & Leadership (E)',
-    scenario: 'A breakthrough patent emerges in your field. How do you evaluate its primary value?',
-    choices: [
-      { text: 'Identifying immediate commercialization avenues, startup spin-offs, and enterprise licensing.', tag: 'Enterprising / Venture Architect' },
-      { text: 'Dissecting the mathematical proofs and underlying physics to assess scientific validity.', tag: 'Investigative / Research Scientist' },
-      { text: 'Determining how the technology can democratize healthcare, education, or public access.', tag: 'Social / Public Good Pioneer' },
-      { text: 'Testing compliance against regulatory safety standards and data privacy mandates.', tag: 'Conventional / Governance Specialist' }
+    "id": 5,
+    "category": "Investigative \u2014 Research, Mathematics & Analytical Modeling",
+    "scenario": "Do you find satisfaction in uncovering underlying root causes and patterns behind unexplained phenomena?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Investigative - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Investigative - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Investigative - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Investigative - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Investigative - Strongly Dislike (1/5)"
+      }
     ]
   },
   {
-    id: 6,
-    category: 'Conventional & Systems (C)',
-    scenario: 'When starting a large-scale project, what is your foundational priority?',
-    choices: [
-      { text: 'Establishing clear architectural schemas, typed data contracts, and reproducible CI tests.', tag: 'Conventional / Systems Architect' },
-      { text: 'Exploring rapid exploratory spikes without worrying about documentation yet.', tag: 'Artistic / Rapid Prototyper' },
-      { text: 'Benchmarking competitive products and market demand pricing elasticity.', tag: 'Enterprising / Market Analyst' },
-      { text: 'Conducting peer reviews and aligning stakeholder expectations.', tag: 'Social / Collaborative Lead' }
+    "id": 6,
+    "category": "Investigative \u2014 Research, Mathematics & Analytical Modeling",
+    "scenario": "How eager are you to learn new programming paradigms, statistical methods, or scientific literature?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Investigative - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Investigative - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Investigative - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Investigative - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Investigative - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "category": "Artistic \u2014 Creative Expression, UI/UX & Open-ended Design",
+    "scenario": "How often do you express ideas through visual design, digital sketches, user interfaces, or creative storytelling?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Artistic - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Artistic - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Artistic - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Artistic - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Artistic - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "category": "Artistic \u2014 Creative Expression, UI/UX & Open-ended Design",
+    "scenario": "Do you prefer unstructured, open-ended problem solving that allows creative freedom over rigid rules?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Artistic - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Artistic - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Artistic - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Artistic - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Artistic - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "category": "Artistic \u2014 Creative Expression, UI/UX & Open-ended Design",
+    "scenario": "How important is aesthetic elegance, user experience, or brand identity to you when evaluating a product?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Artistic - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Artistic - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Artistic - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Artistic - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Artistic - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "category": "Social \u2014 Mentorship, Collaboration & Human Impact",
+    "scenario": "How energized do you feel when mentoring, teaching, or explaining difficult technical concepts to peers?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Social - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Social - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Social - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Social - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Social - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "category": "Social \u2014 Mentorship, Collaboration & Human Impact",
+    "scenario": "Do you prefer collaborative team projects with high interpersonal interaction over solitary tasks?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Social - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Social - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Social - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Social - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Social - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "category": "Social \u2014 Mentorship, Collaboration & Human Impact",
+    "scenario": "How important is it that your work directly improves human welfare, healthcare, or community well-being?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Social - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Social - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Social - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Social - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Social - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "category": "Enterprising \u2014 Strategic Leadership, Risk & Commercialization",
+    "scenario": "How comfortable are you taking calculated risks to pitch ideas, launch projects, or persuade stakeholders?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Enterprising - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Enterprising - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Enterprising - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Enterprising - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Enterprising - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "category": "Enterprising \u2014 Strategic Leadership, Risk & Commercialization",
+    "scenario": "Do you naturally take on leadership roles, delegate responsibilities, and drive teams toward strategic goals?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Enterprising - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Enterprising - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Enterprising - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Enterprising - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Enterprising - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "category": "Enterprising \u2014 Strategic Leadership, Risk & Commercialization",
+    "scenario": "How motivated are you by commercial outcomes, product-market fit, and startup entrepreneurship?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Enterprising - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Enterprising - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Enterprising - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Enterprising - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Enterprising - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "category": "Conventional \u2014 Systematic Processes, Architecture & Data Integrity",
+    "scenario": "How much do you value clear processes, systematic documentation, and organized folder structures?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Conventional - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Conventional - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Conventional - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Conventional - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Conventional - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "category": "Conventional \u2014 Systematic Processes, Architecture & Data Integrity",
+    "scenario": "Do you take pride in precision, error checking, compliance, and maintaining data integrity?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Conventional - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Conventional - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Conventional - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Conventional - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Conventional - Strongly Dislike (1/5)"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "category": "Conventional \u2014 Systematic Processes, Architecture & Data Integrity",
+    "scenario": "Do you prefer work with predictable expectations, well-defined metrics, and structured milestones?",
+    "choices": [
+      {
+        "text": "Strongly Enjoy (5/5) \u2014 Energized and highly inclined toward this activity.",
+        "tag": "Conventional - High (5/5)"
+      },
+      {
+        "text": "Enjoy (4/5) \u2014 Positively disposed toward engaging in this work.",
+        "tag": "Conventional - Medium-High (4/5)"
+      },
+      {
+        "text": "Neutral / Moderate (3/5) \u2014 Balanced or indifferent to this activity.",
+        "tag": "Conventional - Neutral (3/5)"
+      },
+      {
+        "text": "Dislike (2/5) \u2014 Prefer alternative intellectual or creative tasks.",
+        "tag": "Conventional - Low (2/5)"
+      },
+      {
+        "text": "Strongly Dislike (1/5) \u2014 Avoid this type of activity or experience high friction.",
+        "tag": "Conventional - Strongly Dislike (1/5)"
+      }
     ]
   }
 ];
