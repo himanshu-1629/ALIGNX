@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { ParentInput } from '../../types/alignx';
 import { RollButton } from '../RollButton';
 import { saveSessionProgress, getSessionProgress } from '../../utils/sessionManager';
@@ -20,31 +20,16 @@ import {
 interface ParentModuleProps {
   onContinue: () => void;
   onBack?: () => void;
+  currentUser?: { id?: string; name?: string; email?: string } | null;
 }
 
-export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }) => {
+export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, currentUser }) => {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [activeParentToFill, setActiveParentToFill] = useState<ParentInput | null>(null);
-
-  // Check if session previously had completed parent data
-  const initialSession = getSessionProgress();
-  const initialParents: ParentInput[] = initialSession.parentData
-    ? [
-        {
-          name: initialSession.parentData.name || 'Rajesh Sharma',
-          relation: initialSession.parentData.relation || 'Father',
-          maxBudgetAnnualLakhs: initialSession.parentData.maxBudgetAnnualLakhs || 16,
-          preferredLocations: initialSession.parentData.preferredLocations || ['Bangalore', 'Chennai'],
-          riskAppetite: initialSession.parentData.riskAppetite || 'moderate',
-          priorityFocus: (initialSession.parentData.priorityFocus as any) || 'Stability',
-          conflictPoints: ['Budget ceiling defined at ₹' + (initialSession.parentData.maxBudgetAnnualLakhs || 16) + 'L/yr'],
-          status: 'COMPLETED'
-        }
-      ]
-    : [];
-
-  const [parents, setParents] = useState<ParentInput[]>(initialParents);
+  const [parents, setParents] = useState<ParentInput[]>([]);
+  const [conflictIndex, setConflictIndex] = useState<number>(24);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form states for adding parent
   const [newName, setNewName] = useState('');
@@ -59,60 +44,163 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
   const [fillLocation, setFillLocation] = useState('Domestic Tier-1 Tech Hubs');
   const [fillConcerns, setFillConcerns] = useState('Prefers domestic Tier-1 institute over high educational debt; requires placement certainty');
 
-  const hasCompletedParent = parents.some(p => p.status === 'COMPLETED');
+  // Display name for the student
+  const studentDisplayName =
+    currentUser?.name ||
+    getSessionProgress().studentProfile?.name ||
+    'Student';
 
-  const handleCopyLink = (index: number, token: string) => {
-    const url = `https://portal.alignx.ai/parent/invite?token=${token}`;
+  // 1. Fetch authentic parents for this specific child from the database
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadStudentParents = async () => {
+      try {
+        const res = await ApiService.getParentStatus();
+        if (res?.data && isMounted) {
+          if (res.data.alignmentAnalysis?.conflictIndex !== undefined) {
+            setConflictIndex(res.data.alignmentAnalysis.conflictIndex);
+          }
+
+          if (res.data.parents && res.data.parents.length > 0) {
+            const mapped: ParentInput[] = res.data.parents.map((p) => {
+              const annualLakhs = p.financialProfile?.educationBudget
+                ? Math.round(p.financialProfile.educationBudget / 100000)
+                : 16;
+              const mappedRisk =
+                p.financialProfile?.riskAppetite === 'high'
+                  ? 'high'
+                  : p.financialProfile?.riskAppetite === 'low'
+                  ? 'low'
+                  : 'moderate';
+
+              return {
+                id: p.parentId,
+                parentId: p.parentId,
+                name: p.name,
+                relation: p.relationship,
+                email: p.email,
+                phone: p.phone,
+                maxBudgetAnnualLakhs: annualLakhs,
+                preferredLocations: p.financialProfile?.locationPreference
+                  ? [p.financialProfile.locationPreference]
+                  : ['Domestic Tier-1 Tech Hubs'],
+                riskAppetite: mappedRisk,
+                priorityFocus: (p.expectations?.priorityFactors?.[0] as any) || 'Stability',
+                conflictPoints: res.data.alignmentAnalysis?.conflictReasons || [],
+                status: p.status === 'completed' ? 'COMPLETED' : 'PENDING',
+                invitationToken: p.invitationToken,
+                invitationUrl: p.invitationUrl
+              };
+            });
+
+            setParents(mapped);
+
+            // Sync with local session progress
+            const completed = mapped.find((m) => m.status === 'COMPLETED') || mapped[0];
+            if (completed && completed.status === 'COMPLETED') {
+              saveSessionProgress({
+                parentData: {
+                  name: completed.name,
+                  relation: completed.relation,
+                  maxBudgetAnnualLakhs: completed.maxBudgetAnnualLakhs,
+                  preferredLocations: completed.preferredLocations,
+                  priorityFocus: completed.priorityFocus,
+                  riskAppetite: completed.riskAppetite,
+                  maxRelocationKm: 500
+                },
+                parentInputDone: true
+              });
+            }
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('[ALIGNX Parent] Live parent fetch note:', err);
+      }
+
+      // Check session progress if offline or empty
+      const session = getSessionProgress();
+      if (session.parentData?.name && isMounted) {
+        setParents([
+          {
+            name: session.parentData.name,
+            relation: session.parentData.relation || 'Father',
+            maxBudgetAnnualLakhs: session.parentData.maxBudgetAnnualLakhs || 16,
+            preferredLocations: session.parentData.preferredLocations || ['Bangalore', 'Chennai'],
+            riskAppetite: session.parentData.riskAppetite || 'moderate',
+            priorityFocus: (session.parentData.priorityFocus as any) || 'Stability',
+            conflictPoints: ['Budget ceiling defined at ₹' + (session.parentData.maxBudgetAnnualLakhs || 16) + 'L/yr'],
+            status: 'COMPLETED'
+          }
+        ]);
+      }
+    };
+
+    loadStudentParents();
+    return () => {
+      isMounted = false;
+    };
+  }, [currentUser]);
+
+  const hasCompletedParent = parents.some((p) => p.status === 'COMPLETED');
+
+  // Copy invitation link for parent
+  const handleCopyLink = (index: number, parent: ParentInput) => {
+    const token = parent.invitationToken || `invite_${index}_${Date.now()}`;
+    const url = `${window.location.origin}/parent/invite/${token}`;
     navigator.clipboard.writeText(url);
     setCopiedIndex(index);
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
+  // Add Parent: saves to MongoDB under this student's family
   const handleAddParent = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName.trim()) return;
 
+    setIsSubmitting(true);
+    let parentId = `p_${Date.now()}`;
+    let token = `inv_${Date.now()}`;
+    let url = `/parent/invite/${token}`;
+
+    try {
+      const res = await ApiService.inviteParent({
+        name: newName.trim(),
+        relationship: newRelation,
+        email: newEmail.trim() || undefined
+      });
+
+      if (res?.data) {
+        parentId = res.data.parentId || parentId;
+        token = res.data.invitationToken || token;
+        url = res.data.invitationUrl || url;
+      }
+    } catch (err) {
+      console.warn('[ALIGNX Parent] Backend invite creation note:', err);
+    }
+
     const newRecord: ParentInput = {
+      id: parentId,
+      parentId,
       name: newName.trim(),
       relation: newRelation,
+      email: newEmail.trim() || undefined,
       maxBudgetAnnualLakhs: newBudget,
       preferredLocations: ['Domestic Hubs'],
       riskAppetite: 'low',
       priorityFocus: 'Stability',
       conflictPoints: [],
-      status: 'PENDING'
+      status: 'PENDING',
+      invitationToken: token,
+      invitationUrl: url
     };
 
-    // Try sending invite to backend if available
-    try {
-      if (newEmail) {
-        await ApiService.inviteParent({
-          parentName: newName.trim(),
-          parentEmail: newEmail.trim()
-        });
-      }
-    } catch {
-      // Offline fallback
-    }
-
-    setParents(prev => [...prev, newRecord]);
+    setParents((prev) => [...prev, newRecord]);
     setNewName('');
     setNewEmail('');
     setShowAddModal(false);
-  };
-
-  const handleQuickAdd = (relation: 'Father' | 'Mother', defaultName: string) => {
-    const newRecord: ParentInput = {
-      name: defaultName,
-      relation,
-      maxBudgetAnnualLakhs: relation === 'Father' ? 15 : 18,
-      preferredLocations: ['Bangalore', 'Chennai', 'Mumbai'],
-      riskAppetite: relation === 'Father' ? 'low' : 'moderate',
-      priorityFocus: relation === 'Father' ? 'Stability' : 'Work-Life Balance',
-      conflictPoints: [],
-      status: 'PENDING'
-    };
-    setParents(prev => [...prev, newRecord]);
+    setIsSubmitting(false);
   };
 
   const handleOpenFillModal = (parent: ParentInput) => {
@@ -122,12 +210,43 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
     setFillRisk(parent.riskAppetite || 'low');
   };
 
+  // Submit Parent Perspective (direct sync to MongoDB)
   const handleSubmitParentResponse = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeParentToFill) return;
 
-    const updatedParents = parents.map(p => {
-      if (p.name === activeParentToFill.name && p.relation === activeParentToFill.relation) {
+    const budgetBytes = fillBudget * 100000;
+
+    try {
+      if (activeParentToFill.parentId) {
+        const res = await ApiService.submitParentDirect(activeParentToFill.parentId, {
+          educationBudget: budgetBytes,
+          riskAppetite: fillRisk,
+          priorityFactors: [fillPriority],
+          locationPreference: fillLocation,
+          additionalNotes: fillConcerns
+        });
+        if (res?.data?.alignmentAnalysis?.conflictIndex !== undefined) {
+          setConflictIndex(res.data.alignmentAnalysis.conflictIndex);
+        }
+      } else if (activeParentToFill.invitationToken) {
+        await ApiService.submitParentFeedback(activeParentToFill.invitationToken, {
+          educationBudget: budgetBytes,
+          riskAppetite: fillRisk,
+          priorityFactors: [fillPriority],
+          locationPreference: fillLocation,
+          additionalNotes: fillConcerns
+        });
+      }
+    } catch (err) {
+      console.warn('[ALIGNX Parent] Response submission note:', err);
+    }
+
+    const updatedParents = parents.map((p) => {
+      if (
+        (p.parentId && p.parentId === activeParentToFill.parentId) ||
+        (p.name === activeParentToFill.name && p.relation === activeParentToFill.relation)
+      ) {
         return {
           ...p,
           maxBudgetAnnualLakhs: fillBudget,
@@ -148,7 +267,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
     setActiveParentToFill(null);
 
     // Persist to session
-    const primary = updatedParents.find(p => p.status === 'COMPLETED') || updatedParents[0];
+    const primary = updatedParents.find((p) => p.status === 'COMPLETED') || updatedParents[0];
     saveSessionProgress({
       parentData: {
         name: primary.name,
@@ -158,14 +277,15 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
         priorityFocus: primary.priorityFocus || 'Stability',
         riskAppetite: primary.riskAppetite || 'low',
         maxRelocationKm: 500
-      }
+      },
+      parentInputDone: true
     });
   };
 
   const handleSaveAndContinue = async () => {
     if (!hasCompletedParent) return;
 
-    const completed = parents.filter(p => p.status === 'COMPLETED');
+    const completed = parents.filter((p) => p.status === 'COMPLETED');
     const primary = completed[0] || parents[0];
 
     saveSessionProgress({
@@ -193,27 +313,8 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
       // Graceful offline fallback
     }
 
-    // Submit parent invitation & feedback to backend asynchronously
-    ApiService.inviteParent({
-      parentName: primary?.name || 'Parent',
-      parentEmail: 'parent@family.internal',
-      relation: primary?.relation || 'Father'
-    }).then(res => {
-      if (res?.data?.inviteToken) {
-        return ApiService.submitParentFeedback(res.data.inviteToken, {
-          maxBudget: (primary?.maxBudgetAnnualLakhs || 15) * 100000,
-          riskTolerance: primary?.riskAppetite || 'low',
-          preferredLocations: primary?.preferredLocations || ['Bangalore', 'Chennai']
-        });
-      }
-    }).catch(err => {
-      console.warn('[ALIGNX Parent] Backend sync note:', err);
-    });
-
     onContinue();
   };
-
-  const conflictIndex = hasCompletedParent ? 24 : 50;
 
   return (
     <div style={{ maxWidth: '1100px', margin: '40px auto', padding: '0 24px' }}>
@@ -236,7 +337,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
           <Users size={18} color="var(--accent)" />
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.18em', color: 'var(--accent)' }}>
-            PHASE 05 / FAMILY CONSTRAINTS & MULTI-DIMENSIONAL RECONCILIATION
+            STUDENT: {studentDisplayName.toUpperCase()} • FAMILY PERSPECTIVE & FINANCIAL BOUNDS
           </span>
         </div>
 
@@ -289,7 +390,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
           </div>
 
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--accent)', letterSpacing: '0.16em', marginBottom: '8px' }}>
-            STEP 01 / PARENT IDENTIFICATION
+            STUDENT: {studentDisplayName.toUpperCase()} • STEP 01 / PARENT IDENTIFICATION
           </div>
 
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.8rem', fontWeight: 700, marginBottom: '12px' }}>
@@ -302,25 +403,37 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
             <button
-              onClick={() => handleQuickAdd('Father', 'Rajesh Sharma')}
+              onClick={() => {
+                setNewRelation('Father');
+                setNewName('');
+                setShowAddModal(true);
+              }}
               className="alignx-key"
               style={{ padding: '12px 22px', fontSize: '0.84rem' }}
             >
               <Plus size={14} />
-              <span>ADD FATHER (RAJESH SHARMA)</span>
+              <span>ADD FATHER</span>
             </button>
 
             <button
-              onClick={() => handleQuickAdd('Mother', 'Sunita Sharma')}
+              onClick={() => {
+                setNewRelation('Mother');
+                setNewName('');
+                setShowAddModal(true);
+              }}
               className="alignx-key"
               style={{ padding: '12px 22px', fontSize: '0.84rem' }}
             >
               <Plus size={14} />
-              <span>ADD MOTHER (SUNITA SHARMA)</span>
+              <span>ADD MOTHER</span>
             </button>
 
             <RollButton
-              onClick={() => setShowAddModal(true)}
+              onClick={() => {
+                setNewRelation('Guardian');
+                setNewName('');
+                setShowAddModal(true);
+              }}
               variant="primary"
               icon={<Plus size={14} />}
             >
@@ -365,7 +478,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.14em', color: '#EF4444', fontWeight: 700 }}>
-                    GATE ACTIVE: AWAITING PARENT DATA
+                    GATE ACTIVE: AWAITING PARENT DATA FOR {studentDisplayName.toUpperCase()}
                   </span>
                   <span style={{ width: '6px', height: '6px', borderRadius: '0px', backgroundColor: '#EF4444', animation: 'ping 1.5s infinite' }} />
                 </div>
@@ -409,10 +522,10 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
 
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.14em', color: '#10B981', fontWeight: 700, marginBottom: '2px' }}>
-                  CONSENSUS ESTABLISHED: 5D WEIGHTING UNLOCKED
+                  CONSENSUS ESTABLISHED: 5D WEIGHTING UNLOCKED FOR {studentDisplayName.toUpperCase()}
                 </div>
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', color: 'var(--text-primary)' }}>
-                  Parental budget cap (₹{parents.find(p => p.status === 'COMPLETED')?.maxBudgetAnnualLakhs}L/yr) and risk appetite successfully reconciled with student aptitude. You can now synthesize your 5D Decision Dashboard.
+                  Parental budget cap (₹{parents.find((p) => p.status === 'COMPLETED')?.maxBudgetAnnualLakhs}L/yr) and risk parameters reconciled with student aptitude. You can now synthesize your 5D Decision Dashboard.
                 </div>
               </div>
             </div>
@@ -476,16 +589,20 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
           {/* Parent Cards Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.14em', color: 'var(--text-secondary)' }}>
-              FAMILY PROFILES ({parents.length})
+              FAMILY PROFILES FOR {studentDisplayName.toUpperCase()} ({parents.length})
             </div>
 
             <button
-              onClick={() => setShowAddModal(true)}
+              onClick={() => {
+                setNewRelation('Mother');
+                setNewName('');
+                setShowAddModal(true);
+              }}
               className="alignx-key"
               style={{ padding: '7px 14px', fontSize: '0.72rem' }}
             >
               <Plus size={13} />
-              <span>ADD ANOTHER GUARDIAN</span>
+              <span>ADD ANOTHER PARENT / GUARDIAN</span>
             </button>
           </div>
 
@@ -493,11 +610,10 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '36px' }}>
             {parents.map((p, i) => {
               const isCompleted = p.status === 'COMPLETED';
-              const token = `inv_${i}_${p.relation.toLowerCase()}`;
 
               return (
                 <div
-                  key={i}
+                  key={p.parentId || p.id || i}
                   className="titanium-card"
                   style={{
                     padding: '24px',
@@ -555,9 +671,14 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                       )}
                     </div>
 
-                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '14px' }}>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
                       {p.name}
                     </h3>
+                    {p.email && (
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '12px' }}>
+                        {p.email}
+                      </div>
+                    )}
 
                     {/* Metadata details */}
                     {isCompleted ? (
@@ -596,7 +717,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                   {/* Actions on Card */}
                   <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', paddingTop: '14px', borderTop: '1px solid var(--border-hairline)' }}>
                     <button
-                      onClick={() => handleCopyLink(i, token)}
+                      onClick={() => handleCopyLink(i, p)}
                       className="alignx-key"
                       style={{ padding: '8px 12px', fontSize: '0.72rem', flex: 1 }}
                     >
@@ -711,7 +832,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
             }}
           >
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)', letterSpacing: '0.14em', marginBottom: '8px' }}>
-              STEP 01 / PARENT IDENTIFICATION
+              STUDENT: {studentDisplayName.toUpperCase()} • PARENT IDENTIFICATION
             </div>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700, marginBottom: '20px' }}>
               Identify Parent or Guardian
@@ -748,7 +869,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Rajesh Sharma"
+                  placeholder="e.g. Ramesh Singh"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   style={{
@@ -808,8 +929,8 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                 >
                   CANCEL
                 </button>
-                <RollButton type="submit" variant="primary">
-                  GENERATE INVITATION
+                <RollButton type="submit" variant="primary" disabled={isSubmitting}>
+                  {isSubmitting ? 'GENERATING...' : 'GENERATE INVITATION'}
                 </RollButton>
               </div>
             </form>
@@ -857,7 +978,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
               Parent Perspective: {activeParentToFill.name}
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '24px' }}>
-              Provide household financial limits, career priorities, and geographical bounds to unblock the 5D Decision Dashboard.
+              Provide household financial limits, career priorities, and geographical bounds for {studentDisplayName} to unblock the 5D Decision Dashboard.
             </p>
 
             <form onSubmit={handleSubmitParentResponse} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -915,7 +1036,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                   HOUSEHOLD RISK APPETITE
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-                  {(['low', 'moderate', 'high'] as const).map(risk => (
+                  {(['low', 'moderate', 'high'] as const).map((risk) => (
                     <button
                       type="button"
                       key={risk}
@@ -961,10 +1082,10 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
 
               <div>
                 <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-secondary)', marginBottom: '6px' }}>
-                  PARENT GUIDANCE & CONCERNS
+                  KEY PARENTAL GUIDANCE / RESTRICTIONS
                 </label>
                 <textarea
-                  rows={2}
+                  rows={3}
                   value={fillConcerns}
                   onChange={(e) => setFillConcerns(e.target.value)}
                   style={{
@@ -974,12 +1095,12 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                     border: '1px solid var(--border-hairline)',
                     backgroundColor: '#F9F9FA',
                     fontFamily: 'var(--font-body)',
-                    fontSize: '0.85rem'
+                    fontSize: '0.88rem'
                   }}
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>
                 <button
                   type="button"
                   onClick={() => setActiveParentToFill(null)}
@@ -989,7 +1110,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
                   CANCEL
                 </button>
                 <RollButton type="submit" variant="primary">
-                  SUBMIT PARENT PERSPECTIVE →
+                  CONFIRM PARENT PERSPECTIVE
                 </RollButton>
               </div>
             </form>

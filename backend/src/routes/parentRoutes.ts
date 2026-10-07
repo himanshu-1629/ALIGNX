@@ -5,7 +5,8 @@ import {
   submitParentForm,
   getParentStatus,
   resendInvitation,
-  generateParentInvitation
+  generateParentInvitation,
+  directSubmitParentForm
 } from '../controllers/parentController';
 import {
   validateAddParent,
@@ -42,5 +43,8 @@ router.get('/status', authenticate, getParentStatus);
 
 // Resend / regenerate invitation link for an existing parent
 router.post('/:parentId/resend', authenticate, resendInvitation);
+
+// Direct submit parent data by authenticated student (for immediate sync / simulation)
+router.post('/:parentId/direct-submit', authenticate, directSubmitParentForm);
 
 export default router;

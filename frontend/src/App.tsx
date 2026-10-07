@@ -326,6 +326,7 @@ export function App() {
 
         {currentView === 'parent' && (
           <ParentModule
+            currentUser={currentUser}
             onContinue={handleParentContinue}
             onBack={() => {
               setCurrentView('dna');

@@ -69,14 +69,20 @@ export interface OpportunityNode {
 }
 
 export interface ParentInput {
+  id?: string;
+  parentId?: string;
   name: string;
   relation: string;
+  email?: string;
+  phone?: string;
   maxBudgetAnnualLakhs: number;
   preferredLocations: string[];
   riskAppetite: 'low' | 'moderate' | 'high';
   priorityFocus: 'Stability' | 'High Growth' | 'Immediate ROI' | 'Work-Life Balance';
   conflictPoints: string[];
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
+  invitationToken?: string;
+  invitationUrl?: string;
 }
 
 export interface CareerDnaTrait {
