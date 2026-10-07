@@ -40,7 +40,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           name: name.trim(),
           email: email.trim(),
           password,
-          gradeLevel: 'Undergraduate'
+          educationLevel: 'Undergraduate'
         });
 
         const student = res.data?.student || {

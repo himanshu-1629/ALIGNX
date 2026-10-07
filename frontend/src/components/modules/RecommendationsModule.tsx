@@ -48,6 +48,75 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
   const [comparisonCareer, setComparisonCareer] = useState<CareerRecommendation | null>(null);
   const [isCompareMode, setIsCompareMode] = useState(false);
   const [selectedDomain, setSelectedDomain] = useState<string>('all');
+  const [isBackendLive, setIsBackendLive] = useState(false);
+
+  // Fetch live recommendations from backend ALIGNX Decision Engine
+  useEffect(() => {
+    let isMounted = true;
+    const loadLiveRecommendations = async () => {
+      try {
+        const res = await ApiService.generateRecommendations();
+        if (res?.data?.recommendations && res.data.recommendations.length > 0 && isMounted) {
+          const mapDomain = (cat?: string, fallback?: string): string => {
+            if (!cat) return fallback || 'AI & Data Science';
+            const c = cat.toLowerCase();
+            if (c.includes('ai') || c.includes('data')) return 'AI & Data Science';
+            if (c.includes('robot') || c.includes('semi') || c.includes('hardware') || c.includes('vlsi') || c.includes('embedded')) return 'Hardware & Robotics';
+            if (c.includes('clean') || c.includes('energy') || c.includes('climate') || c.includes('battery')) return 'CleanTech & Systems';
+            if (c.includes('design') || c.includes('product') || c.includes('ux')) return 'Product & Design';
+            return fallback || 'AI & Data Science';
+          };
+
+          const mapped: CareerRecommendation[] = res.data.recommendations.map((rec: any) => {
+            const matchedStatic = INITIAL_CAREERS.find(c => c.id === rec.careerSlug || c.title.toLowerCase() === rec.careerName?.toLowerCase());
+            
+            const salaryFormatted = rec.salaryRange?.entryLevel
+              ? `₹${Math.round(rec.salaryRange.entryLevel / 100000)} - ${Math.round(rec.salaryRange.seniorLevel / 100000)} LPA`
+              : matchedStatic?.salaryRange || '₹8 - 25 LPA';
+
+            const riskFormatted = rec.riskLevel
+              ? (rec.riskLevel.charAt(0).toUpperCase() + rec.riskLevel.slice(1))
+              : (matchedStatic?.riskLevel as any) || 'Medium';
+
+            return {
+              id: rec.careerSlug || matchedStatic?.id || rec.careerId,
+              title: rec.careerName || matchedStatic?.title || 'Career Path',
+              domain: mapDomain(rec.category || rec.domain, matchedStatic?.domain),
+              tagline: rec.explanation?.summary || matchedStatic?.tagline || 'Frontier STEAM pathway',
+              scores: {
+                studentFit: rec.studentFit || 65,
+                financialFit: rec.financialFit || 75,
+                familyAlignment: rec.familyAlignment || 75,
+                marketFit: rec.marketFit || 85,
+                locationFit: rec.locationFit || 65,
+                overallScore: rec.overallScore || 70
+              },
+              growthRate: matchedStatic?.growthRate || '+28% (5-yr CAGR)',
+              salaryRange: salaryFormatted,
+              riskLevel: riskFormatted as any,
+              topLocations: rec.topLocations?.length ? rec.topLocations : matchedStatic?.topLocations || ['Bangalore', 'Hyderabad', 'Chennai'],
+              requiredSkills: matchedStatic?.requiredSkills || ['Python', 'System Architecture', 'Problem Solving'],
+              studentSkillGaps: rec.explanation?.potentialChallenges || matchedStatic?.studentSkillGaps || ['Advanced Frameworks'],
+              strengthsMatch: rec.explanation?.whyItMatches || matchedStatic?.strengthsMatch || ['Analytical Logic'],
+              whyRecommended: rec.explanation?.whyItMatches?.length ? rec.explanation.whyItMatches : (matchedStatic?.whyRecommended || []),
+              educationPath: rec.educationPathway?.preferredDegrees?.join(' / ') || matchedStatic?.educationPath || 'B.Tech / B.S. in Allied STEAM Discipline',
+              entranceExams: matchedStatic?.entranceExams || ['JEE Main', 'JEE Advanced', 'BITSAT'],
+              scholarships: matchedStatic?.scholarships || ['Merit Scholarship', 'National Fellowship']
+            };
+          });
+
+          setCareers(mapped);
+          setSelectedCareer(mapped[0]);
+          setIsBackendLive(true);
+        }
+      } catch (err) {
+        console.warn('[ALIGNX Recommendations] Using resilient initial career catalog:', err);
+      }
+    };
+
+    loadLiveRecommendations();
+    return () => { isMounted = false; };
+  }, []);
 
   useEffect(() => {
     if (selectedCareerId) {
@@ -317,11 +386,31 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '20px' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
               <Sparkles size={16} color="var(--accent)" />
               <span className="tracking-widest-mono" style={{ color: 'var(--accent)', fontWeight: 600 }}>
                 DECISION INTELLIGENCE STUDIO
               </span>
+              {isBackendLive && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '2px 8px',
+                    borderRadius: '980px',
+                    backgroundColor: 'rgba(52, 199, 89, 0.12)',
+                    color: '#28cd41',
+                    fontSize: '0.65rem',
+                    fontFamily: 'var(--font-mono)',
+                    fontWeight: 700,
+                    letterSpacing: '0.08em',
+                    border: '1px solid rgba(52, 199, 89, 0.25)'
+                  }}
+                >
+                  ● LIVE ALIGNX ENGINE
+                </span>
+              )}
             </div>
 
             <h1

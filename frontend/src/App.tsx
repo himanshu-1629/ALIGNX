@@ -33,6 +33,13 @@ export function App() {
     }
   });
 
+  // Initialize background student session with backend on startup
+  useEffect(() => {
+    ApiService.ensureSession().catch(err => {
+      console.warn('[ALIGNX App] Background session init note:', err);
+    });
+  }, []);
+
   // Refresh session progress whenever view changes
   useEffect(() => {
     setSessionProgress(getSessionProgress());

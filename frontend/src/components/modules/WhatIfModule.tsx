@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { INITIAL_CAREERS } from '../../data/mockAlignxData';
+import { ApiService } from '../../services/api';
 import {
   ArrowRight,
   Sliders,
@@ -34,6 +35,8 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
   const [selectedLocation, setSelectedLocation] = useState<string>('Bangalore');
   const [riskAppetite, setRiskAppetite] = useState<'low' | 'moderate' | 'high'>('moderate');
   const [timeHorizonMonths, setTimeHorizonMonths] = useState<number>(24);
+  const [isSimBackendActive, setIsSimBackendActive] = useState(false);
+  const [backendSimResults, setBackendSimResults] = useState<any[] | null>(null);
 
   // Reset to default baseline parameters
   const handleReset = () => {
@@ -91,18 +94,22 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
         lFit = Math.max(45, lFit - 14);
       }
 
-      // Master Composite Formula
-      const sim = Math.round(
+      const simMatch = backendSimResults?.find(
+        (b) => b.careerSlug === c.id || b.careerName?.toLowerCase() === c.title?.toLowerCase()
+      );
+
+      const orig = c.scores.overallScore;
+      const sim = simMatch ? simMatch.overallScore : Math.round(
         0.35 * sFit +
         0.20 * fFit +
         0.15 * aFam +
         0.20 * mFit +
         0.10 * lFit
       );
-
-      const orig = c.scores.overallScore;
-      const delta = sim - orig;
-      const rankChange = delta > 2 ? 'PROMOTED' : delta < -2 ? 'DEMOTED' : 'STABLE';
+      const delta = simMatch ? simMatch.scoreDelta : (sim - orig);
+      const rankChange = simMatch
+        ? (simMatch.rankDelta > 0 ? 'PROMOTED' : simMatch.rankDelta < 0 ? 'DEMOTED' : 'STABLE')
+        : (delta > 2 ? 'PROMOTED' : delta < -2 ? 'DEMOTED' : 'STABLE');
 
       return {
         career: c,
@@ -117,6 +124,29 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
         lFit
       };
     }).sort((a, b) => b.simScore - a.simScore);
+  }, [budgetLakhs, selectedLocation, riskAppetite, timeHorizonMonths, backendSimResults]);
+
+  // Synchronize scenario parameters with backend simulator engine (debounced)
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      ApiService.runSimulator({
+        educationBudget: budgetLakhs * 100000,
+        location: selectedLocation,
+        riskAppetite: riskAppetite,
+        timeToEmployment: timeHorizonMonths,
+        scenarioName: `Sim_${selectedLocation}_${budgetLakhs}L`
+      }).then(res => {
+        if (res?.data?.recommendations) {
+          setBackendSimResults(res.data.recommendations);
+          setIsSimBackendActive(true);
+        }
+      }).catch(err => {
+        console.warn('[ALIGNX WhatIf] Backend simulator sync note:', err);
+      });
+    }, 400);
+
+    return () => clearTimeout(handler);
   }, [budgetLakhs, selectedLocation, riskAppetite, timeHorizonMonths]);
 
   // Derived causality telemetry for top result
@@ -146,11 +176,31 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
           marginBottom: '36px'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' }}>
           <Sliders size={18} color="var(--accent)" />
           <span className="tracking-widest-mono" style={{ color: 'var(--accent)', fontWeight: 600 }}>
             MODULE 08 // COUNTERFACTUAL WHAT-IF LAB
           </span>
+          {isSimBackendActive && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '2px 8px',
+                borderRadius: '980px',
+                backgroundColor: 'rgba(52, 199, 89, 0.12)',
+                color: '#28cd41',
+                fontSize: '0.65rem',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                border: '1px solid rgba(52, 199, 89, 0.25)'
+              }}
+            >
+              ● LIVE SIMULATION ENGINE
+            </span>
+          )}
         </div>
 
         <h1

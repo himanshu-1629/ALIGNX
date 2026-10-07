@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { INITIAL_CAREERS } from '../../data/mockAlignxData';
+import { ApiService } from '../../services/api';
 import { Calendar, BookOpen, Award, GraduationCap, ChevronLeft, SlidersHorizontal, Printer } from 'lucide-react';
 import { StudioNavTabs } from '../studio/StudioNavTabs';
 
@@ -16,7 +17,24 @@ export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
   onBackToTwin,
   onOpenWhatIf
 }) => {
-  const career = INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0];
+  const [career, setCareer] = useState(() => INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0]);
+  const [roadmapBackendData, setRoadmapBackendData] = useState<any>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const staticMatched = INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0];
+    setCareer(staticMatched);
+
+    ApiService.generateRoadmap(careerId)
+      .then(res => {
+        if (res?.data && isMounted) {
+          setRoadmapBackendData(res.data);
+        }
+      })
+      .catch(err => console.warn('[ALIGNX Roadmap] Backend roadmap note:', err));
+
+    return () => { isMounted = false; };
+  }, [careerId]);
 
   return (
     <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 24px' }}>
@@ -80,11 +98,31 @@ export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
       </div>
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '24px', marginBottom: '36px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' }}>
           <Calendar size={18} color="var(--accent)" />
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.16em', color: 'var(--accent)' }}>
             PHASE 10 / STRATEGIC LEARNING & EXECUTION ROADMAP
           </span>
+          {roadmapBackendData && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '2px 8px',
+                borderRadius: '980px',
+                backgroundColor: 'rgba(52, 199, 89, 0.12)',
+                color: '#28cd41',
+                fontSize: '0.65rem',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                border: '1px solid rgba(52, 199, 89, 0.25)'
+              }}
+            >
+              ● LIVE PHASED ROADMAP
+            </span>
+          )}
         </div>
 
         <h1
@@ -134,44 +172,53 @@ export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {[
-            {
-              quarter: 'Q1 (MONTHS 1–3)',
-              focus: 'CORE FOUNDATION & MATHEMATICAL PROFILING',
-              deliverables: [
-                'Complete advanced Linear Algebra & Multivariable Matrix Calculus for ML.',
-                'Benchmark C++ / CUDA baseline with zero-copy memory pinned allocators.',
-                'Resolve deficit: Tensor decomposition and hardware cache layouts.'
+          {(roadmapBackendData?.phases?.length > 0
+            ? roadmapBackendData.phases.map((p: any, idx: number) => ({
+                quarter: `PHASE ${p.phaseNumber || idx + 1} (${p.title?.toUpperCase() || `MONTHS ${idx * 3 + 1}–${(idx + 1) * 3}`})`,
+                focus: p.items?.[0]?.title ? p.items[0].title.toUpperCase() : `STRATEGIC CAPSTONE: ${p.title?.toUpperCase()}`,
+                deliverables: p.items?.length > 0
+                  ? p.items.map((it: any) => `${it.title} — ${it.description}${it.estimatedDuration ? ` [${it.estimatedDuration}]` : ''}`)
+                  : [`Execute core competency requirements for ${p.title}.`]
+              }))
+            : [
+                {
+                  quarter: 'PHASE 1 (MONTHS 1–3)',
+                  focus: `FOUNDATIONAL COMPETENCIES & ${career.requiredSkills[0]?.toUpperCase() || 'CORE PREREQUISITES'}`,
+                  deliverables: [
+                    `Master foundational principles of ${career.requiredSkills[0] || 'Core Domain'} and ${career.requiredSkills[1] || 'Applied Tools'}.`,
+                    `Resolve identified learning deficit: ${career.studentSkillGaps[0] || 'Domain Architecture'}.`,
+                    `Complete 2 rigorous technical proof-of-concept projects and code reviews.`
+                  ]
+                },
+                {
+                  quarter: 'PHASE 2 (MONTHS 4–6)',
+                  focus: `ADVANCED SPECIALIZATION & ${career.requiredSkills[2]?.toUpperCase() || 'SYSTEM IMPLEMENTATION'}`,
+                  deliverables: [
+                    `Deep-dive into ${career.requiredSkills[2] || 'Advanced Systems'} and ${career.requiredSkills[3] || 'Industry Frameworks'}.`,
+                    `Publish open-source capstone repository simulating industrial scenarios in ${career.topLocations[0] || 'Tech Hubs'}.`,
+                    `Benchmark proficiency against the 90th-percentile practitioner target.`
+                  ]
+                },
+                {
+                  quarter: 'PHASE 3 (MONTHS 7–9)',
+                  focus: `GATEWAY VALIDATION & ${career.entranceExams[0]?.toUpperCase() || 'COMPETITIVE ACCREDITATION'}`,
+                  deliverables: [
+                    `Execute strategic test series for ${career.entranceExams.slice(0, 2).join(' & ') || 'Gateway Entrance Exams'}.`,
+                    `Secure mentor review and industry apprenticeship / internship pipeline.`,
+                    `Target sponsored fellowship or research grant eligibility.`
+                  ]
+                },
+                {
+                  quarter: 'PHASE 4 (MONTHS 10–12)',
+                  focus: `SCHOLARSHIP CAPTURE & HIGH-ROI PLACEMENT STRATEGY`,
+                  deliverables: [
+                    `Submit applications for high-value funding: ${career.scholarships.slice(0, 2).join(' & ') || 'Merit Scholarships'}.`,
+                    `Complete targeted portfolio defense and algorithmic technical rounds.`,
+                    `Finalize admissions / placement securing optimal compensation and growth leverage.`
+                  ]
+                }
               ]
-            },
-            {
-              quarter: 'Q2 (MONTHS 4–6)',
-              focus: 'DISTRIBUTED SYSTEMS & MODEL PARALLELISM',
-              deliverables: [
-                'Implement Megatron-LM tensor parallel layer from scratch in PyTorch.',
-                'Master Ray Train and vLLM inference engine internals.',
-                'Contribute 2 PRs to open-source systems frameworks.'
-              ]
-            },
-            {
-              quarter: 'Q3 (MONTHS 7–9)',
-              focus: 'PRODUCTION RESEARCH PROJECT & INTERNSHIP',
-              deliverables: [
-                'Deploy sub-5ms low-latency inference service on NVIDIA Triton server.',
-                'Target Tier-1 lab internship in Bangalore / Singapore.',
-                'Apply for ISM or Reliance Foundation research grants.'
-              ]
-            },
-            {
-              quarter: 'Q4 (MONTHS 10–12)',
-              focus: 'PORTFOLIO ARBITRAGE & HIGH-TIER PLACEMENT',
-              deliverables: [
-                'Publish reproducible benchmark paper or GitHub technical report.',
-                'Complete targeted system design interviews for DeepTech roles.',
-                'Negotiate offers prioritizing equity upside and compute budget.'
-              ]
-            }
-          ].map((m, idx) => (
+          ).map((m: any, idx: number) => (
             <div
               key={idx}
               style={{
@@ -194,7 +241,7 @@ export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
               </div>
 
               <ul style={{ paddingLeft: '20px', fontFamily: 'var(--font-body)', fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                {m.deliverables.map((d, i) => (
+                {m.deliverables.map((d: string, i: number) => (
                   <li key={i} style={{ marginBottom: '6px' }}>{d}</li>
                 ))}
               </ul>

@@ -193,6 +193,23 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack }
       // Graceful offline fallback
     }
 
+    // Submit parent invitation & feedback to backend asynchronously
+    ApiService.inviteParent({
+      parentName: primary?.name || 'Parent',
+      parentEmail: 'parent@family.internal',
+      relation: primary?.relation || 'Father'
+    }).then(res => {
+      if (res?.data?.inviteToken) {
+        return ApiService.submitParentFeedback(res.data.inviteToken, {
+          maxBudget: (primary?.maxBudgetAnnualLakhs || 15) * 100000,
+          riskTolerance: primary?.riskAppetite || 'low',
+          preferredLocations: primary?.preferredLocations || ['Bangalore', 'Chennai']
+        });
+      }
+    }).catch(err => {
+      console.warn('[ALIGNX Parent] Backend sync note:', err);
+    });
+
     onContinue();
   };
 

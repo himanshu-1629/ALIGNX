@@ -1,16 +1,28 @@
 /**
  * ALIGNX Frontend API Client
- * Seamlessly interfaces with Om's Express + Mongoose Backend (PORT 5001)
+ * Interfaces with Express + Mongoose Backend (PORT 5001)
  */
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api/v1';
 
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message?: string;
+  data: T;
+  error?: string;
+}
+
 export class ApiService {
   private static token: string | null = localStorage.getItem('alignx_auth_token');
+  private static studentId: string | null = localStorage.getItem('alignx_student_id');
 
-  public static setToken(token: string) {
+  public static setAuth(token: string, studentId?: string) {
     this.token = token;
     localStorage.setItem('alignx_auth_token', token);
+    if (studentId) {
+      this.studentId = studentId;
+      localStorage.setItem('alignx_student_id', studentId);
+    }
   }
 
   public static getToken(): string | null {
@@ -20,12 +32,25 @@ export class ApiService {
     return this.token;
   }
 
-  public static clearToken() {
-    this.token = null;
-    localStorage.removeItem('alignx_auth_token');
+  public static getStudentId(): string | null {
+    if (!this.studentId) {
+      this.studentId = localStorage.getItem('alignx_student_id');
+    }
+    return this.studentId;
   }
 
-  private static async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  public static clearAuth() {
+    this.token = null;
+    this.studentId = null;
+    localStorage.removeItem('alignx_auth_token');
+    localStorage.removeItem('alignx_student_id');
+  }
+
+  public static clearToken() {
+    this.clearAuth();
+  }
+
+  public static async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${API_BASE_URL}${endpoint}`;
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -49,8 +74,41 @@ export class ApiService {
       }
       return data;
     } catch (err) {
-      console.warn(`[ALIGNX API] Failed request to ${endpoint}:`, err);
+      console.warn(`[ALIGNX API] Request to ${endpoint} failed:`, err);
       throw err;
+    }
+  }
+
+  // Auto initialize or verify session
+  public static async ensureSession(defaultProfile?: { name?: string; email?: string; educationLevel?: string; location?: string }) {
+    if (this.getToken()) {
+      try {
+        const me = await this.getMe();
+        if (me?.data?.id) {
+          this.setAuth(this.getToken()!, me.data.id);
+          return me.data;
+        }
+      } catch {
+        // Token expired or invalid, proceed to auto-register new session
+      }
+    }
+
+    // Auto create guest / student session
+    const guestId = Math.random().toString(36).substring(2, 9);
+    const payload = {
+      name: defaultProfile?.name || 'Alex Mercer',
+      email: defaultProfile?.email || `student_${guestId}@alignx.internal`,
+      password: 'AlignxStudentPass123!',
+      educationLevel: defaultProfile?.educationLevel || 'Grade 11-12',
+      location: defaultProfile?.location || 'India'
+    };
+
+    try {
+      const res = await this.register(payload);
+      return res.data?.student;
+    } catch (err) {
+      console.warn('[ALIGNX API] Auto-session initialization fallback:', err);
+      return null;
     }
   }
 
@@ -60,63 +118,101 @@ export class ApiService {
   }
 
   // 2. Auth
-  public static async register(payload: { name: string; email: string; password: string; gradeLevel?: string }) {
-    const res = await this.request<{ success: boolean; data: { student: any; token: string } }>('/auth/register', {
+  public static async register(payload: { name: string; email: string; password: string; educationLevel?: string; location?: string }) {
+    const res = await this.request<{ success: boolean; data: { studentId?: string; accessToken?: string; token?: string; student: any } }>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(payload)
     });
-    if (res.data?.token) {
-      this.setToken(res.data.token);
+    const token = res.data?.accessToken || res.data?.token;
+    const studentId = res.data?.studentId || res.data?.student?.id || res.data?.student?._id;
+    if (token) {
+      this.setAuth(token, studentId);
     }
     return res;
   }
 
   public static async login(payload: { email: string; password: string }) {
-    const res = await this.request<{ success: boolean; data: { student: any; token: string } }>('/auth/login', {
+    const res = await this.request<{ success: boolean; data: { accessToken?: string; token?: string; student: any } }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(payload)
     });
-    if (res.data?.token) {
-      this.setToken(res.data.token);
+    const token = res.data?.accessToken || res.data?.token;
+    const studentId = res.data?.student?.id || res.data?.student?._id;
+    if (token) {
+      this.setAuth(token, studentId);
     }
     return res;
   }
 
-  // 3. Careers Catalog
-  public static async getCareers() {
-    return this.request<{ success: boolean; data: { total: number; careers: any[] } }>('/careers');
+  public static async getMe() {
+    return this.request<{ success: boolean; data: any }>('/auth/me');
   }
 
-  // 4. Student Skills
-  public static async updateSkills(skills: Array<{ skillName: string; category?: string; proficiencyLevel?: number }>) {
-    return this.request<{ success: boolean; data: any }>('/students/skills', {
+  // 3. Careers Catalog
+  public static async getCareers(params?: { category?: string; search?: string; location?: string }) {
+    const query = new URLSearchParams(params as any).toString();
+    const endpoint = query ? `/careers?${query}` : '/careers';
+    return this.request<{ success: boolean; data: { total: number; careers: any[] } }>(endpoint);
+  }
+
+  public static async getCareerBySlug(slugOrId: string) {
+    return this.request<{ success: boolean; data: any }>(`/careers/${slugOrId}`);
+  }
+
+  // 4. Student Profile & Onboarding
+  public static async updateStudentProfile(profile: {
+    name?: string;
+    educationLevel?: string;
+    location?: string;
+    preferredLocations?: string[];
+    budgetAnnualLakhs?: number;
+    goals?: string[];
+    interests?: string[];
+    skills?: Array<{ name: string; proficiency: number }>;
+  }) {
+    return this.request<{ success: boolean; data: any }>('/students/profile', {
       method: 'PUT',
-      body: JSON.stringify({ skills })
+      body: JSON.stringify(profile)
     });
   }
 
   // 5. Assessments
-  public static async startAssessment() {
-    return this.request<{ success: boolean; data: { assessmentId: string } }>('/assessments/career-discovery/start', {
-      method: 'POST'
+  public static async startAssessment(assessmentType: 'career_discovery' | 'aptitude') {
+    return this.request<{ success: boolean; data: { assessmentId: string; status: string } }>(`/assessments/${assessmentType === 'career_discovery' ? 'career-discovery' : 'aptitude'}/start`, {
+      method: 'POST',
+      body: JSON.stringify({ assessmentType })
     });
   }
 
-  public static async completeAssessment(assessmentId: string, payload: {
-    interestResponses?: any[];
-    riasecScores?: Record<string, number>;
-    aptitudeScores?: Record<string, number>;
-    workStyleScores?: Record<string, number>;
-  }) {
-    return this.request<{ success: boolean; data: { careerDna: any } }>(`/assessments/${assessmentId}/complete`, {
+  public static async submitAnswer(assessmentId: string, payload: { questionId: number | string; value: number | string; dimensionTag?: string }) {
+    return this.request<{ success: boolean; data: any }>(`/assessments/${assessmentId}/response`, {
       method: 'POST',
       body: JSON.stringify(payload)
     });
   }
 
-  // 6. Parent Module
-  public static async inviteParent(payload: { parentName: string; parentEmail: string }) {
-    return this.request<{ success: boolean; data: { inviteToken: string } }>('/parents/invite', {
+  public static async completeAssessment(assessmentId: string, assessmentType: 'career_discovery' | 'aptitude', payload: {
+    responses?: any[];
+    riasecScores?: Record<string, number>;
+    aptitudeScores?: Record<string, number>;
+  }) {
+    const endpoint = assessmentType === 'career_discovery'
+      ? `/assessments/career-discovery/${assessmentId}/complete`
+      : `/assessments/aptitude/${assessmentId}/complete`;
+    return this.request<{ success: boolean; data: any }>(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+  }
+
+  // 6. Career DNA
+  public static async getCareerDna() {
+    return this.request<{ success: boolean; data: any }>('/career-dna/me');
+  }
+
+  // 7. Parent Module
+  public static async inviteParent(payload: { parentName: string; parentEmail: string; relation?: string }) {
+    return this.request<{ success: boolean; data: { inviteToken: string; inviteLink?: string } }>('/parents/invite', {
       method: 'POST',
       body: JSON.stringify(payload)
     });
@@ -134,39 +230,61 @@ export class ApiService {
     });
   }
 
-  // 7. Recommendations
-  public static async generateRecommendations() {
-    return this.request<{ success: boolean; data: any }>('/recommendations/generate', {
-      method: 'POST'
+  // 8. Recommendations Engine
+  public static async generateRecommendations(options?: {
+    location?: string;
+    weights?: { interest: number; aptitude: number; financial: number; market: number; parent: number };
+  }) {
+    return this.request<{ success: boolean; data: { total: number; recommendations: any[] } }>('/recommendations/generate', {
+      method: 'POST',
+      body: JSON.stringify(options || {})
     });
   }
 
-  // 8. Simulator
+  public static async getRecommendations() {
+    return this.request<{ success: boolean; data: { total: number; recommendations: any[] } }>('/recommendations/me');
+  }
+
+  // 9. Simulator
   public static async runSimulator(scenario: {
-    budgetShift?: number;
-    preferredLocation?: string;
-    skillAcquisitions?: string[];
-    riasecDelta?: Record<string, number>;
+    educationBudget?: number;
+    location?: string;
+    riskAppetite?: string;
+    timeToEmployment?: number;
+    additionalSkills?: string[];
+    scenarioName?: string;
   }) {
-    return this.request<{ success: boolean; data: any }>('/simulator/run', {
+    return this.request<{
+      success: boolean;
+      data: {
+        scenarioId?: string;
+        scenario?: any;
+        recommendations: any[];
+        changes?: any[];
+        keyShifts?: string[];
+        originalRankings?: any[];
+        simulatedRankings?: any[];
+        rankChanges?: any[];
+      };
+    }>('/simulator/run', {
       method: 'POST',
       body: JSON.stringify(scenario)
     });
   }
 
-  // 9. Career Twin
-  public static async getCareerTwin(slug: string) {
-    return this.request<{ success: boolean; data: any }>(`/career-twin/${slug}`);
+  // 10. Career Twin
+  public static async getCareerTwin(slugOrId: string) {
+    return this.request<{ success: boolean; data: any }>(`/career-twin/${slugOrId}`);
   }
 
-  // 10. Phased Roadmap
-  public static async generateRoadmap(slug: string) {
-    return this.request<{ success: boolean; data: any }>(`/roadmaps/generate/${slug}`, {
+  // 11. Phased Roadmap
+  public static async generateRoadmap(careerSlug: string) {
+    return this.request<{ success: boolean; data: any }>(`/roadmaps/generate/${careerSlug}`, {
       method: 'POST'
     });
   }
 
-  // 11. Dashboard Me
+  // 12. Dashboard Me
   public static async getDashboard() {
     return this.request<{ success: boolean; data: any }>('/dashboard/me');
   }

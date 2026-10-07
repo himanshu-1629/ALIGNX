@@ -56,7 +56,7 @@ const WhatIfScenarioSchema = new Schema<IWhatIfScenario>(
     inputs: {
       educationBudget: { type: Number },
       location: { type: String },
-      riskAppetite: { type: String, enum: ['low', 'medium', 'high'] },
+      riskAppetite: { type: String, enum: ['low', 'medium', 'moderate', 'high'] },
       timeToEmployment: { type: String },
       additionalSkills: [{ type: String }]
     },

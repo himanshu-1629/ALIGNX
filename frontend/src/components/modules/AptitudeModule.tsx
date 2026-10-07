@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { APTITUDE_QUESTIONS } from '../../data/mockAlignxData';
 import { RollButton } from '../RollButton';
 import { saveSessionProgress } from '../../utils/sessionManager';
+import { ApiService } from '../../services/api';
 import { ArrowRight, ChevronLeft, Activity, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface AptitudeModuleProps {
@@ -64,6 +65,18 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
             dashboard: false
           }
         });
+
+        // Submit aptitude assessment to backend
+        ApiService.startAssessment('aptitude')
+          .then(res => {
+            if (res?.data?.assessmentId) {
+              return ApiService.completeAssessment(res.data.assessmentId, 'aptitude', {
+                aptitudeScores: metrics,
+                responses: Object.entries(selectedAnswers).map(([qId, val]) => ({ questionId: Number(qId), value: val }))
+              });
+            }
+          })
+          .catch(err => console.warn('[ALIGNX Aptitude] Assessment submit note:', err));
       }, 1000);
     }
   };

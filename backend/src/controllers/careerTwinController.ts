@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import { Student } from '../models/Student';
 import { Career } from '../models/Career';
+import { calculateStudentFit } from '../engine/scoringEngine';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { sendSuccess } from '../utils/apiResponse';
 import { AppError } from '../middleware/errorHandler';
@@ -116,9 +117,8 @@ export const getCareerTwin = async (
       }
     }
 
-    const matchScore = Math.round(
-      aptitudeScore * 0.3 + interestScore * 0.25 + skillsScore * 0.3 + careerDNAScore * 0.15
-    );
+    const studentFit = calculateStudentFit(student, career);
+    const matchScore = studentFit;
 
     sendSuccess({
       res,

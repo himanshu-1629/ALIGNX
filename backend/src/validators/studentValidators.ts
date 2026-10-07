@@ -6,7 +6,7 @@ export const validateProfileUpdate = (
   res: Response,
   next: NextFunction
 ): void => {
-  const { name, age, educationLevel, location, goals } = req.body;
+  const { name, age, educationLevel, location, goals, budgetAnnualLakhs, preferredLocations, interests } = req.body;
 
   if (name !== undefined && (typeof name !== 'string' || name.trim().length < 2)) {
     return next(new AppError('Name must be at least 2 characters long', 400, 'INVALID_NAME'));
@@ -26,6 +26,18 @@ export const validateProfileUpdate = (
 
   if (goals !== undefined && !Array.isArray(goals)) {
     return next(new AppError('Goals must be an array of strings', 400, 'INVALID_GOALS'));
+  }
+
+  if (budgetAnnualLakhs !== undefined && (typeof budgetAnnualLakhs !== 'number' || budgetAnnualLakhs < 0)) {
+    return next(new AppError('Budget must be a non-negative number', 400, 'INVALID_BUDGET'));
+  }
+
+  if (preferredLocations !== undefined && !Array.isArray(preferredLocations)) {
+    return next(new AppError('Preferred locations must be an array of strings', 400, 'INVALID_PREFERRED_LOCATIONS'));
+  }
+
+  if (interests !== undefined && !Array.isArray(interests)) {
+    return next(new AppError('Interests must be an array', 400, 'INVALID_INTERESTS'));
   }
 
   next();

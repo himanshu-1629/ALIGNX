@@ -51,6 +51,8 @@ export const getProfile = async (
         currentYear: student.currentYear,
         branch: student.branch,
         location: student.location,
+        preferredLocations: student.preferredLocations || [],
+        budgetAnnualLakhs: student.budgetAnnualLakhs,
         interests: student.interests,
         skills: student.skills,
         goals: student.goals,
@@ -69,6 +71,7 @@ export const getProfile = async (
 /**
  * Update student demographic and academic profile
  * PATCH /api/v1/students/profile
+ * PUT /api/v1/students/profile
  */
 export const updateProfile = async (
   req: AuthenticatedRequest,
@@ -77,7 +80,18 @@ export const updateProfile = async (
 ): Promise<void> => {
   try {
     const student = req.student!;
-    const { name, age, educationLevel, currentYear, branch, location, goals } = req.body;
+    const {
+      name,
+      age,
+      educationLevel,
+      currentYear,
+      branch,
+      location,
+      goals,
+      budgetAnnualLakhs,
+      preferredLocations,
+      interests
+    } = req.body;
 
     if (name !== undefined) student.name = name.trim();
     if (age !== undefined) student.age = Number(age);
@@ -87,6 +101,54 @@ export const updateProfile = async (
     if (location !== undefined) student.location = location.trim();
     if (goals !== undefined && Array.isArray(goals)) {
       student.goals = goals.map((g: string) => g.trim()).filter(Boolean);
+    }
+    if (budgetAnnualLakhs !== undefined) {
+      student.budgetAnnualLakhs = Math.max(0, Number(budgetAnnualLakhs));
+
+      // Sync with Family record
+      const budgetInRupees = student.budgetAnnualLakhs * 100000;
+      if (student.familyId) {
+        await Family.findByIdAndUpdate(student.familyId, {
+          'combinedFinancialContext.totalEducationBudget': budgetInRupees
+        });
+      } else {
+        const family = await Family.create({
+          studentId: student._id,
+          parents: [],
+          combinedFinancialContext: {
+            totalEducationBudget: budgetInRupees,
+            averageRiskAppetite: 'medium'
+          }
+        });
+        student.familyId = family._id as any;
+      }
+    }
+    if (preferredLocations !== undefined) {
+      student.preferredLocations = Array.isArray(preferredLocations)
+        ? preferredLocations.map((l: string) => String(l).trim()).filter(Boolean)
+        : [String(preferredLocations).trim()];
+    }
+    if (interests !== undefined && Array.isArray(interests)) {
+      const formattedInterests = interests.map((item: any) => {
+        if (typeof item === 'string') {
+          return {
+            name: item.trim(),
+            score: 85,
+            category: 'domain'
+          };
+        }
+        return {
+          name: String(item.name).trim(),
+          score: item.score !== undefined ? Math.min(100, Math.max(0, Number(item.score))) : 85,
+          category: item.category || 'domain'
+        };
+      });
+
+      // Preserve existing RIASEC traits if present and not overwritten
+      const riasecInterests = (student.interests || []).filter(
+        (i) => i.category === 'riasec' && !formattedInterests.some((f) => f.name.toLowerCase() === i.name.toLowerCase())
+      );
+      student.interests = [...formattedInterests, ...riasecInterests];
     }
 
     await student.save();
@@ -104,7 +166,10 @@ export const updateProfile = async (
         currentYear: student.currentYear,
         branch: student.branch,
         location: student.location,
+        preferredLocations: student.preferredLocations,
+        budgetAnnualLakhs: student.budgetAnnualLakhs,
         goals: student.goals,
+        interests: student.interests,
         updatedAt: student.updatedAt
       }
     });
