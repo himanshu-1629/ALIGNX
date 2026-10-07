@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { INITIAL_CAREERS } from '../../data/mockAlignxData';
 import type { CareerRecommendation } from '../../types/alignx';
-import { ArrowRight, Columns } from 'lucide-react';
+import {
+  Columns,
+  Sparkles,
+  SlidersHorizontal,
+  Compass,
+  CheckCircle2,
+  MapPin,
+  ExternalLink
+} from 'lucide-react';
 
 interface RecommendationsModuleProps {
   onSelectCareerTwin: (careerId: string) => void;
@@ -16,118 +24,287 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
   const [selectedCareer, setSelectedCareer] = useState<CareerRecommendation>(INITIAL_CAREERS[0]);
   const [comparisonCareer, setComparisonCareer] = useState<CareerRecommendation | null>(null);
   const [isCompareMode, setIsCompareMode] = useState(false);
+  const [selectedDomain, setSelectedDomain] = useState<string>('all');
+
+  const domains = ['all', 'AI & Data Science', 'Hardware & Robotics', 'Product & Design', 'CleanTech & Systems'];
+
+  const filteredCareers = selectedDomain === 'all'
+    ? careers
+    : careers.filter(c => c.domain.toLowerCase().includes(selectedDomain.toLowerCase()) || selectedDomain.toLowerCase().includes(c.domain.toLowerCase()));
 
   return (
-    <div style={{ maxWidth: '1300px', margin: '40px auto', padding: '0 24px' }}>
-      {/* Top Banner */}
-      <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '24px', marginBottom: '36px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
+    <div style={{ maxWidth: '1440px', margin: '36px auto', padding: '0 28px' }}>
+      {/* Studio Header & Navigation Switcher */}
+      <div
+        style={{
+          borderBottom: '1px solid var(--border-hairline)',
+          paddingBottom: '24px',
+          marginBottom: '32px'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '20px' }}>
           <div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.16em', color: 'var(--accent)' }}>
-              PHASE 07 / ALIGNX DECISION ENGINE (DETERMINISTIC 5D)
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <Sparkles size={16} color="var(--accent)" />
+              <span className="tracking-widest-mono" style={{ color: 'var(--accent)', fontWeight: 600 }}>
+                DECISION INTELLIGENCE STUDIO
+              </span>
             </div>
+
             <h1
+              className="font-display tracking-tight-display"
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2rem, 4vw, 3.2rem)',
+                fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
                 fontWeight: 700,
-                letterSpacing: '-0.02em',
-                margin: '8px 0 10px'
+                color: 'var(--text-primary)',
+                margin: '4px 0 10px'
               }}
             >
-              RECOMMENDATION DASHBOARD
+              5D Career Alignment Hub
             </h1>
-            <p style={{ fontFamily: 'var(--font-body)', color: 'var(--text-secondary)', fontSize: '1.05rem' }}>
-              Ranked career vectors calculated by combining Student Fit (35%), Financial Fit (20%), Family Alignment (15%), Market Fit (20%), and Location Fit (10%).
+
+            <p
+              className="font-body"
+              style={{
+                color: 'var(--text-secondary)',
+                fontSize: '1.02rem',
+                maxWidth: '75ch',
+                lineHeight: 1.55
+              }}
+            >
+              Multi-dimensional ranking synthesizing Student Aptitude (35%), Financial Feasibility (20%), Family Alignment (15%), Industrial Market Demand (20%), and Regional Location (10%).
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px' }}>
+          {/* Quick Studio Switcher Pill */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px',
+              backgroundColor: 'var(--bg-surface)',
+              borderRadius: '980px',
+              border: '1px solid var(--border-hairline)'
+            }}
+          >
             <button
-              onClick={() => {
-                setIsCompareMode(!isCompareMode);
-                if (!comparisonCareer) setComparisonCareer(INITIAL_CAREERS[1]);
-              }}
               style={{
-                display: 'inline-flex',
+                padding: '8px 18px',
+                borderRadius: '980px',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid var(--border-hairline)',
+                color: 'var(--text-primary)',
+                fontWeight: 600,
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                padding: '10px 18px',
-                backgroundColor: isCompareMode ? 'var(--accent-dim)' : 'transparent',
-                border: isCompareMode ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
-                color: isCompareMode ? 'var(--accent)' : 'var(--text-primary)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                cursor: 'pointer'
+                gap: '6px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.05)'
               }}
             >
-              <Columns size={15} />
-              <span>{isCompareMode ? 'EXIT COMPARISON' : 'COMPARE CAREERS'}</span>
+              <Compass size={14} color="var(--accent)" />
+              <span>5D Recommendations</span>
+            </button>
+
+            <button
+              onClick={() => onSelectCareerTwin(selectedCareer.id)}
+              style={{
+                padding: '8px 18px',
+                borderRadius: '980px',
+                backgroundColor: 'transparent',
+                border: '1px solid transparent',
+                color: 'var(--text-secondary)',
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                transition: 'all 0.18s ease'
+              }}
+            >
+              <Sparkles size={14} />
+              <span>Career Twin Radar</span>
             </button>
 
             <button
               onClick={onOpenWhatIf}
-              className="btn-alignx-primary"
-              style={{ padding: '10px 18px', fontSize: '0.75rem' }}
+              style={{
+                padding: '8px 18px',
+                borderRadius: '980px',
+                backgroundColor: 'transparent',
+                border: '1px solid transparent',
+                color: 'var(--text-secondary)',
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                transition: 'all 0.18s ease'
+              }}
             >
-              <span>RUN WHAT-IF SIMULATOR</span>
-              <ArrowRight size={14} />
+              <SlidersHorizontal size={14} />
+              <span>What-If Lab</span>
             </button>
           </div>
         </div>
+
+        {/* Filter Bar & Comparison Mode Toggle */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: '24px',
+            flexWrap: 'wrap',
+            gap: '12px'
+          }}
+        >
+          {/* Domain Chips */}
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {domains.map((dom) => (
+              <button
+                key={dom}
+                onClick={() => setSelectedDomain(dom)}
+                className={`alignx-key ${selectedDomain === dom ? 'active' : ''}`}
+                style={{
+                  padding: '6px 14px',
+                  fontSize: '0.74rem',
+                  textTransform: 'capitalize'
+                }}
+              >
+                {dom === 'all' ? 'All Disciplines' : dom}
+              </button>
+            ))}
+          </div>
+
+          {/* Compare Toggle */}
+          <button
+            onClick={() => {
+              setIsCompareMode(!isCompareMode);
+              if (!comparisonCareer) setComparisonCareer(careers[1] || careers[0]);
+            }}
+            className="alignx-key"
+            style={{
+              padding: '7px 16px',
+              fontSize: '0.74rem',
+              backgroundColor: isCompareMode ? 'var(--accent-dim)' : undefined,
+              borderColor: isCompareMode ? 'var(--accent)' : undefined
+            }}
+          >
+            <Columns size={13} />
+            <span>{isCompareMode ? 'CLOSE COMPARISON' : 'COMPARE PATHWAYS'}</span>
+          </button>
+        </div>
       </div>
 
-      {/* Main Grid: Left Ranked List, Right Deep Analysis */}
+      {/* Main Studio Grid: Left Ranked Cards, Right In-Depth Dossier */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: isCompareMode ? '1fr 1fr' : '1.2fr 2fr',
+          gridTemplateColumns: isCompareMode ? '1fr 1fr' : '1fr 1.6fr',
           gap: '32px',
           alignItems: 'start'
         }}
         className="dashboard-main-grid"
       >
-        {/* Left: Ranked Career Cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', letterSpacing: '0.12em' }}>
-            RANKED TRAJECTORIES ({careers.length})
+        {/* Left: Ranked Trajectory Cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+            <span className="tracking-widest-mono" style={{ color: 'var(--text-muted)' }}>
+              RANKED CANDIDATES ({filteredCareers.length})
+            </span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--accent)' }}>
+              CLICK CARD TO INSPECT
+            </span>
           </div>
 
-          {careers.map((career, idx) => {
+          {filteredCareers.map((career, idx) => {
             const isSelected = selectedCareer.id === career.id;
             return (
               <div
                 key={career.id}
                 onClick={() => setSelectedCareer(career)}
                 style={{
-                  border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-hairline)',
-                  backgroundColor: isSelected ? 'var(--bg-elevated)' : 'var(--bg-surface)',
-                  padding: '24px',
+                  backgroundColor: 'var(--bg-card)',
+                  borderRadius: '14px',
+                  border: isSelected ? '1.5px solid var(--accent)' : '1px solid var(--border-hairline)',
+                  padding: '22px 24px',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
+                  boxShadow: isSelected ? '0 4px 16px rgba(158, 107, 56, 0.12)' : '0 2px 6px rgba(0, 0, 0, 0.02)',
+                  transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                   position: 'relative'
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: isSelected ? 'var(--accent)' : 'var(--text-muted)' }}>
-                    RANK #{idx + 1} • {career.domain.toUpperCase()}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.74rem',
+                          fontWeight: 700,
+                          color: isSelected ? 'var(--accent)' : 'var(--text-muted)'
+                        }}
+                      >
+                        #{idx + 1}
+                      </span>
+                      <span className="tracking-widest-mono" style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>
+                        {career.domain}
+                      </span>
+                    </div>
+
+                    <h3
+                      className="font-display"
+                      style={{
+                        fontSize: '1.2rem',
+                        fontWeight: 600,
+                        color: 'var(--text-primary)',
+                        margin: '4px 0 6px'
+                      }}
+                    >
+                      {career.title}
+                    </h3>
                   </div>
 
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.8rem', fontWeight: 700, color: isSelected ? 'var(--accent)' : 'var(--text-primary)' }}>
-                    {career.scores.overallScore}%
+                  {/* Overall Match Circle */}
+                  <div style={{ textAlign: 'right' }}>
+                    <div
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '1.7rem',
+                        fontWeight: 800,
+                        color: isSelected ? 'var(--accent)' : 'var(--text-primary)',
+                        lineHeight: 1,
+                        fontVariantNumeric: 'tabular-nums'
+                      }}
+                    >
+                      {career.scores.overallScore}%
+                    </div>
+                    <div className="tracking-widest-mono" style={{ fontSize: '0.6rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                      FIT ALIGNMENT
+                    </div>
                   </div>
                 </div>
 
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
-                  {career.title}
-                </div>
-
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '14px', lineHeight: 1.4 }}>
+                <p
+                  className="font-body"
+                  style={{
+                    fontSize: '0.88rem',
+                    color: 'var(--text-secondary)',
+                    lineHeight: 1.45,
+                    marginBottom: '16px'
+                  }}
+                >
                   {career.tagline}
-                </div>
+                </p>
 
-                {/* Quick 5-Score Bar Micro-Visualizer */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '4px', height: '4px', backgroundColor: 'var(--border-hairline)' }}>
+                {/* Micro 5-Factor Bar Indicator */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '4px', height: '4px', borderRadius: '980px', overflow: 'hidden', backgroundColor: 'var(--border-hairline)', marginBottom: '12px' }}>
                   <div style={{ backgroundColor: 'var(--accent)', opacity: career.scores.studentFit / 100 }} title={`Student Fit: ${career.scores.studentFit}%`} />
                   <div style={{ backgroundColor: 'var(--accent)', opacity: career.scores.financialFit / 100 }} title={`Financial Fit: ${career.scores.financialFit}%`} />
                   <div style={{ backgroundColor: 'var(--accent)', opacity: career.scores.familyAlignment / 100 }} title={`Family: ${career.scores.familyAlignment}%`} />
@@ -135,54 +312,108 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
                   <div style={{ backgroundColor: 'var(--accent)', opacity: career.scores.locationFit / 100 }} title={`Location: ${career.scores.locationFit}%`} />
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '10px' }}>
-                  <span>{career.salaryRange}</span>
-                  <span>{career.growthRate}</span>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.72rem',
+                    color: 'var(--text-muted)',
+                    fontVariantNumeric: 'tabular-nums'
+                  }}
+                >
+                  <span>CTC: {career.salaryRange}</span>
+                  <span>RISK: {career.riskLevel.toUpperCase()}</span>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Right: Detailed 5D Breakdown & Explainable AI */}
+        {/* Right: Detailed Dossier Panel */}
         <div>
-          {/* Active Career Detail Panel */}
           <div
             style={{
+              backgroundColor: 'var(--bg-card)',
+              borderRadius: '16px',
               border: '1px solid var(--border-hairline)',
-              backgroundColor: 'var(--bg-surface)',
               padding: '36px',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
               marginBottom: '28px'
             }}
           >
+            {/* Header info */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
               <div>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)', letterSpacing: '0.12em' }}>
-                  PRIMARY CANDIDATE PROFILE
+                <span className="tracking-widest-mono" style={{ color: 'var(--accent)', fontWeight: 600 }}>
+                  ACTIVE CANDIDATE DOSSIER
                 </span>
-                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 700, margin: '6px 0' }}>
+                <h2
+                  className="font-display tracking-tight-subhead"
+                  style={{
+                    fontSize: '2rem',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    margin: '6px 0 8px'
+                  }}
+                >
                   {selectedCareer.title}
                 </h2>
-                <div style={{ fontFamily: 'var(--font-body)', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                <div style={{ fontFamily: 'var(--font-body)', color: 'var(--text-secondary)', fontSize: '0.98rem', maxWidth: '65ch', lineHeight: 1.5 }}>
                   {selectedCareer.tagline}
                 </div>
               </div>
 
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)' }}>OVERALL MATCH</div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '3.4rem', fontWeight: 800, color: 'var(--accent)', lineHeight: 1 }}>
+              <div
+                style={{
+                  padding: '16px 24px',
+                  borderRadius: '12px',
+                  backgroundColor: 'var(--bg-surface)',
+                  border: '1px solid var(--border-hairline)',
+                  textAlign: 'center'
+                }}
+              >
+                <div className="tracking-widest-mono" style={{ fontSize: '0.62rem', color: 'var(--text-muted)' }}>
+                  ALIGNX SCORE
+                </div>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '2.8rem',
+                    fontWeight: 800,
+                    color: 'var(--accent)',
+                    lineHeight: 1.1,
+                    fontVariantNumeric: 'tabular-nums'
+                  }}
+                >
                   {selectedCareer.scores.overallScore}%
+                </div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#15803D', fontWeight: 600, marginTop: '2px' }}>
+                  FEASIBLE MATCH
                 </div>
               </div>
             </div>
 
-            {/* 5-Dimensional Component Scores */}
-            <div style={{ borderTop: '1px solid var(--border-hairline)', borderBottom: '1px solid var(--border-hairline)', padding: '24px 0', margin: '24px 0' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', letterSpacing: '0.12em', marginBottom: '16px' }}>
+            {/* 5-Dimensional Breakdown Cards */}
+            <div
+              style={{
+                borderTop: '1px solid var(--border-hairline)',
+                borderBottom: '1px solid var(--border-hairline)',
+                padding: '24px 0',
+                margin: '24px 0'
+              }}
+            >
+              <div className="tracking-widest-mono" style={{ color: 'var(--text-muted)', marginBottom: '16px' }}>
                 5-DIMENSIONAL DETERMINISTIC SCORING BREAKDOWN
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '16px' }}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                  gap: '14px'
+                }}
+              >
                 {[
                   { label: 'STUDENT FIT', weight: '35%', score: selectedCareer.scores.studentFit },
                   { label: 'FINANCIAL FIT', weight: '20%', score: selectedCareer.scores.financialFit },
@@ -190,14 +421,34 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
                   { label: 'MARKET FIT', weight: '20%', score: selectedCareer.scores.marketFit },
                   { label: 'LOCATION FIT', weight: '10%', score: selectedCareer.scores.locationFit },
                 ].map((item, i) => (
-                  <div key={i} style={{ border: '1px solid var(--border-subtle)', padding: '14px', backgroundColor: 'var(--bg-deep)' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)' }}>
-                      {item.label} ({item.weight})
+                  <div
+                    key={i}
+                    style={{
+                      borderRadius: '10px',
+                      border: '1px solid var(--border-hairline)',
+                      padding: '16px',
+                      backgroundColor: 'var(--bg-surface)'
+                    }}
+                  >
+                    <div className="tracking-widest-mono" style={{ fontSize: '0.62rem', color: 'var(--text-muted)' }}>
+                      {item.label}
                     </div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 700, color: 'var(--text-primary)', margin: '4px 0' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--accent)' }}>
+                      Weight: {item.weight}
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '1.6rem',
+                        fontWeight: 700,
+                        color: 'var(--text-primary)',
+                        margin: '6px 0',
+                        fontVariantNumeric: 'tabular-nums'
+                      }}
+                    >
                       {item.score}%
                     </div>
-                    <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%' }}>
+                    <div style={{ height: '4px', backgroundColor: 'var(--border-hairline)', borderRadius: '980px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: `${item.score}%`, backgroundColor: 'var(--accent)' }} />
                     </div>
                   </div>
@@ -206,59 +457,102 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
             </div>
 
             {/* Explainable Rationale */}
-            <div style={{ marginBottom: '24px' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)', letterSpacing: '0.12em', marginBottom: '10px' }}>
-                EXPLAINABLE AI RECOMMENDATION RATIONALE
+            <div style={{ marginBottom: '28px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                <CheckCircle2 size={16} color="var(--accent)" />
+                <span className="tracking-widest-mono" style={{ color: 'var(--accent)', fontWeight: 600 }}>
+                  EXPLAINABLE AI RECOMMENDATION RATIONALE
+                </span>
               </div>
-              <ul style={{ paddingLeft: '18px', fontFamily: 'var(--font-body)', fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {selectedCareer.whyRecommended.map((r, i) => (
-                  <li key={i} style={{ marginBottom: '6px' }}>{r}</li>
+                  <div
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '10px',
+                      backgroundColor: 'var(--bg-surface)',
+                      padding: '12px 16px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--border-hairline)'
+                    }}
+                  >
+                    <span style={{ color: 'var(--accent)', marginTop: '2px' }}>•</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                      {r}
+                    </span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
 
-            {/* Bottom Actions */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px', borderTop: '1px solid var(--border-hairline)', flexWrap: 'wrap', gap: '12px' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                PRIMARY HUBS: {selectedCareer.topLocations.join(' • ')}
+            {/* Action Bar */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingTop: '20px',
+                borderTop: '1px solid var(--border-hairline)',
+                flexWrap: 'wrap',
+                gap: '16px'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                <MapPin size={14} color="var(--accent)" />
+                <span>PRIMARY HUBS: {selectedCareer.topLocations.join(', ')}</span>
               </div>
 
-              <button
-                onClick={() => onSelectCareerTwin(selectedCareer.id)}
-                className="btn-alignx-primary"
-                style={{ padding: '10px 18px', fontSize: '0.75rem' }}
-              >
-                <span>OPEN CAREER TWIN & SKILL GAPS</span>
-                <ArrowRight size={14} />
-              </button>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button
+                  onClick={() => onSelectCareerTwin(selectedCareer.id)}
+                  className="btn-alignx-primary"
+                  style={{ padding: '12px 24px', fontSize: '0.78rem' }}
+                >
+                  <span>CAREER TWIN & SKILL GAPS</span>
+                  <ExternalLink size={14} />
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Comparison Mode Secondary Card */}
+          {/* Comparison Card (If Compare Mode Active) */}
           {isCompareMode && comparisonCareer && (
             <div
               style={{
+                backgroundColor: 'var(--bg-card)',
+                borderRadius: '16px',
                 border: '1px solid var(--border-hairline)',
-                backgroundColor: 'var(--bg-surface)',
-                padding: '36px'
+                padding: '32px',
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)'
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <div>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                  <span className="tracking-widest-mono" style={{ color: 'var(--text-muted)' }}>
                     BENCHMARK COMPARISON CANDIDATE
                   </span>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 700, margin: '4px 0' }}>
+                  <h3 className="font-display" style={{ fontSize: '1.4rem', fontWeight: 600, color: 'var(--text-primary)', margin: '4px 0' }}>
                     {comparisonCareer.title}
                   </h3>
                 </div>
 
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '2.2rem',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    fontVariantNumeric: 'tabular-nums'
+                  }}
+                >
                   {comparisonCareer.scores.overallScore}%
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', margin: '16px 0' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
                 {[
                   { label: 'Student', s1: selectedCareer.scores.studentFit, s2: comparisonCareer.scores.studentFit },
                   { label: 'Finance', s1: selectedCareer.scores.financialFit, s2: comparisonCareer.scores.financialFit },
@@ -266,9 +560,9 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
                   { label: 'Market', s1: selectedCareer.scores.marketFit, s2: comparisonCareer.scores.marketFit },
                   { label: 'Location', s1: selectedCareer.scores.locationFit, s2: comparisonCareer.scores.locationFit },
                 ].map((diff, idx) => (
-                  <div key={idx} style={{ border: '1px solid var(--border-hairline)', padding: '8px', textAlign: 'center', backgroundColor: 'var(--bg-deep)' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)' }}>{diff.label}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 600, color: diff.s1 >= diff.s2 ? 'var(--accent)' : 'var(--text-secondary)' }}>
+                  <div key={idx} style={{ borderRadius: '8px', border: '1px solid var(--border-hairline)', padding: '10px', textAlign: 'center', backgroundColor: 'var(--bg-surface)' }}>
+                    <div className="tracking-widest-mono" style={{ fontSize: '0.62rem', color: 'var(--text-muted)' }}>{diff.label}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700, color: diff.s1 >= diff.s2 ? 'var(--accent)' : 'var(--text-secondary)', marginTop: '4px' }}>
                       {diff.s1}% vs {diff.s2}%
                     </div>
                   </div>
@@ -280,7 +574,7 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
       </div>
 
       <style>{`
-        @media (max-width: 900px) {
+        @media (max-width: 960px) {
           .dashboard-main-grid {
             grid-template-columns: 1fr !important;
           }

@@ -8,7 +8,7 @@ import { TrajectoryBifurcationInteractive } from '../TrajectoryBifurcationIntera
 import Parallax from '../Parallax';
 import type { AppView } from '../Header';
 import type { AlignxSessionProgress } from '../../types/alignx';
-import { ArrowRight, ChevronDown, Sparkles, Sliders, MapPin, TrendingUp } from 'lucide-react';
+import { ArrowRight, Sparkles, Sliders, MapPin, TrendingUp } from 'lucide-react';
 
 interface CinematicFramesProps {
   onEnterApp: (view?: AppView) => void;
@@ -172,15 +172,7 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
               variant="primary"
               icon={<ArrowRight size={14} />}
             >
-              BEGIN ASSESSMENT
-            </RollButton>
-
-            <RollButton
-              onClick={() => document.getElementById('career-parallax-narrative')?.scrollIntoView({ behavior: 'smooth' })}
-              variant="outline"
-              icon={<ChevronDown size={14} />}
-            >
-              EXPLORE STORY
+              START ASSESSMENT
             </RollButton>
 
             <RollButton
@@ -191,6 +183,7 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
               TEST SIMULATORS
             </RollButton>
           </div>
+
         </div>
 
         {/* Bottom Metrics Bar */}
