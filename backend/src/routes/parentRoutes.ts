@@ -6,7 +6,8 @@ import {
   getParentStatus,
   resendInvitation,
   generateParentInvitation,
-  directSubmitParentForm
+  directSubmitParentForm,
+  removeParent
 } from '../controllers/parentController';
 import {
   validateAddParent,
@@ -46,5 +47,8 @@ router.post('/:parentId/resend', authenticate, resendInvitation);
 
 // Direct submit parent data by authenticated student (for immediate sync / simulation)
 router.post('/:parentId/direct-submit', authenticate, directSubmitParentForm);
+
+// Remove a parent from student's family
+router.delete('/:parentId', authenticate, removeParent);
 
 export default router;

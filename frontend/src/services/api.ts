@@ -273,6 +273,23 @@ export class ApiService {
     });
   }
 
+  public static async getInvitationDetails(inviteToken: string) {
+    return this.request<{
+      success: boolean;
+      data: {
+        valid: boolean;
+        studentName: string;
+        studentEducation?: string;
+        studentLocation?: string;
+        parentId: string;
+        parentName: string;
+        relationship: string;
+        status: string;
+        expiresAt: string;
+      };
+    }>(`/parents/invite/${inviteToken}`);
+  }
+
   public static async submitParentFeedback(inviteToken: string, payload: {
     educationBudget: number;
     riskAppetite?: string;
@@ -317,6 +334,16 @@ export class ApiService {
       };
     }>(`/parents/${parentId}/resend`, {
       method: 'POST'
+    });
+  }
+
+  public static async removeParent(parentId: string) {
+    return this.request<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>(`/parents/${parentId}`, {
+      method: 'DELETE'
     });
   }
 

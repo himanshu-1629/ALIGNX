@@ -428,6 +428,49 @@ export const directSubmitParentForm = async (
 };
 
 /**
+ * Remove / delete a parent from the student's family
+ * DELETE /api/v1/parents/:parentId
+ */
+export const removeParent = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const student = req.student!;
+    const { parentId } = req.params;
+
+    const family = await Family.findOne({ studentId: student._id });
+    if (!family) {
+      throw new AppError('Family record not found', 404, 'FAMILY_NOT_FOUND');
+    }
+
+    family.parents = family.parents.filter(
+      (p) => p._id?.toString() !== parentId
+    );
+
+    await ParentInvitation.deleteMany({ parentId });
+
+    family.combinedFinancialContext = calculateAggregateFinancials(family);
+    family.alignmentAnalysis = calculateConflictIndexAndAlignment(student, family);
+
+    await family.save();
+
+    sendSuccess({
+      res,
+      statusCode: 200,
+      message: 'Parent removed successfully',
+      data: {
+        totalParents: family.parents.length,
+        parents: family.parents
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Resend / regenerate invitation token for an existing parent
  * POST /api/v1/parents/:parentId/resend
  */

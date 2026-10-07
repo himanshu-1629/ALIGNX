@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { ParentInput } from '../../types/alignx';
 import { RollButton } from '../RollButton';
 import { saveSessionProgress, getSessionProgress } from '../../utils/sessionManager';
@@ -14,7 +14,9 @@ import {
   ChevronLeft,
   Lock,
   Clock,
-  Sliders
+  Sliders,
+  Trash2,
+  RefreshCw
 } from 'lucide-react';
 
 interface ParentModuleProps {
@@ -29,7 +31,9 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
   const [activeParentToFill, setActiveParentToFill] = useState<ParentInput | null>(null);
   const [parents, setParents] = useState<ParentInput[]>([]);
   const [conflictIndex, setConflictIndex] = useState<number>(24);
+  const [conflictReasons, setConflictReasons] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Form states for adding parent
   const [newName, setNewName] = useState('');
@@ -51,97 +55,124 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
     'Student';
 
   // 1. Fetch authentic parents for this specific child from the database
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadStudentParents = async () => {
-      try {
-        const res = await ApiService.getParentStatus();
-        if (res?.data && isMounted) {
-          if (res.data.alignmentAnalysis?.conflictIndex !== undefined) {
-            setConflictIndex(res.data.alignmentAnalysis.conflictIndex);
-          }
-
-          if (res.data.parents && res.data.parents.length > 0) {
-            const mapped: ParentInput[] = res.data.parents.map((p) => {
-              const annualLakhs = p.financialProfile?.educationBudget
-                ? Math.round(p.financialProfile.educationBudget / 100000)
-                : 16;
-              const mappedRisk =
-                p.financialProfile?.riskAppetite === 'high'
-                  ? 'high'
-                  : p.financialProfile?.riskAppetite === 'low'
-                  ? 'low'
-                  : 'moderate';
-
-              return {
-                id: p.parentId,
-                parentId: p.parentId,
-                name: p.name,
-                relation: p.relationship,
-                email: p.email,
-                phone: p.phone,
-                maxBudgetAnnualLakhs: annualLakhs,
-                preferredLocations: p.financialProfile?.locationPreference
-                  ? [p.financialProfile.locationPreference]
-                  : ['Domestic Tier-1 Tech Hubs'],
-                riskAppetite: mappedRisk,
-                priorityFocus: (p.expectations?.priorityFactors?.[0] as any) || 'Stability',
-                conflictPoints: res.data.alignmentAnalysis?.conflictReasons || [],
-                status: p.status === 'completed' ? 'COMPLETED' : 'PENDING',
-                invitationToken: p.invitationToken,
-                invitationUrl: p.invitationUrl
-              };
-            });
-
-            setParents(mapped);
-
-            // Sync with local session progress
-            const completed = mapped.find((m) => m.status === 'COMPLETED') || mapped[0];
-            if (completed && completed.status === 'COMPLETED') {
-              saveSessionProgress({
-                parentData: {
-                  name: completed.name,
-                  relation: completed.relation,
-                  maxBudgetAnnualLakhs: completed.maxBudgetAnnualLakhs,
-                  preferredLocations: completed.preferredLocations,
-                  priorityFocus: completed.priorityFocus,
-                  riskAppetite: completed.riskAppetite,
-                  maxRelocationKm: 500
-                },
-                parentInputDone: true
-              });
-            }
-            return;
-          }
+  const loadStudentParents = useCallback(async (silent = false) => {
+    if (!silent) setIsRefreshing(true);
+    try {
+      const res = await ApiService.getParentStatus();
+      if (res?.data) {
+        if (res.data.alignmentAnalysis?.conflictIndex !== undefined) {
+          setConflictIndex(res.data.alignmentAnalysis.conflictIndex);
         }
-      } catch (err) {
-        console.warn('[ALIGNX Parent] Live parent fetch note:', err);
-      }
+        if (res.data.alignmentAnalysis?.conflictReasons) {
+          setConflictReasons(res.data.alignmentAnalysis.conflictReasons);
+        }
 
-      // Check session progress if offline or empty
-      const session = getSessionProgress();
-      if (session.parentData?.name && isMounted) {
-        setParents([
-          {
-            name: session.parentData.name,
-            relation: session.parentData.relation || 'Father',
-            maxBudgetAnnualLakhs: session.parentData.maxBudgetAnnualLakhs || 16,
-            preferredLocations: session.parentData.preferredLocations || ['Bangalore', 'Chennai'],
-            riskAppetite: session.parentData.riskAppetite || 'moderate',
-            priorityFocus: (session.parentData.priorityFocus as any) || 'Stability',
-            conflictPoints: ['Budget ceiling defined at ₹' + (session.parentData.maxBudgetAnnualLakhs || 16) + 'L/yr'],
-            status: 'COMPLETED'
+        if (res.data.parents && res.data.parents.length > 0) {
+          const mapped: ParentInput[] = res.data.parents.map((p) => {
+            const annualLakhs = p.financialProfile?.educationBudget
+              ? Math.round(p.financialProfile.educationBudget / 100000)
+              : 16;
+            const mappedRisk =
+              p.financialProfile?.riskAppetite === 'high'
+                ? 'high'
+                : p.financialProfile?.riskAppetite === 'low'
+                ? 'low'
+                : 'moderate';
+
+            return {
+              id: p.parentId,
+              parentId: p.parentId,
+              name: p.name,
+              relation: p.relationship,
+              email: p.email,
+              phone: p.phone,
+              maxBudgetAnnualLakhs: annualLakhs,
+              preferredLocations: p.financialProfile?.locationPreference
+                ? [p.financialProfile.locationPreference]
+                : ['Domestic Tier-1 Tech Hubs'],
+              riskAppetite: mappedRisk,
+              priorityFocus: (p.expectations?.priorityFactors?.[0] as any) || 'Stability',
+              conflictPoints: res.data.alignmentAnalysis?.conflictReasons || [],
+              status: p.status === 'completed' ? 'COMPLETED' : 'PENDING',
+              invitationToken: p.invitationToken,
+              invitationUrl: p.invitationUrl
+            };
+          });
+
+          setParents(mapped);
+
+          // Sync with local session progress
+          const completed = mapped.find((m) => m.status === 'COMPLETED') || mapped[0];
+          if (completed && completed.status === 'COMPLETED') {
+            saveSessionProgress({
+              parentData: {
+                name: completed.name,
+                relation: completed.relation,
+                maxBudgetAnnualLakhs: completed.maxBudgetAnnualLakhs,
+                preferredLocations: completed.preferredLocations,
+                priorityFocus: completed.priorityFocus,
+                riskAppetite: completed.riskAppetite,
+                maxRelocationKm: 500
+              },
+              parentInputDone: true
+            });
           }
-        ]);
+          return;
+        } else {
+          // Authentic response: This specific student has 0 parents in database
+          setParents([]);
+          return;
+        }
       }
+    } catch (err) {
+      console.warn('[ALIGNX Parent] Live parent fetch note:', err);
+    } finally {
+      if (!silent) setIsRefreshing(false);
+    }
+
+    // Fallback only if network error / offline mock
+    const session = getSessionProgress();
+    if (session.parentData?.name) {
+      setParents([
+        {
+          name: session.parentData.name,
+          relation: session.parentData.relation || 'Father',
+          maxBudgetAnnualLakhs: session.parentData.maxBudgetAnnualLakhs || 16,
+          preferredLocations: session.parentData.preferredLocations || ['Bangalore', 'Chennai'],
+          riskAppetite: session.parentData.riskAppetite || 'moderate',
+          priorityFocus: (session.parentData.priorityFocus as any) || 'Stability',
+          conflictPoints: ['Budget ceiling defined at ₹' + (session.parentData.maxBudgetAnnualLakhs || 16) + 'L/yr'],
+          status: 'COMPLETED'
+        }
+      ]);
+    } else {
+      setParents([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadStudentParents(false);
+
+    // Auto-refresh when tab regains focus or visibility
+    const handleFocus = () => loadStudentParents(true);
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') loadStudentParents(true);
     };
 
-    loadStudentParents();
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // Periodic 3-second background polling to catch parent submissions live
+    const interval = setInterval(() => {
+      loadStudentParents(true);
+    }, 3000);
+
     return () => {
-      isMounted = false;
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      clearInterval(interval);
     };
-  }, [currentUser]);
+  }, [loadStudentParents, currentUser]);
 
   const hasCompletedParent = parents.some((p) => p.status === 'COMPLETED');
 
@@ -203,6 +234,53 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
     setIsSubmitting(false);
   };
 
+  const handleRemoveParent = async (parent: ParentInput, index: number) => {
+    const pId = parent.parentId || parent.id;
+    if (!window.confirm(`Are you sure you want to remove ${parent.name || 'this parent profile'}?`)) {
+      return;
+    }
+
+    if (pId) {
+      try {
+        await ApiService.removeParent(pId);
+      } catch (err) {
+        console.warn('[ALIGNX Parent] Remove parent API note:', err);
+      }
+    }
+
+    setParents((prev) => {
+      const updated = prev.filter((p, i) => {
+        if (pId) {
+          return (p.parentId || p.id) !== pId;
+        }
+        return i !== index;
+      });
+
+      const remainingCompleted = updated.find((p) => p.status === 'COMPLETED');
+      if (remainingCompleted) {
+        saveSessionProgress({
+          parentData: {
+            name: remainingCompleted.name,
+            relation: remainingCompleted.relation,
+            maxBudgetAnnualLakhs: remainingCompleted.maxBudgetAnnualLakhs,
+            preferredLocations: remainingCompleted.preferredLocations,
+            priorityFocus: remainingCompleted.priorityFocus,
+            riskAppetite: remainingCompleted.riskAppetite,
+            maxRelocationKm: 500
+          },
+          parentInputDone: true
+        });
+      } else {
+        saveSessionProgress({
+          parentData: null as any,
+          parentInputDone: false
+        });
+      }
+
+      return updated;
+    });
+  };
+
   const handleOpenFillModal = (parent: ParentInput) => {
     setActiveParentToFill(parent);
     setFillBudget(parent.maxBudgetAnnualLakhs || 15);
@@ -229,15 +307,26 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
         if (res?.data?.alignmentAnalysis?.conflictIndex !== undefined) {
           setConflictIndex(res.data.alignmentAnalysis.conflictIndex);
         }
+        if (res?.data?.alignmentAnalysis?.conflictReasons) {
+          setConflictReasons(res.data.alignmentAnalysis.conflictReasons);
+        }
       } else if (activeParentToFill.invitationToken) {
-        await ApiService.submitParentFeedback(activeParentToFill.invitationToken, {
+        const res = await ApiService.submitParentFeedback(activeParentToFill.invitationToken, {
           educationBudget: budgetBytes,
           riskAppetite: fillRisk,
           priorityFactors: [fillPriority],
           locationPreference: fillLocation,
           additionalNotes: fillConcerns
         });
+        if (res?.data?.alignmentAnalysis?.conflictIndex !== undefined) {
+          setConflictIndex(res.data.alignmentAnalysis.conflictIndex);
+        }
+        if (res?.data?.alignmentAnalysis?.conflictReasons) {
+          setConflictReasons(res.data.alignmentAnalysis.conflictReasons);
+        }
       }
+      // Re-sync with backend directly
+      await loadStudentParents(true);
     } catch (err) {
       console.warn('[ALIGNX Parent] Response submission note:', err);
     }
@@ -546,11 +635,25 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
                   ALIGNX HARMONY COEFFICIENT
                 </div>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.2rem', fontWeight: 700, margin: '6px 0', letterSpacing: '-0.03em' }}>
-                  {hasCompletedParent ? `FRICTION: ${conflictIndex}% (HIGH CONSENSUS)` : 'FRICTION: AWAITING INPUT'}
+                  {hasCompletedParent
+                    ? `FRICTION: ${conflictIndex}% (${
+                        conflictIndex <= 15
+                          ? 'HIGH CONSENSUS'
+                          : conflictIndex <= 30
+                          ? 'MODERATE FRICTION'
+                          : 'SIGNIFICANT DIVERGENCE'
+                      })`
+                    : 'FRICTION: AWAITING INPUT'}
                 </div>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.92rem', color: 'var(--text-secondary)' }}>
                   {hasCompletedParent
-                    ? 'Strong structural cohesion. Slight divergence in educational debt tolerance vs upfront starting compensation.'
+                    ? conflictReasons.length > 0
+                      ? conflictReasons[0]
+                      : conflictIndex <= 15
+                      ? 'Strong structural cohesion. Parental budget ceiling provides ample runway for Tier-1 education.'
+                      : conflictIndex <= 30
+                      ? 'Moderate divergence in educational debt tolerance vs premium private campus tuition.'
+                      : 'High divergence between parental financial ceiling and standard non-subsidized tech degree tuition.'
                     : 'Pending parental input to measure divergence between student aspirations and family financial tolerance.'}
                 </p>
               </div>
@@ -566,11 +669,41 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
                   gap: '12px'
                 }}
               >
-                <ShieldCheck size={22} color={hasCompletedParent ? '#10B981' : 'var(--accent)'} />
+                <ShieldCheck
+                  size={22}
+                  color={
+                    !hasCompletedParent
+                      ? 'var(--accent)'
+                      : conflictIndex <= 15
+                      ? '#10B981'
+                      : conflictIndex <= 30
+                      ? '#F59E0B'
+                      : '#EF4444'
+                  }
+                />
                 <div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-muted)' }}>RECONCILIATION STATUS</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 600, color: hasCompletedParent ? '#10B981' : '#F59E0B' }}>
-                    {hasCompletedParent ? 'SOLVABLE WITHOUT DEBT STRESS' : 'AWAITING PARENT FEEDBACK'}
+                  <div
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      color: !hasCompletedParent
+                        ? '#F59E0B'
+                        : conflictIndex <= 15
+                        ? '#10B981'
+                        : conflictIndex <= 30
+                        ? '#F59E0B'
+                        : '#EF4444'
+                    }}
+                  >
+                    {!hasCompletedParent
+                      ? 'AWAITING PARENT FEEDBACK'
+                      : conflictIndex <= 15
+                      ? 'SOLVABLE WITHOUT DEBT STRESS'
+                      : conflictIndex <= 30
+                      ? 'BALANCED BUDGET WITH LOAN EXPOSURE'
+                      : 'CONSTRAINED CEILING — SCHOLARSHIPS REQUIRED'}
                   </div>
                 </div>
               </div>
@@ -578,178 +711,271 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
 
             {/* Cohesion Meter */}
             <div style={{ height: '4px', backgroundColor: 'var(--border-hairline)', width: '100%', marginBottom: '10px', borderRadius: '0px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: hasCompletedParent ? `${100 - conflictIndex}%` : '20%', backgroundColor: hasCompletedParent ? 'var(--accent)' : '#EF4444', transition: 'width 0.4s ease' }} />
+              <div
+                style={{
+                  height: '100%',
+                  width: hasCompletedParent ? `${Math.max(5, 100 - conflictIndex)}%` : '20%',
+                  backgroundColor: !hasCompletedParent
+                    ? 'var(--accent)'
+                    : conflictIndex <= 15
+                    ? '#10B981'
+                    : conflictIndex <= 30
+                    ? '#F59E0B'
+                    : '#EF4444',
+                  transition: 'width 0.4s ease, background-color 0.4s ease'
+                }}
+              />
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-              <span>FAMILY ALIGNMENT: {hasCompletedParent ? `${100 - conflictIndex}%` : 'CALCULATING...'}</span>
+              <span>FAMILY ALIGNMENT: {hasCompletedParent ? `${Math.max(5, 100 - conflictIndex)}%` : 'CALCULATING...'}</span>
               <span>DIVERGENCE: {hasCompletedParent ? `${conflictIndex}%` : 'PENDING'}</span>
             </div>
           </div>
 
           {/* Parent Cards Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '10px' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.14em', color: 'var(--text-secondary)' }}>
               FAMILY PROFILES FOR {studentDisplayName.toUpperCase()} ({parents.length})
             </div>
 
-            <button
-              onClick={() => {
-                setNewRelation('Mother');
-                setNewName('');
-                setShowAddModal(true);
-              }}
-              className="alignx-key"
-              style={{ padding: '7px 14px', fontSize: '0.72rem' }}
-            >
-              <Plus size={13} />
-              <span>ADD ANOTHER PARENT / GUARDIAN</span>
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <button
+                type="button"
+                onClick={() => loadStudentParents(false)}
+                disabled={isRefreshing}
+                className="alignx-key"
+                title="Check for newly submitted parent responses"
+                style={{ padding: '7px 14px', fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <RefreshCw size={12} style={{ animation: isRefreshing ? 'spin 1s linear infinite' : 'none' }} />
+                <span>{isRefreshing ? 'CHECKING...' : 'REFRESH STATUS'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setNewRelation('Mother');
+                  setNewName('');
+                  setShowAddModal(true);
+                }}
+                className="alignx-key"
+                style={{ padding: '7px 14px', fontSize: '0.72rem' }}
+              >
+                <Plus size={13} />
+                <span>ADD ANOTHER PARENT / GUARDIAN</span>
+              </button>
+            </div>
           </div>
 
-          {/* Parent Cards List */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '36px' }}>
-            {parents.map((p, i) => {
-              const isCompleted = p.status === 'COMPLETED';
+          {/* Parent Cards List or Empty State */}
+          {parents.length === 0 ? (
+            <div
+              className="titanium-card"
+              style={{
+                padding: '44px 32px',
+                textAlign: 'center',
+                border: '1px dashed var(--border-subtle)',
+                marginBottom: '36px',
+                backgroundColor: 'rgba(0,0,0,0.015)'
+              }}
+            >
+              <Users size={34} color="var(--text-muted)" style={{ margin: '0 auto 12px' }} />
+              <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
+                No Family Profiles Linked for {studentDisplayName}
+              </h4>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--text-secondary)', maxWidth: '460px', margin: '0 auto 24px', lineHeight: 1.6 }}>
+                Each student has an independent family portal. Add a parent or guardian to measure financial tolerance and reconcile career priorities.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setNewRelation('Father');
+                  setNewName('');
+                  setShowAddModal(true);
+                }}
+                className="alignx-key"
+                style={{ padding: '8px 20px', fontSize: '0.76rem', margin: '0 auto' }}
+              >
+                <Plus size={14} />
+                <span>ADD PARENT / GUARDIAN</span>
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '36px' }}>
+              {parents.map((p, i) => {
+                const isCompleted = p.status === 'COMPLETED';
 
-              return (
-                <div
-                  key={p.parentId || p.id || i}
-                  className="titanium-card"
-                  style={{
-                    padding: '24px',
-                    border: isCompleted ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(245, 158, 11, 0.4)',
-                    backgroundColor: isCompleted ? '#FFFFFF' : 'rgba(245, 158, 11, 0.02)',
-                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <div>
-                    {/* Status Badge */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                      <span className="titanium-badge" style={{ backgroundColor: 'rgba(0,0,0,0.04)', color: 'var(--text-primary)' }}>
-                        {p.relation.toUpperCase()}
-                      </span>
+                return (
+                  <div
+                    key={p.parentId || p.id || i}
+                    className="titanium-card"
+                    style={{
+                      padding: '24px',
+                      border: isCompleted ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(245, 158, 11, 0.4)',
+                      backgroundColor: isCompleted ? '#FFFFFF' : 'rgba(245, 158, 11, 0.02)',
+                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <div>
+                      {/* Status Badge */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                        <span className="titanium-badge" style={{ backgroundColor: 'rgba(0,0,0,0.04)', color: 'var(--text-primary)' }}>
+                          {p.relation.toUpperCase()}
+                        </span>
 
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          {isCompleted ? (
+                            <span
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.7rem',
+                                color: '#10B981',
+                                fontWeight: 700,
+                                padding: '3px 8px',
+                                borderRadius: '0px',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)'
+                              }}
+                            >
+                              <CheckCircle2 size={12} />
+                              <span>COMPLETED</span>
+                            </span>
+                          ) : (
+                            <span
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.7rem',
+                                color: '#F59E0B',
+                                fontWeight: 700,
+                                padding: '3px 8px',
+                                borderRadius: '0px',
+                                backgroundColor: 'rgba(245, 158, 11, 0.1)'
+                              }}
+                            >
+                              <Clock size={12} />
+                              <span>AWAITING INPUT</span>
+                            </span>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveParent(p, i)}
+                            title={`Remove ${p.name}`}
+                            aria-label={`Remove ${p.name}`}
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              color: 'var(--text-muted)',
+                              cursor: 'pointer',
+                              padding: '4px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              borderRadius: '3px',
+                              transition: 'color 0.15s, background-color 0.15s'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = '#EF4444';
+                              e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = 'var(--text-muted)';
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                            }}
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
+                      </div>
+
+                      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                        {p.name}
+                      </h3>
+                      {p.email && (
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '12px' }}>
+                          {p.email}
+                        </div>
+                      )}
+
+                      {/* Metadata details */}
                       {isCompleted ? (
-                        <span
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.7rem',
-                            color: '#10B981',
-                            fontWeight: 700,
-                            padding: '3px 8px',
-                            borderRadius: '0px',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)'
-                          }}
-                        >
-                          <CheckCircle2 size={12} />
-                          <span>COMPLETED</span>
-                        </span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
+                            <span style={{ color: 'var(--text-muted)' }}>MAX ANNUAL TUITION:</span>
+                            <span style={{ fontWeight: 600, color: 'var(--accent)' }}>₹{p.maxBudgetAnnualLakhs}L / year</span>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
+                            <span style={{ color: 'var(--text-muted)' }}>PRIORITY FOCUS:</span>
+                            <span style={{ fontWeight: 600 }}>{p.priorityFocus}</span>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
+                            <span style={{ color: 'var(--text-muted)' }}>RISK APPETITE:</span>
+                            <span style={{ fontWeight: 600, textTransform: 'capitalize' }}>{p.riskAppetite}</span>
+                          </div>
+                        </div>
                       ) : (
-                        <span
+                        <div
                           style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.7rem',
-                            color: '#F59E0B',
-                            fontWeight: 700,
-                            padding: '3px 8px',
+                            padding: '12px 14px',
                             borderRadius: '0px',
-                            backgroundColor: 'rgba(245, 158, 11, 0.1)'
+                            backgroundColor: 'rgba(0,0,0,0.03)',
+                            border: '1px solid var(--border-hairline)',
+                            marginBottom: '20px',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.74rem',
+                            color: 'var(--text-secondary)'
                           }}
                         >
-                          <Clock size={12} />
-                          <span>AWAITING INPUT</span>
-                        </span>
+                          Parent invite active. Waiting for {p.name} to submit financial ceiling and career priority parameters.
+                        </div>
                       )}
                     </div>
 
-                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
-                      {p.name}
-                    </h3>
-                    {p.email && (
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '12px' }}>
-                        {p.email}
-                      </div>
-                    )}
+                    {/* Actions on Card */}
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', paddingTop: '14px', borderTop: '1px solid var(--border-hairline)' }}>
+                      <button
+                        onClick={() => handleCopyLink(i, p)}
+                        className="alignx-key"
+                        style={{ padding: '8px 12px', fontSize: '0.72rem', flex: 1 }}
+                      >
+                        {copiedIndex === i ? <Check size={12} color="#10B981" /> : <Copy size={12} />}
+                        <span>{copiedIndex === i ? 'LINK COPIED' : 'COPY INVITE'}</span>
+                      </button>
 
-                    {/* Metadata details */}
-                    {isCompleted ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
-                          <span style={{ color: 'var(--text-muted)' }}>MAX ANNUAL TUITION:</span>
-                          <span style={{ fontWeight: 600, color: 'var(--accent)' }}>₹{p.maxBudgetAnnualLakhs}L / year</span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
-                          <span style={{ color: 'var(--text-muted)' }}>PRIORITY FOCUS:</span>
-                          <span style={{ fontWeight: 600 }}>{p.priorityFocus}</span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
-                          <span style={{ color: 'var(--text-muted)' }}>RISK APPETITE:</span>
-                          <span style={{ fontWeight: 600, textTransform: 'capitalize' }}>{p.riskAppetite}</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div
+                      <button
+                        onClick={() => handleOpenFillModal(p)}
                         style={{
-                          padding: '12px 14px',
+                          padding: '8px 14px',
                           borderRadius: '0px',
-                          backgroundColor: 'rgba(0,0,0,0.03)',
-                          border: '1px solid var(--border-hairline)',
-                          marginBottom: '20px',
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.74rem',
-                          color: 'var(--text-secondary)'
+                          backgroundColor: isCompleted ? 'rgba(0,0,0,0.06)' : 'var(--accent)',
+                          color: isCompleted ? 'var(--text-primary)' : '#FFFFFF',
+                          border: 'none',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px'
                         }}
                       >
-                        Parent invite active. Waiting for {p.name} to submit financial ceiling and career priority parameters.
-                      </div>
-                    )}
+                        <Sliders size={12} />
+                        <span>{isCompleted ? 'UPDATE PERSPECTIVE' : 'FILL AS PARENT'}</span>
+                      </button>
+                    </div>
                   </div>
-
-                  {/* Actions on Card */}
-                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', paddingTop: '14px', borderTop: '1px solid var(--border-hairline)' }}>
-                    <button
-                      onClick={() => handleCopyLink(i, p)}
-                      className="alignx-key"
-                      style={{ padding: '8px 12px', fontSize: '0.72rem', flex: 1 }}
-                    >
-                      {copiedIndex === i ? <Check size={12} color="#10B981" /> : <Copy size={12} />}
-                      <span>{copiedIndex === i ? 'LINK COPIED' : 'COPY INVITE'}</span>
-                    </button>
-
-                    <button
-                      onClick={() => handleOpenFillModal(p)}
-                      style={{
-                        padding: '8px 14px',
-                        borderRadius: '0px',
-                        backgroundColor: isCompleted ? 'rgba(0,0,0,0.06)' : 'var(--accent)',
-                        color: isCompleted ? 'var(--text-primary)' : '#FFFFFF',
-                        border: 'none',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '0.75rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}
-                    >
-                      <Sliders size={12} />
-                      <span>{isCompleted ? 'UPDATE PERSPECTIVE' : 'FILL AS PARENT'}</span>
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </>
       )}
 
