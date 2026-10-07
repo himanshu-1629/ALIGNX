@@ -15,39 +15,57 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({ onContinueToRoadmap 
   const [timeHorizonMonths, setTimeHorizonMonths] = useState<number>(24);
   const [hasSimulated, setHasSimulated] = useState<boolean>(true);
 
-  // Compute simulated dynamic scores
+  // Compute simulated dynamic scores using authentic ALIGNX 5-factor scoring model
   const getSimulatedCareers = (): { career: CareerRecommendation; originalScore: number; simScore: number; delta: number; rankChange: string }[] => {
     return INITIAL_CAREERS.map((c) => {
-      let mod = 0;
+      // 1. Student Fit (35%)
+      const sFit = c.scores.studentFit;
 
-      // Budget effect
-      if (budgetLakhs >= 20) mod += 5;
-      else if (budgetLakhs < 8) mod -= 8;
+      // 2. Financial Fit (20%) - dynamically scaled with budget
+      let fFit = c.scores.financialFit;
+      if (budgetLakhs >= 22) fFit = Math.min(99, fFit + 12);
+      else if (budgetLakhs >= 15) fFit = Math.min(96, fFit + 6);
+      else if (budgetLakhs < 8) fFit = Math.max(45, fFit - 18);
+      else if (budgetLakhs < 12) fFit = Math.max(60, fFit - 8);
 
-      // Location effect
-      if (c.topLocations.includes(selectedLocation)) {
-        mod += 6;
+      // 3. Family Alignment (15%) - dynamically scaled with parental risk appetite
+      let aFam = c.scores.familyAlignment;
+      const cRisk = c.riskLevel.toLowerCase();
+      if (riskAppetite === 'low') {
+        if (cRisk === 'low') aFam = Math.min(98, aFam + 10);
+        else if (cRisk === 'high') aFam = Math.max(50, aFam - 20);
+        else aFam = Math.max(65, aFam - 8);
+      } else if (riskAppetite === 'high') {
+        if (cRisk === 'high') aFam = Math.min(96, aFam + 12);
       } else {
-        mod -= 4;
+        if (cRisk === 'moderate') aFam = Math.min(95, aFam + 5);
       }
 
-      // Risk effect
-      if (riskAppetite === 'high') {
-        if (c.id === 'quant-risk-analyst') mod += 10;
-        if (c.id === 'ai-engineer') mod += 3;
-      } else if (riskAppetite === 'low') {
-        if (c.id === 'semiconductor-architect') mod += 6;
-        if (c.id === 'quant-risk-analyst') mod -= 12;
+      // 4. Market Fit (20%)
+      const mFit = c.scores.marketFit;
+
+      // 5. Location Fit (10%) - dynamically checked against career clusters
+      let lFit = c.scores.locationFit;
+      const hasHub = c.topLocations.some(
+        (loc) => loc.toLowerCase() === selectedLocation.toLowerCase()
+      );
+      if (hasHub) {
+        lFit = Math.min(98, lFit + 12);
+      } else {
+        lFit = Math.max(45, lFit - 14);
       }
 
-      // Time horizon effect
-      if (timeHorizonMonths <= 12) {
-        if (c.id === 'ai-engineer') mod += 4;
-        if (c.id === 'semiconductor-architect') mod -= 5;
-      }
+      // Master ALIGNX Composite Formula:
+      // 35% Student Fit + 20% Financial Fit + 15% Family Alignment + 20% Market Fit + 10% Location Fit
+      const sim = Math.round(
+        0.35 * sFit +
+        0.20 * fFit +
+        0.15 * aFam +
+        0.20 * mFit +
+        0.10 * lFit
+      );
 
       const orig = c.scores.overallScore;
-      const sim = Math.max(50, Math.min(99, orig + mod));
       const delta = sim - orig;
       const rankChange = delta > 2 ? '↑ PROMOTED' : delta < -2 ? '↓ DEMOTED' : '— STABLE';
 

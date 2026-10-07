@@ -1,123 +1,8 @@
 import type { CareerRecommendation, MarketSignal, OpportunityNode, CareerDnaProfile } from '../types/alignx';
+import { ALL_AUTHENTIC_CAREERS } from './allCareers';
 
-export const INITIAL_CAREERS: CareerRecommendation[] = [
-  {
-    id: 'ai-engineer',
-    title: 'AI / Machine Learning Systems Engineer',
-    domain: 'Intelligent Systems & Neural Computing',
-    tagline: 'Designing high-throughput model inference pipelines and edge intelligence engines.',
-    scores: {
-      studentFit: 94,
-      financialFit: 82,
-      familyAlignment: 88,
-      marketFit: 95,
-      locationFit: 86,
-      overallScore: 91
-    },
-    growthRate: '+31% CAGR',
-    salaryRange: '₹14L — ₹36L CTC',
-    riskLevel: 'Moderate',
-    topLocations: ['Bangalore', 'Hyderabad', 'Chennai', 'Singapore'],
-    requiredSkills: ['PyTorch / JAX', 'Distributed Systems', 'CUDA / GPU Optimization', 'Vector Databases', 'MLOps'],
-    studentSkillGaps: ['Low-level Tensor Compilation', 'Distributed Tracing'],
-    strengthsMatch: ['Strong mathematical foundation', 'High algorithmic aptitude (92/100)', 'Abstract logic preference'],
-    whyRecommended: [
-      'Exceptional alignment between analytical aptitude (88) and neural compute requirements.',
-      'Tier-1 market demand across Tier-1 tech hubs with 31% annual hiring velocity.',
-      'Affordable local UG pathways with self-funded or sponsored MS optionality.'
-    ],
-    educationPath: 'B.Tech Computer Science / AI & Data Science → Specialization in Edge AI',
-    entranceExams: ['JEE Advanced / Mains', 'GATE Computer Science', 'BITSAT'],
-    scholarships: ['Reliance Foundation Scholarship', 'KVPY / INSPIRE Fellowship', 'ACM India Student Grant']
-  },
-  {
-    id: 'semiconductor-architect',
-    title: 'Semiconductor VLSI & Silicon Architect',
-    domain: 'Hardware Engineering & Microelectronics',
-    tagline: 'Architecting next-generation RISC-V compute fabrics and physical synthesis layouts.',
-    scores: {
-      studentFit: 89,
-      financialFit: 86,
-      familyAlignment: 85,
-      marketFit: 92,
-      locationFit: 80,
-      overallScore: 87
-    },
-    growthRate: '+24% CAGR',
-    salaryRange: '₹12L — ₹30L CTC',
-    riskLevel: 'Low',
-    topLocations: ['Bangalore', 'Chennai', 'Hyderabad', 'Berlin'],
-    requiredSkills: ['SystemVerilog / UVM', 'ASIC Flow & Synthesis', 'Computer Architecture', 'FPGA Prototyping', 'Static Timing Analysis'],
-    studentSkillGaps: ['Physical Design DRC/LVS', 'PCIe / CXL Protocols'],
-    strengthsMatch: ['Hardware systems curiosity', 'High precision spatial intuition', 'Deterministic thinking style'],
-    whyRecommended: [
-      'Matches disciplined systematic mindset with strong physics-electronics baseline.',
-      'Massive national semiconductor mission subsidies driving unprecedented domestic silicon hiring.',
-      'Long-tenure job stability with exceptional career longevity and patent opportunities.'
-    ],
-    educationPath: 'B.Tech Electronics & Communication / Electrical Engineering → M.Tech VLSI',
-    entranceExams: ['JEE Mains', 'GATE Electronics & Comm', 'VITEEE'],
-    scholarships: ['India Semiconductor Mission (ISM) Grant', 'DRDO Young Scientist Fellowship']
-  },
-  {
-    id: 'quant-risk-analyst',
-    title: 'Quantitative Systems & Risk Strategist',
-    domain: 'Mathematical Finance & Algorithmic Trading',
-    tagline: 'Modeling stochastic volatility, high-frequency execution regimes, and cross-asset liquidity risk.',
-    scores: {
-      studentFit: 86,
-      financialFit: 78,
-      familyAlignment: 76,
-      marketFit: 88,
-      locationFit: 82,
-      overallScore: 83
-    },
-    growthRate: '+19% CAGR',
-    salaryRange: '₹18L — ₹45L CTC',
-    riskLevel: 'High',
-    topLocations: ['Mumbai', 'Bangalore', 'Singapore', 'London'],
-    requiredSkills: ['Stochastic Calculus', 'C++ Low Latency', 'Time-series Econometrics', 'Python / Polars', 'Risk Arbitrage'],
-    studentSkillGaps: ['C++ Order Book Mechanics', 'Options Greeks Surface Modeling'],
-    strengthsMatch: ['Hyper-quantitative processing', 'Fast statistical inference', 'Calculated risk appetite'],
-    whyRecommended: [
-      'Leverages top 5% numerical test results and quick mathematical intuition.',
-      'High starting compensation enables immediate debt retirement and capital independence.',
-      'Requires higher tolerance for performance volatility.'
-    ],
-    educationPath: 'B.Tech/BS Mathematics & Computing / Economics → CQF or M.S. Quantitative Finance',
-    entranceExams: ['JEE Advanced', 'ISI Admission Test', 'GRE Quantitative (168+)'],
-    scholarships: ['Tata Merit Scholarship', 'K.C. Mahindra Education Trust']
-  },
-  {
-    id: 'robotics-firmware',
-    title: 'Autonomous Robotics & Firmware Engineer',
-    domain: 'Cyber-Physical Systems & Automation',
-    tagline: 'Bridging physical sensor telemetry with real-time RTOS kinematics and SLAM autonomy.',
-    scores: {
-      studentFit: 84,
-      financialFit: 85,
-      familyAlignment: 82,
-      marketFit: 86,
-      locationFit: 78,
-      overallScore: 83
-    },
-    growthRate: '+18% CAGR',
-    salaryRange: '₹10L — ₹26L CTC',
-    riskLevel: 'Moderate',
-    topLocations: ['Pune', 'Chennai', 'Bangalore', 'Tokyo'],
-    requiredSkills: ['ROS 2 / Navigation2', 'Embedded C / C++', 'Kalman Filters / SLAM', 'RTOS (FreeRTOS/Zephyr)', 'CAN Bus Protocols'],
-    studentSkillGaps: ['Nonlinear Control Theory', 'LiDAR Sensor Fusion Tuning'],
-    strengthsMatch: ['Hands-on maker orientation', 'Spatial kinematics comprehension', 'Root-cause persistence'],
-    whyRecommended: [
-      'Direct convergence of software logic with tangible kinetic machinery.',
-      'Surging defense, agritech, and warehouse automation ventures across India and East Asia.',
-      'Balanced capital outlay during academic training.'
-    ],
-    educationPath: 'B.Tech Mechatronics / Mechanical + CS Minor → Autonomous Systems Certification',
-    entranceExams: ['JEE Mains', 'GATE Mechanical / Instrumentation', 'MET'],
-    scholarships: ['SERB Student Innovation Grant', 'Maruti Suzuki Tech Scholar Award']
-  }
-];
+// All 25 Authentic STEAM Careers generated from database/seeds/careers.json via the ALIGNX Decision Engine
+export const INITIAL_CAREERS: CareerRecommendation[] = ALL_AUTHENTIC_CAREERS;
 
 export const MARKET_SIGNALS: MarketSignal[] = [
   { sector: 'AI & NEURAL COMPUTE', growthPercent: 31, talentShortage: 'Critical', keyHubs: ['Bangalore', 'Hyderabad', 'Singapore'], driver: 'Enterprise LLM deployments and sovereign GPU clusters' },
@@ -141,14 +26,14 @@ export const OPPORTUNITY_NODES: OpportunityNode[] = [
 
 export const DEFAULT_CAREER_DNA: CareerDnaProfile = {
   dominantArchetype: 'SYSTEMS ARCHITECT & ALGORITHMIC STRATEGIST',
-  subType: 'Analytical Synthesizer (Type 7-A)',
+  subType: 'Investigative-Analytical (Type 7-A)',
   description: 'You thrive when disassembling ambiguous complex systems into deterministic, predictable mathematical abstractions. Rather than treating decisions as emotional impulses, you evaluate risk surfaces, feedback loops, and long-term leverage.',
   traits: [
-    { dimension: 'Algorithmic Decomposition', score: 92, descriptor: 'Structured Problem Solver', implication: 'Naturally divides multi-tier challenges into modular executable pipelines.' },
+    { dimension: 'Algorithmic Decomposition', score: 95, descriptor: 'Investigative & Systematic', implication: 'Naturally divides multi-tier challenges into modular executable pipelines.' },
     { dimension: 'Spatial & Structural Logic', score: 86, descriptor: 'High Architectural Topology', implication: 'Visualizes interconnected dependencies, data flows, and physical constraints.' },
-    { dimension: 'Empirical Skepticism', score: 81, descriptor: 'Data-Driven Validation', implication: 'Rejects unfounded claims; relies on verifiable telemetry and measured benchmarks.' },
+    { dimension: 'Empirical Skepticism', score: 90, descriptor: 'Data-Driven Validation', implication: 'Rejects unfounded claims; relies on verifiable telemetry and measured benchmarks.' },
     { dimension: 'Systemic Persistence', score: 88, descriptor: 'Resilient Debugger', implication: 'Retains cognitive focus through extended root-cause analysis without fatigue.' },
-    { dimension: 'Calculated Risk Tolerance', score: 68, descriptor: 'Prudent Opportunist', implication: 'Willing to take non-consensus bets when downside is strictly bounded.' }
+    { dimension: 'Calculated Risk Tolerance', score: 72, descriptor: 'Prudent Opportunist', implication: 'Willing to take non-consensus bets when downside is strictly bounded.' }
   ],
   idealEnvironments: [
     'Deep engineering labs with high individual autonomy',
@@ -271,35 +156,68 @@ export const APTITUDE_QUESTIONS = [
 export const DISCOVERY_SCENARIOS = [
   {
     id: 1,
-    category: 'Cognitive Preference',
-    scenario: 'You are handed a complex system with a critical bottleneck. How do you naturally begin?',
+    category: 'Realistic & Hands-on (R)',
+    scenario: 'You are given access to a makerspace with robotics microcontrollers, 3D printers, and code debuggers. Where do you naturally gravitate first?',
     choices: [
-      { text: 'Analyze instrumented logs, metrics, and trace telemetry to isolate exact variance.', tag: 'Data-Driven Analytic' },
-      { text: 'Redraw the architectural block diagram and verify boundary assumptions.', tag: 'Architectural Synthesizer' },
-      { text: 'Formulate hypotheses and run controlled empirical mini-experiments.', tag: 'Empirical Experimenter' },
-      { text: 'Look at the team workflows and communication handoffs between owners.', tag: 'Socio-Technical Leader' }
+      { text: 'Assembling and soldering micro-controllers and wiring physical sensor actuators.', tag: 'Realistic / Hardware Builder' },
+      { text: 'Writing algorithmic firmware code to optimize computational PID control loops.', tag: 'Investigative / Algorithmist' },
+      { text: 'Designing the ergonomic physical casing and aesthetic industrial CAD enclosure.', tag: 'Artistic / Industrial Designer' },
+      { text: 'Organizing the sprint roadmap and orchestrating team member milestones.', tag: 'Enterprising / Project Lead' }
     ]
   },
   {
     id: 2,
-    category: 'Risk & Ambiguity',
-    scenario: 'You can choose between two career projects over the next 18 months. Which draws you more?',
+    category: 'Investigative & Research (I)',
+    scenario: 'You encounter a complex system anomaly with inconsistent telemetry data. How do you approach the problem?',
     choices: [
-      { text: 'A proven, prestigious domain with high certainty and guaranteed top 10% compensation.', tag: 'Prudent Optimizer' },
-      { text: 'An emergent, uncharted sector (e.g., Neuromorphic Silicon) with immense upside but high initial ambiguity.', tag: 'Frontier Explorer' },
-      { text: 'An entrepreneurial cross-disciplinary effort where you own the full product lifecycle.', tag: 'Venture Architect' },
-      { text: 'A mission-critical national security or public infrastructure system with long-lasting impact.', tag: 'Public Impact Anchor' }
+      { text: 'Formulate mathematical hypotheses and inspect system logs to derive the root cause.', tag: 'Investigative / Analytical Debugger' },
+      { text: 'Swap hardware boards and test physical voltage rails with an oscilloscope.', tag: 'Realistic / Diagnostic Technician' },
+      { text: 'Interview user cohorts to observe how their interaction triggers the anomaly.', tag: 'Social / User Advocate' },
+      { text: 'Document standard operating procedures and write automated compliance checks.', tag: 'Conventional / Quality Assurance' }
     ]
   },
   {
     id: 3,
-    category: 'Work Environment',
-    scenario: 'At the end of an intensive workweek, what makes you feel the deepest satisfaction?',
+    category: 'Artistic & Expressive (A)',
+    scenario: 'When evaluating a software application or technological platform, what bothers you most?',
     choices: [
-      { text: 'A clean, mathematically elegant codebase that runs with zero runtime faults.', tag: 'Precision Craftsman' },
-      { text: 'A tangible prototype or hardware board activating in physical reality.', tag: 'Physical Creator' },
-      { text: 'A strategic presentation where complex market dynamics were decoded for leadership.', tag: 'Strategic Communicator' },
-      { text: 'Resolving a high-stakes emergency that saved thousands of user operations.', tag: 'Mission Critical Fixer' }
+      { text: 'Clunky visual design, poor typography hierarchy, and unintuitive user experience.', tag: 'Artistic / UX Architect' },
+      { text: 'Sub-optimal algorithmic latency, unindexed database queries, and memory leaks.', tag: 'Investigative / Performance Engineer' },
+      { text: 'Fragile business model with negative unit economics and no customer moat.', tag: 'Enterprising / Venture Strategist' },
+      { text: 'Lack of accessible onboarding guides and patient customer empathy.', tag: 'Social / Community Mentor' }
+    ]
+  },
+  {
+    id: 4,
+    category: 'Social & Collaborative (S)',
+    scenario: 'During an intensive technical hackathon, what role energizes you the most?',
+    choices: [
+      { text: 'Mentoring teammates, resolving cross-functional friction, and synthesizing team clarity.', tag: 'Social / Team Catalyst' },
+      { text: 'Pitching to hackathon judges with persuasive narratives and commercial viability.', tag: 'Enterprising / Visionary Pitcher' },
+      { text: 'Deep solitary focus writing core algorithmic pipelines without interruptions.', tag: 'Investigative / Deep Coder' },
+      { text: 'Building the continuous deployment pipeline and setting up Git branching rules.', tag: 'Conventional / Infrastructure Lead' }
+    ]
+  },
+  {
+    id: 5,
+    category: 'Enterprising & Leadership (E)',
+    scenario: 'A breakthrough patent emerges in your field. How do you evaluate its primary value?',
+    choices: [
+      { text: 'Identifying immediate commercialization avenues, startup spin-offs, and enterprise licensing.', tag: 'Enterprising / Venture Architect' },
+      { text: 'Dissecting the mathematical proofs and underlying physics to assess scientific validity.', tag: 'Investigative / Research Scientist' },
+      { text: 'Determining how the technology can democratize healthcare, education, or public access.', tag: 'Social / Public Good Pioneer' },
+      { text: 'Testing compliance against regulatory safety standards and data privacy mandates.', tag: 'Conventional / Governance Specialist' }
+    ]
+  },
+  {
+    id: 6,
+    category: 'Conventional & Systems (C)',
+    scenario: 'When starting a large-scale project, what is your foundational priority?',
+    choices: [
+      { text: 'Establishing clear architectural schemas, typed data contracts, and reproducible CI tests.', tag: 'Conventional / Systems Architect' },
+      { text: 'Exploring rapid exploratory spikes without worrying about documentation yet.', tag: 'Artistic / Rapid Prototyper' },
+      { text: 'Benchmarking competitive products and market demand pricing elasticity.', tag: 'Enterprising / Market Analyst' },
+      { text: 'Conducting peer reviews and aligning stakeholder expectations.', tag: 'Social / Collaborative Lead' }
     ]
   }
 ];
