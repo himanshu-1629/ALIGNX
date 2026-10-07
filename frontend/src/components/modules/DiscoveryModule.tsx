@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DISCOVERY_SCENARIOS } from '../../data/mockAlignxData';
 import { RollButton } from '../RollButton';
 import { saveSessionProgress, getSessionProgress } from '../../utils/sessionManager';
+import { ApiService } from '../../services/api';
 import { ArrowRight, ChevronLeft, CheckCircle2 } from 'lucide-react';
 
 interface DiscoveryModuleProps {
@@ -193,7 +194,7 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete }) 
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
             <RollButton
-              onClick={() => {
+              onClick={async () => {
                 saveSessionProgress({
                   lastActiveView: 'aptitude',
                   completedStages: {
@@ -201,6 +202,37 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete }) 
                     discovery: true
                   }
                 });
+
+                // Compute RIASEC breakdown from user selections
+                const riasecCounts: Record<string, number> = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+                Object.values(answers).forEach((tag) => {
+                  if (tag && riasecCounts[tag] !== undefined) {
+                    riasecCounts[tag] = (riasecCounts[tag] || 0) + 1;
+                  }
+                });
+
+                const maxCount = Math.max(1, ...Object.values(riasecCounts));
+                const riasecScores = {
+                  realistic: Math.round(((riasecCounts.R || 1) / maxCount) * 90),
+                  investigative: Math.round(((riasecCounts.I || 2) / maxCount) * 95),
+                  artistic: Math.round(((riasecCounts.A || 1) / maxCount) * 80),
+                  social: Math.round(((riasecCounts.S || 1) / maxCount) * 70),
+                  enterprising: Math.round(((riasecCounts.E || 1) / maxCount) * 85),
+                  conventional: Math.round(((riasecCounts.C || 1) / maxCount) * 88)
+                };
+
+                // Asynchronously submit discovery assessment session to backend
+                ApiService.startAssessment('career_discovery')
+                  .then(res => {
+                    if (res?.data?.assessmentId) {
+                      return ApiService.completeAssessment(res.data.assessmentId, 'career_discovery', {
+                        riasecScores,
+                        responses: Object.entries(answers).map(([qId, val]) => ({ questionId: Number(qId), value: val }))
+                      });
+                    }
+                  })
+                  .catch(err => console.warn('[ALIGNX Discovery] Assessment submit note:', err));
+
                 onComplete(answers);
               }}
               variant="primary"

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { LifeStage, StudentProfile } from '../../types/alignx';
 import { RollButton } from '../RollButton';
 import { saveSessionProgress, getSessionProgress } from '../../utils/sessionManager';
+import { ApiService } from '../../services/api';
 import { ArrowRight, Check } from 'lucide-react';
 
 interface OnboardingModuleProps {
@@ -77,6 +78,19 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete }
         ...getSessionProgress().completedStages,
         onboarding: true
       }
+    });
+
+    // Synchronize profile with backend asynchronously
+    ApiService.updateStudentProfile({
+      name: profile.name,
+      educationLevel: profile.stage === 'class10' ? 'Class 10' : profile.stage === 'class12' ? 'Class 12' : 'Undergraduate',
+      location: profile.location,
+      preferredLocations: profile.preferredLocations,
+      budgetAnnualLakhs: profile.budgetAnnualLakhs,
+      goals: profile.aspirations,
+      interests: profile.interests
+    }).catch(err => {
+      console.warn('[ALIGNX Onboarding] Backend profile sync note:', err);
     });
 
     onComplete(profile);

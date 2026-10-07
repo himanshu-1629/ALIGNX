@@ -13,12 +13,20 @@ import { WhatIfModule } from './components/modules/WhatIfModule';
 import { RoadmapModule } from './components/modules/RoadmapModule';
 import type { StudentProfile, AlignxSessionProgress } from './types/alignx';
 import { getSessionProgress, saveSessionProgress, clearSessionProgress } from './utils/sessionManager';
+import { ApiService } from './services/api';
 
 export function App() {
   const [currentView, setCurrentView] = useState<AppView>('home');
   const [selectedCareerId, setSelectedCareerId] = useState<string>('ai-engineer');
   const [, setStudentProfile] = useState<StudentProfile | null>(null);
   const [sessionProgress, setSessionProgress] = useState<AlignxSessionProgress>(getSessionProgress());
+
+  // Initialize background student session with backend on startup
+  useEffect(() => {
+    ApiService.ensureSession().catch(err => {
+      console.warn('[ALIGNX App] Background session init note:', err);
+    });
+  }, []);
 
   // Refresh session progress whenever view changes
   useEffect(() => {

@@ -47,6 +47,8 @@ export interface IStudent extends Document {
   currentYear?: number | string;
   branch?: string;
   location: string;
+  preferredLocations?: string[];
+  budgetAnnualLakhs?: number;
   interests: IStudentInterest[];
   skills: IStudentSkill[];
   goals: string[];
@@ -117,6 +119,8 @@ const StudentSchema = new Schema<IStudent>(
     currentYear: { type: Schema.Types.Mixed },
     branch: { type: String, trim: true },
     location: { type: String, required: true, trim: true, index: true },
+    preferredLocations: [{ type: String, trim: true }],
+    budgetAnnualLakhs: { type: Number, min: 0 },
     interests: [StudentInterestSchema],
     skills: [StudentSkillSchema],
     goals: [{ type: String, trim: true }],

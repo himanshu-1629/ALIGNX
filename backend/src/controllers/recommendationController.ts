@@ -48,25 +48,35 @@ export const generateRecommendations = async (
       customLocation: location || student.location
     });
 
-    // Optionally enrich top 3 careers with LLM narrative explanation
-    if (rankingResults.length > 0) {
-      const topCareerResult = rankingResults[0];
-      const matchedCareerDoc = careers.find((c) => c._id.toString() === topCareerResult.careerId?.toString());
+    // Enrich top 3 careers with AI narrative explanation concurrently
+    const topN = Math.min(3, rankingResults.length);
+    const enrichmentPromises = [];
+    for (let i = 0; i < topN; i++) {
+      const result = rankingResults[i];
+      const matchedCareerDoc = careers.find((c) => c._id.toString() === result.careerId?.toString());
       if (matchedCareerDoc) {
-        const llmExplanation = await LLMService.generateExplanation(
-          student,
-          matchedCareerDoc,
-          topCareerResult.components,
-          topCareerResult.overallScore
+        enrichmentPromises.push(
+          LLMService.generateExplanation(
+            student,
+            matchedCareerDoc,
+            result.components,
+            result.overallScore
+          )
+            .then((llmExplanation) => {
+              result.explanationData = {
+                whyItMatches: llmExplanation.strengths,
+                potentialChallenges: llmExplanation.concerns,
+                suggestedAlternatives: matchedCareerDoc.alternativeCareers || [],
+                summary: llmExplanation.whyRecommended
+              };
+            })
+            .catch((err) => {
+              console.warn(`[Recommendations] LLM explanation for ${matchedCareerDoc.name} note:`, err.message);
+            })
         );
-        topCareerResult.explanationData = {
-          whyItMatches: llmExplanation.strengths,
-          potentialChallenges: llmExplanation.concerns,
-          suggestedAlternatives: matchedCareerDoc.alternativeCareers || [],
-          summary: llmExplanation.whyRecommended
-        };
       }
     }
+    await Promise.allSettled(enrichmentPromises);
 
     // Save to Recommendation collection
     const recommendationDoc: IRecommendation = new Recommendation({
@@ -87,20 +97,30 @@ export const generateRecommendations = async (
         recommendationId: recommendationDoc._id,
         engineVersion: recommendationDoc.engineVersion,
         totalCareersEvaluated: careers.length,
-        recommendations: rankingResults.map((r) => ({
-          careerId: r.careerId,
-          careerSlug: r.careerSlug,
-          careerName: r.careerName,
-          rank: r.rank,
-          overallScore: r.overallScore,
-          studentFit: r.components.studentFit,
-          financialFit: r.components.financialFit,
-          familyAlignment: r.components.familyAlignment,
-          marketFit: r.components.marketFit,
-          locationFit: r.components.locationFit,
-          affordabilityStatus: r.affordabilityStatus,
-          explanation: r.explanationData
-        }))
+        recommendations: rankingResults.map((r) => {
+          const cDoc = careers.find((c) => c._id.toString() === r.careerId?.toString());
+          return {
+            careerId: r.careerId,
+            careerSlug: r.careerSlug,
+            careerName: r.careerName,
+            category: cDoc?.category || 'Technology',
+            domain: cDoc?.category || 'Technology',
+            rank: r.rank,
+            overallScore: r.overallScore,
+            studentFit: r.components.studentFit,
+            financialFit: r.components.financialFit,
+            familyAlignment: r.components.familyAlignment,
+            marketFit: r.components.marketFit,
+            locationFit: r.components.locationFit,
+            affordabilityStatus: r.affordabilityStatus,
+            salaryRange: cDoc?.salaryRange,
+            educationPathway: cDoc?.educationPathway,
+            educationCost: cDoc?.educationCost,
+            riskLevel: cDoc?.riskLevel || 'medium',
+            topLocations: (cDoc?.locationDemand || []).map((l: any) => l.location),
+            explanation: r.explanationData
+          };
+        })
       }
     });
   } catch (error) {
@@ -142,6 +162,8 @@ export const getRecommendations = async (
       return generateRecommendations(req, res, next);
     }
 
+    const careers = await Career.find({});
+
     sendSuccess({
       res,
       statusCode: 200,
@@ -150,20 +172,30 @@ export const getRecommendations = async (
         recommendationId: latestRecommendation._id,
         engineVersion: latestRecommendation.engineVersion,
         createdAt: latestRecommendation.createdAt,
-        recommendations: latestRecommendation.rankedCareers.map((r) => ({
-          careerId: r.careerId,
-          careerSlug: r.careerSlug,
-          careerName: r.careerName,
-          rank: r.rank,
-          overallScore: r.overallScore,
-          studentFit: r.components.studentFit,
-          financialFit: r.components.financialFit,
-          familyAlignment: r.components.familyAlignment,
-          marketFit: r.components.marketFit,
-          locationFit: r.components.locationFit,
-          affordabilityStatus: r.affordabilityStatus,
-          explanation: r.explanationData
-        }))
+        recommendations: latestRecommendation.rankedCareers.map((r) => {
+          const cDoc = careers.find((c) => c._id.toString() === r.careerId?.toString() || c.slug === r.careerSlug);
+          return {
+            careerId: r.careerId,
+            careerSlug: r.careerSlug,
+            careerName: r.careerName,
+            category: cDoc?.category || 'Technology',
+            domain: cDoc?.category || 'Technology',
+            rank: r.rank,
+            overallScore: r.overallScore,
+            studentFit: r.components.studentFit,
+            financialFit: r.components.financialFit,
+            familyAlignment: r.components.familyAlignment,
+            marketFit: r.components.marketFit,
+            locationFit: r.components.locationFit,
+            affordabilityStatus: r.affordabilityStatus,
+            salaryRange: cDoc?.salaryRange,
+            educationPathway: cDoc?.educationPathway,
+            educationCost: cDoc?.educationCost,
+            riskLevel: cDoc?.riskLevel || 'medium',
+            topLocations: (cDoc?.locationDemand || []).map((l: any) => l.location),
+            explanation: r.explanationData
+          };
+        })
       }
     });
   } catch (error) {

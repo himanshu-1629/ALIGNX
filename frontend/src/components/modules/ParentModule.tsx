@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { ParentInput } from '../../types/alignx';
 import { RollButton } from '../RollButton';
 import { saveSessionProgress, getSessionProgress } from '../../utils/sessionManager';
+import { ApiService } from '../../services/api';
 import { ArrowRight, Copy, Check, Users, ShieldCheck, Plus, CheckCircle2 } from 'lucide-react';
 
 interface ParentModuleProps {
@@ -13,32 +14,27 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue }) => {
   const [showAddModal, setShowAddModal] = useState(false);
 
   // Parent records aligned to Decision Engine schema
-  const [parents, setParents] = useState<ParentInput[]>([
-    {
-      name: 'Rajesh Sharma',
-      relation: 'Father',
-      maxBudgetAnnualLakhs: 15,
-      preferredLocations: ['Chennai', 'Bangalore', 'Mumbai'],
-      riskAppetite: 'low',
-      priorityFocus: 'Stability',
-      conflictPoints: ['Prefers domestic Tier-1 over high unhedged educational debt', 'Desires brand pedigree (IIT / BITS / Tier-1)'],
-      status: 'COMPLETED'
-    },
-    {
-      name: 'Sunita Sharma',
-      relation: 'Mother',
-      maxBudgetAnnualLakhs: 18,
-      preferredLocations: ['Bangalore', 'Pune', 'Hyderabad'],
-      riskAppetite: 'moderate',
-      priorityFocus: 'Work-Life Balance',
-      conflictPoints: ['Supports frontier R&D if institutional stipend covers living overhead'],
-      status: 'COMPLETED'
-    }
-  ]);
+  const [parents, setParents] = useState<ParentInput[]>(() => {
+    const session = getSessionProgress();
+    const budget = session.studentProfile?.budgetAnnualLakhs || 15;
+    const loc = session.studentProfile?.location || 'Bangalore';
+    return [
+      {
+        name: 'Primary Guardian',
+        relation: 'Father / Mother',
+        maxBudgetAnnualLakhs: budget,
+        preferredLocations: [loc, 'Bangalore', 'Chennai'],
+        riskAppetite: 'low',
+        priorityFocus: 'Stability',
+        conflictPoints: [`Prefers domestic Tier-1 programs within ₹${budget}L annual budget`],
+        status: 'COMPLETED'
+      }
+    ];
+  });
 
   // Form states for adding parent
   const [newName, setNewName] = useState('');
-  const [newRelation, setNewRelation] = useState('Guardian');
+  const [newRelation, setNewRelation] = useState('Mother');
   const [newBudget, setNewBudget] = useState(15);
   const [newPriority, setNewPriority] = useState<'Stability' | 'High Growth' | 'Immediate ROI' | 'Work-Life Balance'>('Stability');
 
@@ -71,7 +67,6 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue }) => {
   };
 
   const handleSaveAndContinue = () => {
-
     // Save exact schema payload to session storage
     saveSessionProgress({
       parentInputDone: true,
@@ -90,6 +85,23 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue }) => {
         parent: true,
         dashboard: false
       }
+    });
+
+    // Submit parent invitation & feedback to backend asynchronously
+    ApiService.inviteParent({
+      parentName: parents[0]?.name || 'Parent',
+      parentEmail: 'parent@family.internal',
+      relation: parents[0]?.relation || 'Father'
+    }).then(res => {
+      if (res?.data?.inviteToken) {
+        return ApiService.submitParentFeedback(res.data.inviteToken, {
+          maxBudget: (parents[0]?.maxBudgetAnnualLakhs || 15) * 100000,
+          riskTolerance: parents[0]?.riskAppetite || 'low',
+          preferredLocations: parents[0]?.preferredLocations || ['Bangalore', 'Chennai']
+        });
+      }
+    }).catch(err => {
+      console.warn('[ALIGNX Parent] Backend sync note:', err);
     });
 
     onContinue();

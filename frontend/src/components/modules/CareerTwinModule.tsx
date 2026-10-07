@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { INITIAL_CAREERS } from '../../data/mockAlignxData';
+import { ApiService } from '../../services/api';
 import { ArrowRight, Cpu, CheckCircle2, AlertCircle, GitBranch } from 'lucide-react';
 
 interface CareerTwinModuleProps {
@@ -11,17 +12,54 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
   careerId = 'ai-engineer',
   onOpenRoadmap
 }) => {
-  const career = INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0];
+  const [career, setCareer] = useState(() => INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0]);
+  const [twinBackendData, setTwinBackendData] = useState<any>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const staticMatched = INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0];
+    setCareer(staticMatched);
+
+    ApiService.getCareerTwin(careerId)
+      .then(res => {
+        if (res?.data && isMounted) {
+          setTwinBackendData(res.data);
+        }
+      })
+      .catch(err => console.warn('[ALIGNX Twin] Backend twin note:', err));
+
+    return () => { isMounted = false; };
+  }, [careerId]);
 
   return (
     <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 24px' }}>
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '24px', marginBottom: '36px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' }}>
           <Cpu size={18} color="var(--accent)" />
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.16em', color: 'var(--accent)' }}>
             PHASE 08 / DIGITAL CAREER TWIN
           </span>
+          {twinBackendData && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '2px 8px',
+                borderRadius: '980px',
+                backgroundColor: 'rgba(52, 199, 89, 0.12)',
+                color: '#28cd41',
+                fontSize: '0.65rem',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                border: '1px solid rgba(52, 199, 89, 0.25)'
+              }}
+            >
+              ● LIVE DIGITAL TWIN
+            </span>
+          )}
         </div>
 
         <h1
@@ -62,28 +100,25 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)', letterSpacing: '0.12em', marginBottom: '8px' }}>
             STUDENT BASELINE VECTOR
           </div>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 700, marginBottom: '24px' }}>
-            DAKSH (UNDERGRADUATE CS)
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 700, marginBottom: '24px' }}>
+            {career.title.toUpperCase()} (FOUNDATIONAL LEVEL)
           </h3>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {[
-              { skill: 'Algorithmic Problem Solving', level: 90 },
-              { skill: 'Python / C++ Systems Baseline', level: 85 },
-              { skill: 'Mathematical Linear Algebra', level: 82 },
-              { skill: 'Distributed Systems & GPU Shading', level: 54 },
-              { skill: 'Production Model Serving (MLOps)', level: 42 }
-            ].map((s, idx) => (
-              <div key={idx}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginBottom: '6px' }}>
-                  <span>{s.skill}</span>
-                  <span style={{ color: 'var(--accent)' }}>{s.level}%</span>
+            {career.requiredSkills.map((skillName, idx) => {
+              const baselineLevel = Math.max(35, Math.min(85, 80 - idx * 10));
+              return (
+                <div key={idx}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginBottom: '6px' }}>
+                    <span>{skillName}</span>
+                    <span style={{ color: 'var(--accent)' }}>{baselineLevel}%</span>
+                  </div>
+                  <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%' }}>
+                    <div style={{ height: '100%', width: `${baselineLevel}%`, backgroundColor: 'var(--accent)' }} />
+                  </div>
                 </div>
-                <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%' }}>
-                  <div style={{ height: '100%', width: `${s.level}%`, backgroundColor: 'var(--accent)' }} />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -98,28 +133,25 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', letterSpacing: '0.12em', marginBottom: '8px' }}>
             TARGET INDUSTRY TWIN BENCHMARK
           </div>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 700, marginBottom: '24px' }}>
-            STAFF SYSTEMS ENGINEER (TIER-1)
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 700, marginBottom: '24px' }}>
+            TOP 10TH-PERCENTILE {career.title.toUpperCase()}
           </h3>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {[
-              { skill: 'Algorithmic Problem Solving', level: 92 },
-              { skill: 'Python / C++ Systems Baseline', level: 95 },
-              { skill: 'Mathematical Linear Algebra', level: 90 },
-              { skill: 'Distributed Systems & GPU Shading', level: 88 },
-              { skill: 'Production Model Serving (MLOps)', level: 92 }
-            ].map((s, idx) => (
-              <div key={idx}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginBottom: '6px' }}>
-                  <span>{s.skill}</span>
-                  <span style={{ color: 'var(--text-primary)' }}>{s.level}%</span>
+            {career.requiredSkills.map((skillName, idx) => {
+              const targetLevel = 90 + (idx % 3) * 3;
+              return (
+                <div key={idx}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginBottom: '6px' }}>
+                    <span>{skillName}</span>
+                    <span style={{ color: 'var(--text-primary)' }}>{targetLevel}%</span>
+                  </div>
+                  <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%' }}>
+                    <div style={{ height: '100%', width: `${targetLevel}%`, backgroundColor: 'var(--text-secondary)' }} />
+                  </div>
                 </div>
-                <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%' }}>
-                  <div style={{ height: '100%', width: `${s.level}%`, backgroundColor: 'var(--text-secondary)' }} />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DEFAULT_CAREER_DNA } from '../../data/mockAlignxData';
+import { ApiService } from '../../services/api';
+import { getSessionProgress } from '../../utils/sessionManager';
 import { ArrowRight, Dna } from 'lucide-react';
 
 interface CareerDnaModuleProps {
@@ -7,17 +9,84 @@ interface CareerDnaModuleProps {
 }
 
 export const CareerDnaModule: React.FC<CareerDnaModuleProps> = ({ onContinue }) => {
-  const dna = DEFAULT_CAREER_DNA;
+  const [dna, setDna] = useState(() => {
+    const session = getSessionProgress();
+    const metrics = session.aptitudeMetrics;
+    if (!metrics) return DEFAULT_CAREER_DNA;
+
+    return {
+      ...DEFAULT_CAREER_DNA,
+      traits: [
+        { dimension: 'Algorithmic Decomposition', score: metrics.abstractLogic || 92, descriptor: 'Investigative & Systematic', implication: 'Naturally divides multi-tier challenges into modular executable pipelines.' },
+        { dimension: 'Spatial & Structural Logic', score: metrics.spatialArchitecture || 84, descriptor: 'High Architectural Topology', implication: 'Visualizes interconnected dependencies, data flows, and physical constraints.' },
+        { dimension: 'Empirical Skepticism', score: metrics.systemsThinking || 88, descriptor: 'Data-Driven Validation', implication: 'Rejects unfounded claims; relies on verifiable telemetry and measured benchmarks.' },
+        { dimension: 'Quantitative Estimation', score: metrics.quantitativeEstimation || 85, descriptor: 'Probabilistic Modeler', implication: 'Calculates expected values and computational complexities accurately.' },
+        { dimension: 'Calculated Risk Tolerance', score: metrics.riskTolerance || 80, descriptor: 'Prudent Opportunist', implication: 'Willing to take non-consensus bets when downside is strictly bounded.' }
+      ]
+    };
+  });
+
+  const [isLiveDna, setIsLiveDna] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    ApiService.getCareerDna()
+      .then(res => {
+        if (res?.data && isMounted) {
+          const remote = res.data;
+          const ts = remote.traitScores;
+          const dynamicTraits = ts ? [
+            { dimension: 'Analytical & Algorithmic Logic', score: ts.analytical || 90, descriptor: 'Investigative & Systematic', implication: 'Naturally divides multi-tier challenges into modular executable pipelines.' },
+            { dimension: 'Practical Systems Construction', score: ts.builder || 85, descriptor: 'Builder / Kinetic Engineering', implication: 'Synthesizes concrete mechanical or software implementations from theoretical designs.' },
+            { dimension: 'Frontier Research & Discovery', score: ts.research || 88, descriptor: 'Empirical Discovery', implication: 'Rejects unfounded claims; relies on verifiable telemetry and measured benchmarks.' },
+            { dimension: 'Creative Synthesis & Architecture', score: ts.creative || 75, descriptor: 'Generative Topology', implication: 'Identifies novel non-linear solutions across interdisciplinary boundaries.' },
+            { dimension: 'Leadership & Calculated Risk', score: Math.round(((ts.leadership || 70) + (ts.risk || 70)) / 2), descriptor: 'Prudent Opportunist', implication: 'Willing to take non-consensus bets when downside is strictly bounded.' }
+          ] : null;
+
+          setDna(prev => ({
+            ...prev,
+            dominantArchetype: remote.primaryTrait || remote.primaryArchetype || remote.archetype || prev.dominantArchetype,
+            subType: remote.secondaryTraits?.length ? remote.secondaryTraits.join(' • ') : (remote.subType || prev.subType),
+            description: remote.description || prev.description,
+            traits: dynamicTraits || prev.traits
+          }));
+          setIsLiveDna(true);
+        }
+      })
+      .catch(err => console.warn('[ALIGNX DNA] Backend DNA note:', err));
+
+    return () => { isMounted = false; };
+  }, []);
 
   return (
     <div style={{ maxWidth: '1100px', margin: '40px auto', padding: '0 24px' }}>
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '24px', marginBottom: '36px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' }}>
           <Dna size={18} color="var(--accent)" />
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.16em', color: 'var(--accent)' }}>
             PHASE 05 / CAREER DNA PROTOCOL REVEAL
           </span>
+          {isLiveDna && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '2px 8px',
+                borderRadius: '980px',
+                backgroundColor: 'rgba(52, 199, 89, 0.12)',
+                color: '#28cd41',
+                fontSize: '0.65rem',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                border: '1px solid rgba(52, 199, 89, 0.25)'
+              }}
+            >
+              ● LIVE SYNTHESIS
+            </span>
+          )}
         </div>
 
         <h1

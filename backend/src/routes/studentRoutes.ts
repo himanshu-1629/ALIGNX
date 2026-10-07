@@ -21,6 +21,7 @@ router.use(authenticate);
 // Profile management
 router.get('/profile', getProfile);
 router.patch('/profile', validateProfileUpdate, updateProfile);
+router.put('/profile', validateProfileUpdate, updateProfile);
 
 // Skills and Interests management
 router.put('/skills', validateSkillsUpdate, updateSkills);

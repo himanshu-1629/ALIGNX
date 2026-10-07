@@ -126,6 +126,7 @@ export const completeAssessment = async (
   try {
     const { id } = req.params;
     const student = req.student!;
+    const { responses, riasecScores, aptitudeScores, traitScores, scores } = req.body;
 
     const assessment = await Assessment.findOne({
       _id: id,
@@ -136,8 +137,15 @@ export const completeAssessment = async (
       throw new AppError('Assessment session not found', 404, 'ASSESSMENT_NOT_FOUND');
     }
 
-    if (assessment.status === 'completed') {
-      throw new AppError('This assessment is already completed', 400, 'ASSESSMENT_ALREADY_COMPLETED');
+    // Save batch responses if provided and assessment.responses is empty
+    if (Array.isArray(responses) && responses.length > 0 && assessment.responses.length === 0) {
+      assessment.responses = responses.map((r: any, idx: number) => ({
+        questionId: String(r.questionId || idx + 1),
+        questionText: r.questionText || `Question ${r.questionId || idx + 1}`,
+        selectedOption: r.value ?? r.selectedOption ?? 0,
+        dimensionImpact: r.dimensionImpact || {},
+        answeredAt: new Date()
+      })) as any;
     }
 
     assessment.status = 'completed';
@@ -146,27 +154,43 @@ export const completeAssessment = async (
     const calculatedScores: Record<string, number> = {};
 
     if (assessment.assessmentType === 'aptitude') {
-      // Initialize dimensions
       const dimensions = ['logical', 'numerical', 'analytical', 'spatial', 'verbal'];
-      dimensions.forEach((dim) => (calculatedScores[dim] = 70)); // baseline
+      const rawAptitude = aptitudeScores || scores || {};
 
-      // Accumulate dimension impacts
-      assessment.responses.forEach((resp) => {
-        if (resp.dimensionImpact) {
-          const impactObj = resp.dimensionImpact instanceof Map
-            ? Object.fromEntries(resp.dimensionImpact)
-            : resp.dimensionImpact;
+      // Map frontend metric names if present
+      const mappedInput: Record<string, number> = {
+        logical: Number(rawAptitude.logical ?? rawAptitude.abstractLogic ?? 75),
+        numerical: Number(rawAptitude.numerical ?? rawAptitude.quantitativeEstimation ?? 75),
+        analytical: Number(rawAptitude.analytical ?? rawAptitude.systemsThinking ?? 75),
+        spatial: Number(rawAptitude.spatial ?? rawAptitude.spatialArchitecture ?? 75),
+        verbal: Number(rawAptitude.verbal ?? rawAptitude.riskTolerance ?? 75)
+      };
 
-          Object.entries(impactObj).forEach(([dim, val]) => {
-            const key = dim.toLowerCase();
-            calculatedScores[key] = (calculatedScores[key] || 70) + Number(val);
-          });
-        }
+      dimensions.forEach((dim) => {
+        calculatedScores[dim] = mappedInput[dim];
       });
 
-      // Clamp between 0 and 100
+      // Also accumulate dimension impacts if available in responses
+      if (assessment.responses && assessment.responses.length > 0) {
+        assessment.responses.forEach((resp) => {
+          if (resp.dimensionImpact) {
+            const impactObj = resp.dimensionImpact instanceof Map
+              ? Object.fromEntries(resp.dimensionImpact)
+              : resp.dimensionImpact;
+
+            Object.entries(impactObj).forEach(([dim, val]) => {
+              const key = dim.toLowerCase();
+              if (dimensions.includes(key)) {
+                calculatedScores[key] = (calculatedScores[key] || 70) + Number(val);
+              }
+            });
+          }
+        });
+      }
+
+      // Clamp between 20 and 100
       dimensions.forEach((dim) => {
-        calculatedScores[dim] = Math.min(100, Math.max(30, Math.round(calculatedScores[dim] || 75)));
+        calculatedScores[dim] = Math.min(100, Math.max(20, Math.round(calculatedScores[dim] || 75)));
       });
 
       student.aptitudeSnapshot = {
@@ -195,23 +219,55 @@ export const completeAssessment = async (
 
     if (assessment.assessmentType === 'career_discovery') {
       const traits = ['analytical', 'builder', 'research', 'creative', 'leadership', 'social', 'risk'];
-      traits.forEach((t) => (calculatedScores[t] = 60)); // baseline
+      const rawRiasec = riasecScores || scores || {};
 
-      assessment.responses.forEach((resp) => {
-        if (resp.dimensionImpact) {
-          const impactObj = resp.dimensionImpact instanceof Map
-            ? Object.fromEntries(resp.dimensionImpact)
-            : resp.dimensionImpact;
+      // Parse RIASEC scores
+      const r = Number(rawRiasec.realistic ?? rawRiasec.R ?? 65);
+      const i = Number(rawRiasec.investigative ?? rawRiasec.I ?? 70);
+      const a = Number(rawRiasec.artistic ?? rawRiasec.A ?? 60);
+      const s = Number(rawRiasec.social ?? rawRiasec.S ?? 60);
+      const e = Number(rawRiasec.enterprising ?? rawRiasec.E ?? 65);
+      const c = Number(rawRiasec.conventional ?? rawRiasec.C ?? 65);
 
-          Object.entries(impactObj).forEach(([t, val]) => {
-            const key = t.toLowerCase();
-            calculatedScores[key] = (calculatedScores[key] || 60) + Number(val);
-          });
-        }
-      });
+      // Synthesize trait scores from RIASEC
+      calculatedScores.analytical = Math.round(0.6 * i + 0.4 * c);
+      calculatedScores.builder = Math.round(0.7 * r + 0.3 * i);
+      calculatedScores.research = Math.round(0.75 * i + 0.25 * r);
+      calculatedScores.creative = Math.round(0.7 * a + 0.3 * i);
+      calculatedScores.leadership = Math.round(0.75 * e + 0.25 * s);
+      calculatedScores.social = Math.round(0.75 * s + 0.25 * e);
+      calculatedScores.risk = Math.round(0.65 * e + 0.35 * r);
 
+      // If direct traitScores provided, override
+      if (traitScores && typeof traitScores === 'object') {
+        traits.forEach((t) => {
+          if (traitScores[t] !== undefined) {
+            calculatedScores[t] = Number(traitScores[t]);
+          }
+        });
+      }
+
+      // Also accumulate dimension impacts if available in responses
+      if (assessment.responses && assessment.responses.length > 0) {
+        assessment.responses.forEach((resp) => {
+          if (resp.dimensionImpact) {
+            const impactObj = resp.dimensionImpact instanceof Map
+              ? Object.fromEntries(resp.dimensionImpact)
+              : resp.dimensionImpact;
+
+            Object.entries(impactObj).forEach(([t, val]) => {
+              const key = t.toLowerCase();
+              if (calculatedScores[key] !== undefined) {
+                calculatedScores[key] = calculatedScores[key] + Number(val);
+              }
+            });
+          }
+        });
+      }
+
+      // Clamp traits
       traits.forEach((t) => {
-        calculatedScores[t] = Math.min(100, Math.max(25, Math.round(calculatedScores[t] || 65)));
+        calculatedScores[t] = Math.min(100, Math.max(20, Math.round(calculatedScores[t] || 65)));
       });
 
       // Rank traits
@@ -235,10 +291,42 @@ export const completeAssessment = async (
           social: calculatedScores.social,
           risk: calculatedScores.risk
         },
-        summary: `You exhibit a strong orientation as an ${primaryTrait}, characterized by high ${topTraitKey} intuition and problem-solving capability.`
+        summary: `You exhibit a strong orientation as an ${primaryTrait}, characterized by high ${topTraitKey} intuition and systematic problem-solving capability.`
       };
 
-      assessment.calculatedScores = calculatedScores;
+      // Synchronize RIASEC interest profiles into student.interests
+      const riasecDimensions: Array<{ name: string; score: number }> = [
+        { name: 'Investigative', score: Math.round(i) },
+        { name: 'Realistic', score: Math.round(r) },
+        { name: 'Enterprising', score: Math.round(e) },
+        { name: 'Conventional', score: Math.round(c) },
+        { name: 'Artistic', score: Math.round(a) },
+        { name: 'Social', score: Math.round(s) }
+      ];
+
+      student.interests = student.interests || [];
+      riasecDimensions.forEach(({ name, score }) => {
+        const existingIdx = student.interests.findIndex(
+          (item) => item.name.toLowerCase() === name.toLowerCase()
+        );
+        if (existingIdx > -1) {
+          student.interests[existingIdx].score = score;
+          student.interests[existingIdx].category = 'riasec';
+        } else {
+          student.interests.push({ name, score, category: 'riasec' });
+        }
+      });
+
+      assessment.calculatedScores = {
+        ...calculatedScores,
+        realistic: r,
+        investigative: i,
+        artistic: a,
+        social: s,
+        enterprising: e,
+        conventional: c
+      };
+
       await Promise.all([assessment.save(), student.save()]);
 
       sendSuccess({
@@ -247,7 +335,15 @@ export const completeAssessment = async (
         message: 'Career Discovery completed and Career DNA generated',
         data: {
           assessmentType: 'career_discovery',
-          careerDna: student.careerDna
+          careerDna: student.careerDna,
+          riasecScores: {
+            realistic: r,
+            investigative: i,
+            artistic: a,
+            social: s,
+            enterprising: e,
+            conventional: c
+          }
         }
       });
       return;

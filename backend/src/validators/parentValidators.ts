@@ -9,13 +9,21 @@ export const validateAddParent = (
   res: Response,
   next: NextFunction
 ): void => {
-  const { name, relationship, email, phone } = req.body;
+  const name = req.body.name || req.body.parentName;
+  let relationship = req.body.relationship || req.body.relation || 'Guardian';
+
+  if (relationship.includes('Father')) relationship = 'Father';
+  else if (relationship.includes('Mother')) relationship = 'Mother';
+  else if (!VALID_RELATIONSHIPS.includes(relationship)) relationship = 'Guardian';
+
+  req.body.name = name;
+  req.body.relationship = relationship;
 
   if (!name || typeof name !== 'string' || name.trim().length < 2) {
     return next(new AppError('Parent name is required (minimum 2 characters)', 400, 'INVALID_NAME'));
   }
 
-  if (!relationship || !VALID_RELATIONSHIPS.includes(relationship)) {
+  if (!VALID_RELATIONSHIPS.includes(relationship)) {
     return next(
       new AppError(
         `Relationship must be one of: ${VALID_RELATIONSHIPS.join(', ')}`,
@@ -25,7 +33,7 @@ export const validateAddParent = (
     );
   }
 
-  if (email && typeof email === 'string' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+  if (req.body.email && typeof req.body.email === 'string' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email.trim())) {
     return next(new AppError('Invalid email format for parent', 400, 'INVALID_EMAIL'));
   }
 
