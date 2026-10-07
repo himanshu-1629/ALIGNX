@@ -133,12 +133,12 @@ export const AlignxCanvas: React.FC<AlignxCanvasProps> = ({ scrollProgress = 0, 
       const lightSourceY = cy - baseScale * 0.4;
       const hitPoint = projected[1] || { px: cx, py: cy };
 
-      // Incident ray: pure clean alabaster beam
+      // Incident ray: precision obsidian dashed beam
       ctx.beginPath();
       ctx.moveTo(lightSourceX, lightSourceY);
       ctx.lineTo(hitPoint.px, hitPoint.py);
-      ctx.strokeStyle = 'rgba(241, 238, 231, 0.45)';
-      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = 'rgba(29, 29, 31, 0.4)';
+      ctx.lineWidth = 1.3;
       ctx.setLineDash([4, 4]);
       ctx.stroke();
       ctx.setLineDash([]);
@@ -150,36 +150,36 @@ export const AlignxCanvas: React.FC<AlignxCanvasProps> = ({ scrollProgress = 0, 
       ctx.beginPath();
       ctx.moveTo(hitPoint.px, hitPoint.py);
       ctx.lineTo(exitPoint1.px, exitPoint1.py);
-      ctx.strokeStyle = 'rgba(216, 111, 69, 0.35)'; // Terracotta refraction
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = 'rgba(158, 107, 56, 0.75)'; // Desert Titanium gold refraction
+      ctx.lineWidth = 1.8;
       ctx.stroke();
 
-      // Refracted exit beams (Terracotta & Warm Ivory spectrum, restrained, NO rainbow neon)
-      // Beam A: Terracotta accent
+      // Refracted exit beams (Desert Titanium Gold & Signature Blue, Apple Pro palette)
+      // Beam A: Desert Titanium Gold
       ctx.beginPath();
       ctx.moveTo(exitPoint1.px, exitPoint1.py);
       ctx.lineTo(cx + baseScale * 1.9, cy + baseScale * 0.3);
-      ctx.strokeStyle = 'rgba(216, 111, 69, 0.6)';
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = 'rgba(158, 107, 56, 0.9)';
+      ctx.lineWidth = 1.8;
       ctx.stroke();
 
-      // Beam B: Warm Ivory
+      // Beam B: Apple Signature Blue
       ctx.beginPath();
       ctx.moveTo(exitPoint1.px, exitPoint1.py);
       ctx.lineTo(cx + baseScale * 1.85, cy + baseScale * 0.6);
-      ctx.strokeStyle = 'rgba(241, 238, 231, 0.35)';
-      ctx.lineWidth = 1.0;
+      ctx.strokeStyle = 'rgba(0, 113, 227, 0.75)';
+      ctx.lineWidth = 1.2;
       ctx.stroke();
 
-      // Beam C: Muted Stone
+      // Beam C: Natural Slate Graphite
       ctx.beginPath();
       ctx.moveTo(exitPoint2.px, exitPoint2.py);
       ctx.lineTo(cx + baseScale * 1.75, cy - baseScale * 0.2);
-      ctx.strokeStyle = 'rgba(133, 128, 120, 0.4)';
-      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = 'rgba(81, 81, 84, 0.55)';
+      ctx.lineWidth = 1.0;
       ctx.stroke();
 
-      // Render Facets (subtle warm translucent tint)
+      // Render Facets (subtle desert titanium translucent tint)
       const renderFacet = (indices: number[], alpha: number) => {
         ctx.beginPath();
         indices.forEach((idx, i) => {
@@ -188,29 +188,29 @@ export const AlignxCanvas: React.FC<AlignxCanvasProps> = ({ scrollProgress = 0, 
           else ctx.lineTo(pt.px, pt.py);
         });
         ctx.closePath();
-        ctx.fillStyle = `rgba(216, 111, 69, ${alpha})`;
+        ctx.fillStyle = `rgba(158, 107, 56, ${alpha})`;
         ctx.fill();
       };
 
       // Shading on select architectural facets
-      renderFacet([0, 1, 2], 0.04);
-      renderFacet([1, 2, 8, 7], 0.05);
-      renderFacet([2, 3, 9, 8], 0.03);
-      renderFacet([13, 7, 8], 0.04);
+      renderFacet([0, 1, 2], 0.05);
+      renderFacet([1, 2, 8, 7], 0.07);
+      renderFacet([2, 3, 9, 8], 0.04);
+      renderFacet([13, 7, 8], 0.06);
 
-      // Draw wireframe edges
+      // Draw wireframe edges (crisp graphite and titanium hairlines)
       edges.forEach(([i1, i2]) => {
         const p1 = projected[i1];
         const p2 = projected[i2];
         const depthAvg = (p1.z + p2.z) / 2;
 
-        // Front edges are crisp warm ivory, back edges are faint stone
-        const alpha = depthAvg < 0 ? 0.45 : 0.15;
+        // Front edges are dark graphite obsidian, back edges are faint slate
+        const alpha = depthAvg < 0 ? 0.65 : 0.22;
         ctx.beginPath();
         ctx.moveTo(p1.px, p1.py);
         ctx.lineTo(p2.px, p2.py);
-        ctx.strokeStyle = depthAvg < 0 ? `rgba(241, 238, 231, ${alpha})` : `rgba(133, 128, 120, ${alpha})`;
-        ctx.lineWidth = depthAvg < 0 ? 1.0 : 0.6;
+        ctx.strokeStyle = depthAvg < 0 ? `rgba(29, 29, 31, ${alpha})` : `rgba(81, 81, 84, ${alpha})`;
+        ctx.lineWidth = depthAvg < 0 ? 1.2 : 0.7;
         ctx.stroke();
       });
 
@@ -218,8 +218,8 @@ export const AlignxCanvas: React.FC<AlignxCanvasProps> = ({ scrollProgress = 0, 
       projected.forEach((p, idx) => {
         if (p.z < 0.2) {
           ctx.beginPath();
-          ctx.arc(p.px, p.py, idx === 0 || idx === 13 ? 2.5 : 1.5, 0, Math.PI * 2);
-          ctx.fillStyle = idx === 0 ? 'var(--accent)' : 'rgba(241, 238, 231, 0.7)';
+          ctx.arc(p.px, p.py, idx === 0 || idx === 13 ? 2.8 : 1.6, 0, Math.PI * 2);
+          ctx.fillStyle = idx === 0 ? '#9E6B38' : 'rgba(29, 29, 31, 0.75)';
           ctx.fill();
         }
       });
