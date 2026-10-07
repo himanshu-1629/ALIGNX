@@ -11,19 +11,24 @@ import {
   ShieldAlert,
   Clock,
   Coins,
-  CheckCircle2,
-  ChevronLeft
+  CheckCircle2
 } from 'lucide-react';
+import { StudioNavTabs } from '../studio/StudioNavTabs';
 
 interface WhatIfModuleProps {
+  careerId?: string;
   onContinueToRoadmap?: () => void;
   onBackToDashboard?: () => void;
+  onOpenTwin?: () => void;
 }
 
 export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
+  careerId = 'ai-engineer',
   onContinueToRoadmap,
-  onBackToDashboard
+  onBackToDashboard,
+  onOpenTwin
 }) => {
+  const currentCareer = INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0];
   // Simulator input parameters
   const [budgetLakhs, setBudgetLakhs] = useState<number>(14);
   const [selectedLocation, setSelectedLocation] = useState<string>('Bangalore');
@@ -122,19 +127,16 @@ export const WhatIfModule: React.FC<WhatIfModuleProps> = ({
 
   return (
     <div style={{ maxWidth: '1400px', margin: '36px auto', padding: '0 24px' }}>
-      {/* Top Back Navigation */}
-      {onBackToDashboard && (
-        <div style={{ marginBottom: '24px' }}>
-          <button
-            onClick={onBackToDashboard}
-            className="alignx-key"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.78rem' }}
-          >
-            <ChevronLeft size={14} />
-            <span>BACK TO 5D RECOMMENDATIONS</span>
-          </button>
-        </div>
-      )}
+      {/* Synchronized Studio Nav Tabs */}
+      <StudioNavTabs
+        currentTab="whatif"
+        onSelectTab={(tab) => {
+          if (tab === 'dashboard' && onBackToDashboard) onBackToDashboard();
+          else if (tab === 'twin' && onOpenTwin) onOpenTwin();
+          else if (tab === 'roadmap' && onContinueToRoadmap) onContinueToRoadmap();
+        }}
+        selectedCareerTitle={currentCareer.title}
+      />
 
       {/* Editorial Header */}
       <div

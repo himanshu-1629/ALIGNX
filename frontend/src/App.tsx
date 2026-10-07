@@ -41,6 +41,11 @@ export function App() {
   const handleAuthSuccess = (user: { id: string; name: string; email: string }) => {
     setCurrentUser(user);
     localStorage.setItem('alignx_current_user', JSON.stringify(user));
+    setIsAuthModalOpen(false);
+    if (currentView === 'home') {
+      setCurrentView('onboarding');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleSignOut = () => {
@@ -50,6 +55,11 @@ export function App() {
   };
 
   const handleEnterApp = (view: AppView = 'onboarding') => {
+    // Auth Gate: Student must sign in before answering or starting the assessment
+    if (['onboarding', 'discovery', 'aptitude', 'dna', 'parent'].includes(view) && !currentUser) {
+      setIsAuthModalOpen(true);
+      return;
+    }
     setCurrentView(view);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -199,6 +209,10 @@ export function App() {
                 <div
                   key={step.id}
                   onClick={() => {
+                    if (!currentUser) {
+                      setIsAuthModalOpen(true);
+                      return;
+                    }
                     setCurrentView(step.id);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
@@ -260,7 +274,11 @@ export function App() {
         )}
 
         {currentView === 'onboarding' && (
-          <OnboardingModule onComplete={handleOnboardingComplete} />
+          <OnboardingModule
+            onComplete={handleOnboardingComplete}
+            currentUser={currentUser}
+            onRequireAuth={() => setIsAuthModalOpen(true)}
+          />
         )}
 
         {currentView === 'discovery' && (
@@ -314,6 +332,8 @@ export function App() {
             onOpenRoadmap={handleOpenRoadmap}
             sessionProgress={sessionProgress}
             onStartAssessment={(stage) => handleEnterApp(stage || 'onboarding')}
+            selectedCareerId={selectedCareerId}
+            onSelectCareerId={setSelectedCareerId}
           />
         )}
 
@@ -335,9 +355,14 @@ export function App() {
 
         {currentView === 'whatif' && (
           <WhatIfModule
+            careerId={selectedCareerId}
             onContinueToRoadmap={handleOpenRoadmap}
             onBackToDashboard={() => {
               setCurrentView('dashboard');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenTwin={() => {
+              setCurrentView('twin');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />

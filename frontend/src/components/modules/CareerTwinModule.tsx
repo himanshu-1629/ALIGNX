@@ -1,6 +1,7 @@
 import React from 'react';
 import { INITIAL_CAREERS } from '../../data/mockAlignxData';
 import { ArrowRight, Cpu, CheckCircle2, AlertCircle, GitBranch, ChevronLeft, SlidersHorizontal } from 'lucide-react';
+import { StudioNavTabs } from '../studio/StudioNavTabs';
 
 interface CareerTwinModuleProps {
   careerId?: string;
@@ -21,6 +22,16 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
 
   return (
     <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 24px' }}>
+      {/* Synchronized Studio Nav Tabs */}
+      <StudioNavTabs
+        currentTab="twin"
+        onSelectTab={(tab) => {
+          if (tab === 'dashboard' && onBackToDashboard) onBackToDashboard();
+          else if (tab === 'whatif' && onOpenWhatIf) onOpenWhatIf();
+          else if (tab === 'roadmap') onOpenRoadmap();
+        }}
+        selectedCareerTitle={career.title}
+      />
       {/* Top Navigation Bar */}
       {onBackToDashboard && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>

@@ -8,7 +8,6 @@ import {
   Columns,
   Sparkles,
   SlidersHorizontal,
-  Compass,
   CheckCircle2,
   MapPin,
   ExternalLink,
@@ -17,6 +16,7 @@ import {
   Clock,
   ArrowRight
 } from 'lucide-react';
+import { StudioNavTabs } from '../studio/StudioNavTabs';
 
 interface RecommendationsModuleProps {
   onSelectCareerTwin: (careerId: string) => void;
@@ -24,6 +24,8 @@ interface RecommendationsModuleProps {
   onOpenRoadmap?: (careerId: string) => void;
   sessionProgress: AlignxSessionProgress;
   onStartAssessment: (view?: AppView) => void;
+  selectedCareerId?: string;
+  onSelectCareerId?: (careerId: string) => void;
 }
 
 export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
@@ -31,13 +33,30 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
   onOpenWhatIf,
   onOpenRoadmap,
   sessionProgress,
-  onStartAssessment
+  onStartAssessment,
+  selectedCareerId,
+  onSelectCareerId
 }) => {
   const [careers, setCareers] = useState<CareerRecommendation[]>(INITIAL_CAREERS);
-  const [selectedCareer, setSelectedCareer] = useState<CareerRecommendation>(INITIAL_CAREERS[0]);
+  const [selectedCareer, setSelectedCareer] = useState<CareerRecommendation>(() => {
+    if (selectedCareerId) {
+      const match = INITIAL_CAREERS.find(c => c.id === selectedCareerId);
+      if (match) return match;
+    }
+    return INITIAL_CAREERS[0];
+  });
   const [comparisonCareer, setComparisonCareer] = useState<CareerRecommendation | null>(null);
   const [isCompareMode, setIsCompareMode] = useState(false);
   const [selectedDomain, setSelectedDomain] = useState<string>('all');
+
+  useEffect(() => {
+    if (selectedCareerId) {
+      const match = careers.find(c => c.id === selectedCareerId);
+      if (match && match.id !== selectedCareer.id) {
+        setSelectedCareer(match);
+      }
+    }
+  }, [selectedCareerId, careers]);
 
   // Verify whether student has completed assessment calibration
   const isCalibrated =
@@ -330,104 +349,16 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
             </p>
           </div>
 
-          {/* Quick Studio Switcher Pill */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px',
-              backgroundColor: 'var(--bg-surface)',
-              borderRadius: '980px',
-              border: '1px solid var(--border-hairline)'
+          {/* Quick Studio Switcher */}
+          <StudioNavTabs
+            currentTab="dashboard"
+            onSelectTab={(tab) => {
+              if (tab === 'twin') onSelectCareerTwin(selectedCareer.id);
+              else if (tab === 'whatif') onOpenWhatIf();
+              else if (tab === 'roadmap' && onOpenRoadmap) onOpenRoadmap(selectedCareer.id);
             }}
-          >
-            <button
-              style={{
-                padding: '8px 18px',
-                borderRadius: '980px',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid var(--border-hairline)',
-                color: 'var(--text-primary)',
-                fontWeight: 600,
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.82rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.05)'
-              }}
-            >
-              <Compass size={14} color="var(--accent)" />
-              <span>5D Recommendations</span>
-            </button>
-
-            <button
-              onClick={() => onSelectCareerTwin(selectedCareer.id)}
-              style={{
-                padding: '8px 18px',
-                borderRadius: '980px',
-                backgroundColor: 'transparent',
-                border: '1px solid transparent',
-                color: 'var(--text-secondary)',
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.82rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                transition: 'all 0.18s ease'
-              }}
-            >
-              <Sparkles size={14} />
-              <span>Career Twin Radar</span>
-            </button>
-
-            <button
-              onClick={onOpenWhatIf}
-              style={{
-                padding: '8px 18px',
-                borderRadius: '980px',
-                backgroundColor: 'transparent',
-                border: '1px solid transparent',
-                color: 'var(--text-secondary)',
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.82rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                transition: 'all 0.18s ease'
-              }}
-            >
-              <SlidersHorizontal size={14} />
-              <span>What-If Lab</span>
-            </button>
-
-            {onOpenRoadmap && (
-              <button
-                onClick={() => onOpenRoadmap(selectedCareer.id)}
-                style={{
-                  padding: '8px 18px',
-                  borderRadius: '980px',
-                  backgroundColor: 'transparent',
-                  border: '1px solid transparent',
-                  color: 'var(--text-secondary)',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.82rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  transition: 'all 0.18s ease'
-                }}
-              >
-                <Layers size={14} />
-                <span>Roadmap Blueprint</span>
-              </button>
-            )}
-          </div>
+            selectedCareerTitle={selectedCareer.title}
+          />
         </div>
 
         {/* Filter Bar & Comparison Mode Toggle */}
@@ -505,7 +436,10 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
             return (
               <div
                 key={career.id}
-                onClick={() => setSelectedCareer(career)}
+                onClick={() => {
+                  setSelectedCareer(career);
+                  onSelectCareerId?.(career.id);
+                }}
                 style={{
                   backgroundColor: 'var(--bg-card)',
                   borderRadius: '14px',

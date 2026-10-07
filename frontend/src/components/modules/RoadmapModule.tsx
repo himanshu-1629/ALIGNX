@@ -1,6 +1,7 @@
 import React from 'react';
 import { INITIAL_CAREERS } from '../../data/mockAlignxData';
 import { Calendar, BookOpen, Award, GraduationCap, ChevronLeft, SlidersHorizontal, Printer } from 'lucide-react';
+import { StudioNavTabs } from '../studio/StudioNavTabs';
 
 interface RoadmapModuleProps {
   careerId?: string;
@@ -19,6 +20,16 @@ export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
 
   return (
     <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 24px' }}>
+      {/* Synchronized Studio Nav Tabs */}
+      <StudioNavTabs
+        currentTab="roadmap"
+        onSelectTab={(tab) => {
+          if (tab === 'dashboard' && onBackToDashboard) onBackToDashboard();
+          else if (tab === 'twin' && onBackToTwin) onBackToTwin();
+          else if (tab === 'whatif' && onOpenWhatIf) onOpenWhatIf();
+        }}
+        selectedCareerTitle={career.title}
+      />
       {/* Top Action & Navigation Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
         <div style={{ display: 'flex', gap: '10px' }}>

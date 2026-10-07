@@ -6,10 +6,12 @@ import { ArrowRight, Check } from 'lucide-react';
 
 interface OnboardingModuleProps {
   onComplete: (profile: StudentProfile) => void;
+  currentUser?: { id: string; name: string; email: string } | null;
+  onRequireAuth?: () => void;
 }
 
-export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete }) => {
-  const [name, setName] = useState('Daksh');
+export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, currentUser, onRequireAuth }) => {
+  const [name, setName] = useState(currentUser?.name || 'Daksh');
   const [stage, setStage] = useState<LifeStage>('ug');
   const [currentField, setCurrentField] = useState('Computer Science & Engineering');
   const [location, setLocation] = useState('Chennai / Vellore');
@@ -58,6 +60,10 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!currentUser && onRequireAuth) {
+      onRequireAuth();
+      return;
+    }
     const profile: StudentProfile = {
       name,
       stage,

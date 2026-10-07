@@ -18,8 +18,15 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
   const question = APTITUDE_QUESTIONS[currentIdx];
   const totalQuestions = APTITUDE_QUESTIONS.length;
 
-  const handleSelectOption = (qId: number, score: number) => {
-    setSelectedAnswers(prev => ({ ...prev, [qId]: score }));
+  const handleSelectOption = (qId: number, optionIndex: number) => {
+    setSelectedAnswers(prev => ({ ...prev, [qId]: optionIndex }));
+  };
+
+  const calculateRawSum = () => {
+    return Object.entries(selectedAnswers).reduce((sum, [qId, optIdx]) => {
+      const q = APTITUDE_QUESTIONS.find(item => item.id === Number(qId));
+      return sum + (q?.options[optIdx]?.score || 16);
+    }, 0);
   };
 
   const handleNext = () => {
@@ -31,16 +38,16 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
         setIsCalculating(false);
         setShowResults(true);
 
-        // Compute dimension scores
-        const rawSum = Object.values(selectedAnswers).reduce((a, b) => a + b, 0);
+        // Compute dimension scores from actual selected option scores
+        const rawSum = calculateRawSum();
         const finalScore = Math.max(76, Math.min(100, Math.round((rawSum / (totalQuestions * 20)) * 100)));
 
         const metrics = {
-          abstractLogic: 92,
-          systemsThinking: 88,
-          quantitativeEstimation: 85,
-          spatialArchitecture: 81,
-          riskTolerance: 86
+          abstractLogic: Math.min(99, Math.round(finalScore * 1.04)),
+          systemsThinking: Math.min(96, Math.round(finalScore * 0.98)),
+          quantitativeEstimation: Math.min(95, Math.round(finalScore * 0.96)),
+          spatialArchitecture: Math.min(92, Math.round(finalScore * 0.92)),
+          riskTolerance: Math.min(94, Math.round(finalScore * 0.95))
         };
 
         // Persist to session
@@ -65,7 +72,7 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
     if (currentIdx > 0) setCurrentIdx(currentIdx - 1);
   };
 
-  const rawSum = Object.values(selectedAnswers).reduce((a, b) => a + b, 0);
+  const rawSum = calculateRawSum();
   const calculatedPercent = Math.max(76, Math.min(98, Math.round((rawSum / (totalQuestions * 20)) * 100) || 88));
 
   return (
@@ -152,11 +159,12 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
           {/* Options */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {question.options.map((opt, i) => {
-              const isSelected = selectedAnswers[question.id] === opt.score;
+              const isSelected = selectedAnswers[question.id] === i;
+              const optionLetters = ['A', 'B', 'C', 'D'];
               return (
                 <button
                   key={i}
-                  onClick={() => handleSelectOption(question.id, opt.score)}
+                  onClick={() => handleSelectOption(question.id, i)}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -165,30 +173,64 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
                     textAlign: 'left',
                     borderRadius: '12px',
                     backgroundColor: isSelected ? 'rgba(197, 155, 109, 0.12)' : 'rgba(0, 0, 0, 0.4)',
-                    border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-hairline)',
+                    border: isSelected ? '1.5px solid var(--accent)' : '1px solid var(--border-hairline)',
                     color: 'var(--text-primary)',
                     fontFamily: 'var(--font-body)',
-                    fontSize: '0.95rem',
+                    fontSize: '0.96rem',
                     cursor: 'pointer',
-                    transition: 'all 0.2s var(--ease-apple)',
-                    boxShadow: isSelected ? '0 4px 20px rgba(197, 155, 109, 0.2)' : 'none'
+                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow: isSelected ? '0 4px 20px rgba(197, 155, 109, 0.2)' : 'none',
+                    transform: isSelected ? 'translateY(-1px)' : 'none',
+                    gap: '16px'
                   }}
                 >
-                  <span style={{ letterSpacing: '-0.01em' }}>{opt.text}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <span
+                      style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '8px',
+                        backgroundColor: isSelected ? 'var(--accent)' : 'rgba(255, 255, 255, 0.06)',
+                        color: isSelected ? '#FFFFFF' : 'var(--text-secondary)',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}
+                    >
+                      {optionLetters[i] || i + 1}
+                    </span>
+                    <span style={{ letterSpacing: '-0.01em', lineHeight: 1.45, fontWeight: isSelected ? 600 : 400 }}>
+                      {opt.text}
+                    </span>
+                  </div>
+
                   <div
                     style={{
-                      width: '18px',
-                      height: '18px',
+                      width: '22px',
+                      height: '22px',
                       border: isSelected ? '2px solid var(--accent)' : '1px solid var(--border-subtle)',
                       borderRadius: '50%',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
-                      marginLeft: '16px'
+                      backgroundColor: isSelected ? 'rgba(197, 155, 109, 0.15)' : 'transparent'
                     }}
                   >
-                    {isSelected && <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--accent)', borderRadius: '50%' }} />}
+                    {isSelected && (
+                      <div
+                        style={{
+                          width: '10px',
+                          height: '10px',
+                          backgroundColor: 'var(--accent)',
+                          borderRadius: '50%'
+                        }}
+                      />
+                    )}
                   </div>
                 </button>
               );

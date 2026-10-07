@@ -17,16 +17,6 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
   const scenario = DISCOVERY_SCENARIOS[currentIdx];
   const progressPercent = Math.round(((currentIdx + (isFinished ? 1 : 0)) / DISCOVERY_SCENARIOS.length) * 100);
 
-  const handleSelectChoice = (tag: string) => {
-    const updated = { ...answers, [scenario.id]: tag };
-    setAnswers(updated);
-
-    if (currentIdx < DISCOVERY_SCENARIOS.length - 1) {
-      setCurrentIdx(currentIdx + 1);
-    } else {
-      setIsFinished(true);
-    }
-  };
 
   const handlePrev = () => {
     if (currentIdx > 0) {
@@ -95,52 +85,96 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
                 return (
                   <button
                     key={i}
-                    onClick={() => handleSelectChoice(choice.tag)}
+                    onClick={() => {
+                      setAnswers(prev => ({ ...prev, [scenario.id]: choice.tag }));
+                    }}
                     style={{
                       display: 'flex',
                       alignItems: 'flex-start',
                       justifyContent: 'space-between',
                       textAlign: 'left',
                       padding: '20px 24px',
-                      backgroundColor: isSelected ? 'var(--accent-dim)' : 'var(--bg-deep)',
-                      border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
+                      borderRadius: '12px',
+                      backgroundColor: isSelected ? 'rgba(197, 155, 109, 0.12)' : 'var(--bg-deep)',
+                      border: isSelected ? '1.5px solid var(--accent)' : '1px solid var(--border-subtle)',
                       color: 'var(--text-primary)',
                       cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      gap: '20px'
+                      transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                      gap: '20px',
+                      boxShadow: isSelected ? '0 4px 20px rgba(197, 155, 109, 0.15)' : 'none',
+                      transform: isSelected ? 'translateY(-1px)' : 'none'
                     }}
                   >
                     <div>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.5 }}>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.5, fontWeight: isSelected ? 600 : 400 }}>
                         {choice.text}
                       </div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '6px' }}>
-                        TRAIT ALIGNMENT: {choice.tag.toUpperCase()}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: isSelected ? 'var(--accent)' : 'var(--text-muted)' }}>
+                          TRAIT ALIGNMENT: {choice.tag.toUpperCase()}
+                        </span>
+                        {isSelected && (
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.65rem',
+                              padding: '2px 6px',
+                              borderRadius: '4px',
+                              backgroundColor: 'var(--accent)',
+                              color: '#FFFFFF',
+                              fontWeight: 700
+                            }}
+                          >
+                            SELECTED
+                          </span>
+                        )}
                       </div>
                     </div>
 
                     <div
                       style={{
-                        width: '20px',
-                        height: '20px',
-                        border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
+                        width: '22px',
+                        height: '22px',
+                        border: isSelected ? '2px solid var(--accent)' : '1.5px solid var(--border-subtle)',
                         borderRadius: '50%',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
-                        marginTop: '4px'
+                        marginTop: '4px',
+                        backgroundColor: isSelected ? 'rgba(197, 155, 109, 0.15)' : 'transparent',
+                        transition: 'all 0.2s ease'
                       }}
                     >
-                      {isSelected && <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--accent)', borderRadius: '50%' }} />}
+                      {isSelected && (
+                        <div
+                          style={{
+                            width: '10px',
+                            height: '10px',
+                            backgroundColor: 'var(--accent)',
+                            borderRadius: '50%'
+                          }}
+                        />
+                      )}
                     </div>
                   </button>
                 );
               })}
             </div>
 
-            {/* Navigation buttons */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '36px', paddingTop: '20px', borderTop: '1px solid var(--border-hairline)' }}>
+            {/* Navigation & Advance buttons */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: '36px',
+                paddingTop: '24px',
+                borderTop: '1px solid var(--border-hairline)',
+                flexWrap: 'wrap',
+                gap: '16px'
+              }}
+            >
               <button
                 onClick={handlePrev}
                 disabled={currentIdx === 0}
@@ -153,7 +187,9 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
                   color: currentIdx === 0 ? 'var(--text-muted)' : 'var(--text-secondary)',
                   cursor: currentIdx === 0 ? 'not-allowed' : 'pointer',
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.75rem'
+                  fontSize: '0.78rem',
+                  padding: '8px 12px',
+                  borderRadius: '6px'
                 }}
               >
                 <ChevronLeft size={16} />
@@ -161,17 +197,13 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                  CHOOSE ONE ACTION TO ADVANCE
-                </span>
-
                 {onSkipToAptitude && (
                   <button
                     onClick={onSkipToAptitude}
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: 'var(--accent)',
+                      color: 'var(--text-muted)',
                       fontFamily: 'var(--font-mono)',
                       fontSize: '0.72rem',
                       cursor: 'pointer',
@@ -182,6 +214,29 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
                     SKIP TO APTITUDE →
                   </button>
                 )}
+
+                <RollButton
+                  onClick={() => {
+                    if (answers[scenario.id]) {
+                      if (currentIdx < DISCOVERY_SCENARIOS.length - 1) {
+                        setCurrentIdx(currentIdx + 1);
+                      } else {
+                        setIsFinished(true);
+                      }
+                    }
+                  }}
+                  variant={answers[scenario.id] ? 'primary' : 'outline'}
+                  disabled={!answers[scenario.id]}
+                  icon={<ArrowRight size={15} />}
+                  style={{
+                    opacity: answers[scenario.id] ? 1 : 0.45,
+                    cursor: answers[scenario.id] ? 'pointer' : 'not-allowed'
+                  }}
+                >
+                  {currentIdx < DISCOVERY_SCENARIOS.length - 1
+                    ? 'NEXT SCENARIO →'
+                    : 'COMPLETE DISCOVERY EVALUATION →'}
+                </RollButton>
               </div>
             </div>
           </div>
