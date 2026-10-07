@@ -1,0 +1,1501 @@
+[
+  {
+    "id": "ai_ml_engineer",
+    "name": "AI & Machine Learning Engineer",
+    "domain": "ai_data",
+    "description": "Designs, builds, and deploys scalable machine learning models, neural networks, and generative AI systems into production architectures.",
+    "riskLevel": "medium",
+    "aptitudeProfile": { "logical": 92, "numerical": 88, "analytical": 95, "spatial": 72, "verbal": 68 },
+    "interestProfile": { "realistic": 45, "investigative": 95, "artistic": 30, "social": 25, "enterprising": 60, "conventional": 50 },
+    "skills": [
+      { "skillId": "python", "name": "Python Programming", "importance": 0.95, "requiredLevel": 90 },
+      { "skillId": "deep_learning", "name": "Deep Learning & Neural Networks", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "machine_learning", "name": "Machine Learning", "importance": 0.95, "requiredLevel": 90 },
+      { "skillId": "data_structures", "name": "Data Structures & Algorithms", "importance": 0.85, "requiredLevel": 80 },
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.90, "requiredLevel": 85 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech Computer Science / AI / Data Science", "M.Tech / MS in Machine Learning (Optional)"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 650000, "maxINR": 1050000, "description": "IITs / NITs / IIITs (Subsidized Central Govt)" },
+      "pvtTier1": { "minINR": 2400000, "maxINR": 3000000, "description": "BITS Pilani / Top Deemed Universities" },
+      "pvtTier2": { "minINR": 1100000, "maxINR": 2200000, "description": "VIT / SRM / Manipal (Category Tiered Fees)" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 9.5, "max": 16.0 },
+      "midLPA": { "min": 24.0, "max": 38.0 },
+      "seniorLPA": { "min": 45.0, "max": 80.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 95,
+      "growthScore": 96,
+      "disruptionIndex": 92,
+      "dataDate": "2026-10-01",
+      "dataSource": "NASSCOM Strategic Review & TeamLease Digital FY27",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 98, "costIndex": 85, "hubSpecialization": "AI Core & Product Startups" },
+      { "location": "Hyderabad", "demandScore": 92, "costIndex": 72, "hubSpecialization": "Enterprise AI & Global Capability Centers (GCCs)" },
+      { "location": "Pune", "demandScore": 84, "costIndex": 68, "hubSpecialization": "Automotive AI & Cloud R&D" },
+      { "location": "Delhi NCR", "demandScore": 86, "costIndex": 80, "hubSpecialization": "Fintech & Consumer Internet AI" },
+      { "location": "Chennai", "demandScore": 80, "costIndex": 65, "hubSpecialization": "SaaS AI & Deep Tech Engineering" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["IIT Madras Pravartak Technologies", "IIIT Hyderabad Kohli Center on Intelligent Systems", "IISc AI Foundry (Bangalore)"],
+      "patentActivity": "high",
+      "nanoMechContext": "School & College innovation incubators developing edge-AI diagnostic and sensory automation tools."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main / Advanced", "difficulty": "Very High", "authority": "NTA / IITs" },
+      { "exam": "BITSAT", "difficulty": "High", "authority": "BITS Pilani" },
+      { "exam": "VITEEE / MET", "difficulty": "Moderate", "authority": "VIT / Manipal" }
+    ],
+    "scholarships": [
+      { "name": "Central Sector Scheme of Scholarships", "provider": "Ministry of Education (NSP)", "coverage": "Up to ₹20,000/yr for Top 20th Percentile" },
+      { "name": "Reliance Foundation Undergraduate Scholarship", "provider": "Reliance Foundation", "coverage": "Up to ₹2,00,000 across degree duration" }
+    ],
+    "alternativeCareers": ["data_platform_engineer", "full_stack_software_engineer", "computational_biologist"]
+  },
+  {
+    "id": "data_platform_engineer",
+    "name": "Data Platform & Cloud Engineer",
+    "domain": "ai_data",
+    "description": "Constructs high-throughput distributed data pipelines, lakehouses, and stream-processing infrastructure for enterprise analytics.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 88, "numerical": 84, "analytical": 90, "spatial": 65, "verbal": 62 },
+    "interestProfile": { "realistic": 50, "investigative": 85, "artistic": 20, "social": 20, "enterprising": 45, "conventional": 75 },
+    "skills": [
+      { "skillId": "distributed_systems", "name": "Big Data & Distributed Computing", "importance": 0.95, "requiredLevel": 90 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "sql_databases", "name": "Relational Databases & SQL", "importance": 0.95, "requiredLevel": 90 },
+      { "skillId": "cloud_computing", "name": "Cloud Architecture (AWS/GCP/Azure)", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "nosql_databases", "name": "Document & Vector DBs (MongoDB/Pinecone)", "importance": 0.85, "requiredLevel": 80 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech Computer Science / Information Technology / Data Engineering"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 600000, "maxINR": 1000000, "description": "IITs / NITs / State Govt Universities" },
+      "pvtTier1": { "minINR": 2400000, "maxINR": 3000000, "description": "BITS Pilani / Premium Institutes" },
+      "pvtTier2": { "minINR": 1000000, "maxINR": 2000000, "description": "Tier-2 Private Engineering Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 8.5, "max": 14.0 },
+      "midLPA": { "min": 20.0, "max": 32.0 },
+      "seniorLPA": { "min": 38.0, "max": 65.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 91,
+      "growthScore": 92,
+      "disruptionIndex": 88,
+      "dataDate": "2026-10-01",
+      "dataSource": "TeamLease Digital Skills & Salary Primer FY27",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 96, "costIndex": 85, "hubSpecialization": "Product Data Infrastructure" },
+      { "location": "Hyderabad", "demandScore": 94, "costIndex": 72, "hubSpecialization": "BFSI & Healthcare Big Data GCCs" },
+      { "location": "Pune", "demandScore": 82, "costIndex": 68, "hubSpecialization": "Enterprise ETL & Analytics" },
+      { "location": "Chennai", "demandScore": 84, "costIndex": 65, "hubSpecialization": "SaaS Data Operations" },
+      { "location": "Delhi NCR", "demandScore": 85, "costIndex": 80, "hubSpecialization": "E-Commerce Pipeline Scaling" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["NASSCOM DeepTech Club", "T-Hub Hyderabad Data Foundry"],
+      "patentActivity": "moderate",
+      "nanoMechContext": "Decentralized sensor-data ingestion for regional environmental and agricultural analytics."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" },
+      { "exam": "State CET (MHT-CET / KCET / WBJEE)", "difficulty": "Moderate", "authority": "State Examination Boards" }
+    ],
+    "scholarships": [
+      { "name": "Siemens Scholarship for Technical Students", "provider": "Siemens India", "coverage": "Full Tuition Fee + Mentorship" }
+    ],
+    "alternativeCareers": ["ai_ml_engineer", "cloud_devops_architect", "full_stack_software_engineer"]
+  },
+  {
+    "id": "cloud_devops_architect",
+    "name": "Cloud Systems & DevOps Architect",
+    "domain": "software_cloud",
+    "description": "Architects resilient multi-cloud infrastructures, automated deployment pipelines, container orchestration, and site reliability systems.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 86, "numerical": 78, "analytical": 88, "spatial": 68, "verbal": 70 },
+    "interestProfile": { "realistic": 60, "investigative": 80, "artistic": 15, "social": 25, "enterprising": 50, "conventional": 70 },
+    "skills": [
+      { "skillId": "cloud_computing", "name": "Cloud Architecture (AWS/GCP/Azure)", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "devops_ci_cd", "name": "DevOps & CI/CD", "importance": 0.95, "requiredLevel": 90 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.85, "requiredLevel": 80 },
+      { "skillId": "cybersecurity_principles", "name": "Network Security & Cryptography", "importance": 0.80, "requiredLevel": 78 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Computer Science / Cloud Computing / Information Technology"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 600000, "maxINR": 950000, "description": "Central & State Govt Engineering Colleges" },
+      "pvtTier1": { "minINR": 2200000, "maxINR": 2800000, "description": "Top Private Deemed Universities" },
+      "pvtTier2": { "minINR": 950000, "maxINR": 1800000, "description": "Regional Private Engineering Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 7.5, "max": 12.5 },
+      "midLPA": { "min": 18.0, "max": 28.0 },
+      "seniorLPA": { "min": 35.0, "max": 58.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 89,
+      "growthScore": 90,
+      "disruptionIndex": 85,
+      "dataDate": "2026-10-01",
+      "dataSource": "NASSCOM & TeamLease Digital FY27",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 95, "costIndex": 85, "hubSpecialization": "Cloud Native Startups & Scaleups" },
+      { "location": "Hyderabad", "demandScore": 92, "costIndex": 72, "hubSpecialization": "Hyperscale Cloud Infrastructure Centers" },
+      { "location": "Pune", "demandScore": 88, "costIndex": 68, "hubSpecialization": "Enterprise DevOps Centers" },
+      { "location": "Chennai", "demandScore": 82, "costIndex": 65, "hubSpecialization": "SaaS Platform Reliability" },
+      { "location": "Delhi NCR", "demandScore": 86, "costIndex": 80, "hubSpecialization": "Fintech Infrastructure" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["IIT Bombay SINE Cloud Incubator", "Kerala Startup Mission (KSUML)"],
+      "patentActivity": "moderate",
+      "nanoMechContext": "Deploying hybrid edge-cloud networks for remote educational setups and micro-factories."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" },
+      { "exam": "COMEDK UGET", "difficulty": "Moderate", "authority": "Karnataka Professional Colleges Foundation" }
+    ],
+    "scholarships": [
+      { "name": "AWS Certified Cloud Scholarship / AICTE PRAGATI", "provider": "AICTE / Industry", "coverage": "Tuition grants for eligible engineering students" }
+    ],
+    "alternativeCareers": ["cybersecurity_analyst", "data_platform_engineer", "full_stack_software_engineer"]
+  },
+  {
+    "id": "cybersecurity_analyst",
+    "name": "Cybersecurity & Cryptographic Analyst",
+    "domain": "software_cloud",
+    "description": "Protects enterprise systems against cyber warfare, vulnerability exploits, and data breaches using zero-trust architecture and cryptographic protocols.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 90, "numerical": 80, "analytical": 94, "spatial": 60, "verbal": 74 },
+    "interestProfile": { "realistic": 55, "investigative": 92, "artistic": 10, "social": 20, "enterprising": 40, "conventional": 80 },
+    "skills": [
+      { "skillId": "cybersecurity_principles", "name": "Network Security & Cryptography", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.85, "requiredLevel": 80 },
+      { "skillId": "ethical_ai_governance", "name": "AI Ethics & Data Privacy", "importance": 0.85, "requiredLevel": 82 },
+      { "skillId": "cloud_computing", "name": "Cloud Architecture (AWS/GCP/Azure)", "importance": 0.80, "requiredLevel": 78 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Cybersecurity / Computer Science / Information Security"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 550000, "maxINR": 950000, "description": "National Forensic Sciences University / IITs / NITs" },
+      "pvtTier1": { "minINR": 2200000, "maxINR": 2800000, "description": "Premium Private Deemed Universities" },
+      "pvtTier2": { "minINR": 900000, "maxINR": 1800000, "description": "State & Regional Private Engineering Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 7.0, "max": 12.0 },
+      "midLPA": { "min": 17.0, "max": 27.0 },
+      "seniorLPA": { "min": 32.0, "max": 52.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 93,
+      "growthScore": 94,
+      "disruptionIndex": 90,
+      "dataDate": "2026-10-01",
+      "dataSource": "NASSCOM & CERT-In Industry Reports",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 94, "costIndex": 85, "hubSpecialization": "Cloud & Threat Intelligence" },
+      { "location": "Delhi NCR", "demandScore": 92, "costIndex": 80, "hubSpecialization": "Defense, Banking & GovTech Cybersecurity" },
+      { "location": "Hyderabad", "demandScore": 90, "costIndex": 72, "hubSpecialization": "Global Security Operations Centers (SOC)" },
+      { "location": "Mumbai", "demandScore": 93, "costIndex": 90, "hubSpecialization": "Fintech & Banking Security Architecture" },
+      { "location": "Pune", "demandScore": 82, "costIndex": 68, "hubSpecialization": "Automotive IoT Cybersecurity" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["Cyber Crime Prevention Centre (NFSU Gandhinagar)", "C-DAC Cyber Security Lab (Pune)"],
+      "patentActivity": "high",
+      "nanoMechContext": "Hardware-level cryptographic authentication for local IoT micro-sensors."
+    },
+    "entranceExams": [
+      { "exam": "NFSU National Entrance Test", "difficulty": "Moderate", "authority": "NFSU" },
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" }
+    ],
+    "scholarships": [
+      { "name": "National Scholarship for Cyber Forensics", "provider": "Ministry of Home Affairs", "coverage": "Tuition grants for accredited forensic courses" }
+    ],
+    "alternativeCareers": ["cloud_devops_architect", "blockchain_cryptographic_architect", "full_stack_software_engineer"]
+  },
+  {
+    "id": "full_stack_software_engineer",
+    "name": "Full-Stack Software Engineer",
+    "domain": "software_cloud",
+    "description": "Architects end-to-end web and mobile applications, handling dynamic frontend interfaces, backend microservices, and databases.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 86, "numerical": 76, "analytical": 86, "spatial": 70, "verbal": 72 },
+    "interestProfile": { "realistic": 40, "investigative": 75, "artistic": 45, "social": 30, "enterprising": 55, "conventional": 60 },
+    "skills": [
+      { "skillId": "python", "name": "Python Programming", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "data_structures", "name": "Data Structures & Algorithms", "importance": 0.92, "requiredLevel": 88 },
+      { "skillId": "sql_databases", "name": "Relational Databases & SQL", "importance": 0.88, "requiredLevel": 85 },
+      { "skillId": "ui_ux_design", "name": "UI/UX & Design Systems", "importance": 0.70, "requiredLevel": 65 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech / B.E. in Computer Science / Information Science / Software Engineering"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 500000, "maxINR": 900000, "description": "State & Central Govt Engineering Colleges" },
+      "pvtTier1": { "minINR": 2000000, "maxINR": 2800000, "description": "Top Tier Private Engineering Universities" },
+      "pvtTier2": { "minINR": 800000, "maxINR": 1700000, "description": "State Private Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 6.5, "max": 12.0 },
+      "midLPA": { "min": 16.0, "max": 26.0 },
+      "seniorLPA": { "min": 30.0, "max": 50.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 86,
+      "growthScore": 88,
+      "disruptionIndex": 78,
+      "dataDate": "2026-10-01",
+      "dataSource": "Foundit Hiring Tracker & India Skills Report 2026",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 96, "costIndex": 85, "hubSpecialization": "Consumer Tech & SaaS Ecosystem" },
+      { "location": "Hyderabad", "demandScore": 90, "costIndex": 72, "hubSpecialization": "Enterprise Application Development" },
+      { "location": "Pune", "demandScore": 85, "costIndex": 68, "hubSpecialization": "Product Engineering Centers" },
+      { "location": "Chennai", "demandScore": 86, "costIndex": 65, "hubSpecialization": "SaaS Hub (Zoho/Freshworks Corridor)" },
+      { "location": "Delhi NCR", "demandScore": 88, "costIndex": 80, "hubSpecialization": "E-Commerce & Digital Commerce" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["NSRCEL IIM Bangalore", "IIT Madras Research Park"],
+      "patentActivity": "moderate",
+      "nanoMechContext": "Developing interactive digital web platforms for community healthcare and local trade."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" },
+      { "exam": "State Engineering CETs", "difficulty": "Moderate", "authority": "State Boards" }
+    ],
+    "scholarships": [
+      { "name": "AICTE Pragati Scholarship for Girls", "provider": "AICTE", "coverage": "₹50,000 per annum towards college fee" }
+    ],
+    "alternativeCareers": ["cloud_devops_architect", "ui_ux_product_designer", "data_platform_engineer"]
+  },
+  {
+    "id": "robotics_systems_engineer",
+    "name": "Robotics & Autonomous Systems Engineer",
+    "domain": "robotics_hardware",
+    "description": "Integrates mechanical kinematics, embedded microcontrollers, computer vision, and ROS control algorithms to build intelligent robots.",
+    "riskLevel": "medium",
+    "aptitudeProfile": { "logical": 90, "numerical": 88, "analytical": 92, "spatial": 92, "verbal": 64 },
+    "interestProfile": { "realistic": 92, "investigative": 88, "artistic": 30, "social": 20, "enterprising": 45, "conventional": 40 },
+    "skills": [
+      { "skillId": "robotics_kinematics", "name": "Robotics Kinematics & Control", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "embedded_c_cpp", "name": "Embedded C / C++", "importance": 0.92, "requiredLevel": 88 },
+      { "skillId": "deep_learning", "name": "Deep Learning & Neural Networks", "importance": 0.85, "requiredLevel": 80 },
+      { "skillId": "circuit_pcb_design", "name": "Circuit & PCB Design", "importance": 0.80, "requiredLevel": 75 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Robotics & Mechatronics / Mechanical / Electrical / Electronics"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 650000, "maxINR": 1050000, "description": "IITs / NITs (Centrally Funded)" },
+      "pvtTier1": { "minINR": 2400000, "maxINR": 3000000, "description": "BITS Pilani / Top Deemed Universities" },
+      "pvtTier2": { "minINR": 1100000, "maxINR": 2100000, "description": "Private Mechatronics Institutions" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 6.5, "max": 11.5 },
+      "midLPA": { "min": 16.0, "max": 26.0 },
+      "seniorLPA": { "min": 32.0, "max": 52.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 88,
+      "growthScore": 93,
+      "disruptionIndex": 94,
+      "dataDate": "2026-10-01",
+      "dataSource": "NASSCOM Robotics & Manufacturing Tech Survey",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Pune", "demandScore": 94, "costIndex": 68, "hubSpecialization": "Industrial Automation & Auto Robotics" },
+      { "location": "Chennai", "demandScore": 92, "costIndex": 65, "hubSpecialization": "Automotive Electronics & Factory Robotics" },
+      { "location": "Bangalore", "demandScore": 90, "costIndex": 85, "hubSpecialization": "Autonomous Mobile Robots (AMR) & Warehouse Drones" },
+      { "location": "Delhi NCR (Gurugram/Faridabad)", "demandScore": 84, "costIndex": 80, "hubSpecialization": "Heavy Machinery Automation" },
+      { "location": "Hyderabad", "demandScore": 80, "costIndex": 72, "hubSpecialization": "Medical & Defense Robotics" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["Centre for Artificial Intelligence and Robotics (CAIR DRDO Bangalore)", "IIT Kanpur Robotics Lab"],
+      "patentActivity": "high",
+      "nanoMechContext": "Pioneering hyper-local educational robotic kits, agricultural drones, and prosthetic automation."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main / Advanced", "difficulty": "Very High", "authority": "NTA" },
+      { "exam": "BITSAT", "difficulty": "High", "authority": "BITS" }
+    ],
+    "scholarships": [
+      { "name": "Kishore Vaigyanik / INSPIRE Fellowship", "provider": "Department of Science and Technology", "coverage": "₹80,000 per annum for STEAM innovators" }
+    ],
+    "alternativeCareers": ["embedded_iot_engineer", "electric_vehicle_powertrain_engineer", "ai_ml_engineer"]
+  },
+  {
+    "id": "embedded_iot_engineer",
+    "name": "Embedded Systems & IoT Engineer",
+    "domain": "robotics_hardware",
+    "description": "Programs resource-constrained microcontrollers, RTOS kernels, sensor telemetry networks, and edge-intelligence hardware.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 88, "numerical": 82, "analytical": 88, "spatial": 84, "verbal": 62 },
+    "interestProfile": { "realistic": 88, "investigative": 82, "artistic": 20, "social": 20, "enterprising": 35, "conventional": 60 },
+    "skills": [
+      { "skillId": "embedded_c_cpp", "name": "Embedded C / C++", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "circuit_pcb_design", "name": "Circuit & PCB Design", "importance": 0.88, "requiredLevel": 85 },
+      { "skillId": "iot_edge_ai", "name": "IoT Architectures & Edge AI", "importance": 0.92, "requiredLevel": 88 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.80, "requiredLevel": 75 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Electronics & Communication (ECE) / Electrical (EEE) / Embedded Systems"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 550000, "maxINR": 950000, "description": "Centrally Funded Technical Institutes" },
+      "pvtTier1": { "minINR": 2200000, "maxINR": 2800000, "description": "Top Private Universities" },
+      "pvtTier2": { "minINR": 900000, "maxINR": 1800000, "description": "Regional Private Engineering Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 6.0, "max": 10.5 },
+      "midLPA": { "min": 15.0, "max": 24.0 },
+      "seniorLPA": { "min": 28.0, "max": 45.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 87,
+      "growthScore": 89,
+      "disruptionIndex": 91,
+      "dataDate": "2026-10-01",
+      "dataSource": "India Electronics and Semiconductor Association (IESA)",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 95, "costIndex": 85, "hubSpecialization": "Semiconductor & Firmware Labs" },
+      { "location": "Chennai", "demandScore": 90, "costIndex": 65, "hubSpecialization": "Automotive Electronics & Hardware Manufacturing" },
+      { "location": "Pune", "demandScore": 88, "costIndex": 68, "hubSpecialization": "Industrial IoT & Powertrain Controllers" },
+      { "location": "Hyderabad", "demandScore": 84, "costIndex": 72, "hubSpecialization": "Smart City Telemetry & Sensor Networks" },
+      { "location": "Delhi NCR (Noida)", "demandScore": 85, "costIndex": 80, "hubSpecialization": "Consumer Electronics Hardware" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["IIT Hyderabad FAB Lab", "C-DAC Electronics Hardware Cluster (Mohali)"],
+      "patentActivity": "high",
+      "nanoMechContext": "Creating low-power smart agricultural sensors and rural water monitoring telemetry nodes."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" },
+      { "exam": "KCET / TNEA", "difficulty": "Moderate", "authority": "State Technical Councils" }
+    ],
+    "scholarships": [
+      { "name": "IESA Semiconductor Talent Scholarship", "provider": "IESA & Ministry of Electronics", "coverage": "Tuition grants for ECE students" }
+    ],
+    "alternativeCareers": ["robotics_systems_engineer", "vlsi_semiconductor_design_engineer", "agritech_iot_engineer"]
+  },
+  {
+    "id": "vlsi_semiconductor_design_engineer",
+    "name": "VLSI & Semiconductor Design Engineer",
+    "domain": "robotics_hardware",
+    "description": "Designs microchips, ASIC architectures, FPGA synthesis blocks, and system-on-chips (SoC) for modern computing and India Semiconductor Mission.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 94, "numerical": 92, "analytical": 96, "spatial": 88, "verbal": 64 },
+    "interestProfile": { "realistic": 82, "investigative": 94, "artistic": 15, "social": 15, "enterprising": 35, "conventional": 70 },
+    "skills": [
+      { "skillId": "embedded_c_cpp", "name": "Embedded C / C++", "importance": 0.90, "requiredLevel": 88 },
+      { "skillId": "circuit_pcb_design", "name": "Circuit & PCB Design", "importance": 0.95, "requiredLevel": 92 },
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.92, "requiredLevel": 90 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech / M.Tech in Microelectronics / VLSI / ECE / Electrical Engineering"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 700000, "maxINR": 1100000, "description": "IITs / IISc / NITs (Subsidized Central Govt)" },
+      "pvtTier1": { "minINR": 2400000, "maxINR": 3000000, "description": "BITS Pilani / Top Tier Institutes" },
+      "pvtTier2": { "minINR": 1100000, "maxINR": 2000000, "description": "Private Engineering Colleges with VLSI Labs" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 9.0, "max": 16.5 },
+      "midLPA": { "min": 22.0, "max": 36.0 },
+      "seniorLPA": { "min": 42.0, "max": 75.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 94,
+      "growthScore": 97,
+      "disruptionIndex": 96,
+      "dataDate": "2026-10-01",
+      "dataSource": "India Semiconductor Mission (ISM) & NASSCOM",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 98, "costIndex": 85, "hubSpecialization": "Silicon Valley of India - Chip Design Centers (Intel/Qualcomm/Nvidia)" },
+      { "location": "Hyderabad", "demandScore": 92, "costIndex": 72, "hubSpecialization": "Semiconductor R&D & Verification Hubs" },
+      { "location": "Noida / Delhi NCR", "demandScore": 88, "costIndex": 80, "hubSpecialization": "Fabless Design & Testing Labs" },
+      { "location": "Chennai", "demandScore": 84, "costIndex": 65, "hubSpecialization": "IIT-M Shakti Microprocessor Ecosystem" },
+      { "location": "Gujarat (Dholera / Sanand)", "demandScore": 85, "costIndex": 55, "hubSpecialization": "Semiconductor Fab & Packaging Corridors" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["IIT Madras SHAKTI Processor Ecosystem", "Semiconductor Complex Limited (Mohali)"],
+      "patentActivity": "very high",
+      "nanoMechContext": "Indigenous chip-design architectures for domestic computing and smart agricultural microcontrollers."
+    },
+    "entranceExams": [
+      { "exam": "JEE Advanced", "difficulty": "Very High", "authority": "IITs" },
+      { "exam": "GATE (for M.Tech VLSI)", "difficulty": "Very High", "authority": "IITs / IISc" }
+    ],
+    "scholarships": [
+      { "name": "India Semiconductor Mission (ISM) Fellowship", "provider": "Ministry of Electronics & IT", "coverage": "Full Fellowship for Chip Design Scholars" }
+    ],
+    "alternativeCareers": ["embedded_iot_engineer", "robotics_systems_engineer", "quantum_software_researcher"]
+  },
+  {
+    "id": "bioinformatics_scientist",
+    "name": "Bioinformatics & Genomic Data Scientist",
+    "domain": "biotech_health",
+    "description": "Applies statistical algorithms, computational biology, and machine learning to decode DNA/RNA sequencing data and discover new therapeutics.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 92, "numerical": 88, "analytical": 95, "spatial": 78, "verbal": 74 },
+    "interestProfile": { "realistic": 35, "investigative": 98, "artistic": 25, "social": 30, "enterprising": 40, "conventional": 60 },
+    "skills": [
+      { "skillId": "bioinformatics_genomics", "name": "Genomic Data Analysis & NGS", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "computational_biology", "name": "Computational Biology & Biostatistics", "importance": 0.95, "requiredLevel": 90 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "machine_learning", "name": "Machine Learning", "importance": 0.85, "requiredLevel": 80 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech / M.Sc in Bioinformatics / Biotechnology / Computational Biology"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.Sc (4-Yr Honors)"
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 450000, "maxINR": 850000, "description": "IITs / IISERs / Central Universities" },
+      "pvtTier1": { "minINR": 1800000, "maxINR": 2400000, "description": "Top Tier Private Biotech Universities" },
+      "pvtTier2": { "minINR": 850000, "maxINR": 1600000, "description": "Private Universities with Biotech Centers" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 6.0, "max": 10.0 },
+      "midLPA": { "min": 14.0, "max": 24.0 },
+      "seniorLPA": { "min": 28.0, "max": 48.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 86,
+      "growthScore": 91,
+      "disruptionIndex": 93,
+      "dataDate": "2026-10-01",
+      "dataSource": "Department of Biotechnology (DBT) & ABLE India",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Hyderabad", "demandScore": 96, "costIndex": 72, "hubSpecialization": "Genome Valley - Pharma & Vaccine R&D" },
+      { "location": "Bangalore", "demandScore": 94, "costIndex": 85, "hubSpecialization": "Biotech Startups & Precision Medicine Labs" },
+      { "location": "Pune", "demandScore": 86, "costIndex": 68, "hubSpecialization": "Vaccine Analytics (Serum Institute Ecosystem)" },
+      { "location": "Chennai", "demandScore": 82, "costIndex": 65, "hubSpecialization": "Clinical Research & Healthcare Informatics" },
+      { "location": "Delhi NCR", "demandScore": 84, "costIndex": 80, "hubSpecialization": "National Institute of Immunology Hub" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["Genome Valley (Hyderabad)", "IBAB (Institute of Bioinformatics and Applied Biotechnology, Bangalore)"],
+      "patentActivity": "very high",
+      "nanoMechContext": "Local genetic variant analysis for endemic disease diagnostics and agricultural crop enhancement."
+    },
+    "entranceExams": [
+      { "exam": "IISER IAT / NEST", "difficulty": "Very High", "authority": "IISERs / DAE" },
+      { "exam": "CUET UG / JEE Main", "difficulty": "Moderate to High", "authority": "NTA" }
+    ],
+    "scholarships": [
+      { "name": "DBT Junior Research Fellowship / INSPIRE", "provider": "Department of Biotechnology (Govt of India)", "coverage": "Full tuition waiver + monthly stipend" }
+    ],
+    "alternativeCareers": ["computational_biologist", "biomedical_device_engineer", "ai_ml_engineer"]
+  },
+  {
+    "id": "computational_biologist",
+    "name": "Computational Biologist & Drug Discovery Specialist",
+    "domain": "biotech_health",
+    "description": "Uses molecular dynamics simulations, structural biology models, and generative chemistry to accelerate drug discovery pipelines.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 90, "numerical": 90, "analytical": 94, "spatial": 85, "verbal": 70 },
+    "interestProfile": { "realistic": 30, "investigative": 96, "artistic": 25, "social": 30, "enterprising": 35, "conventional": 65 },
+    "skills": [
+      { "skillId": "computational_biology", "name": "Computational Biology & Biostatistics", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.92, "requiredLevel": 88 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.88, "requiredLevel": 85 },
+      { "skillId": "machine_learning", "name": "Machine Learning", "importance": 0.85, "requiredLevel": 80 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech / BS in Computational Biology / Biotechnology / Pharmacy"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / BS"
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 450000, "maxINR": 850000, "description": "IISc / IITs / NIPER Institutes" },
+      "pvtTier1": { "minINR": 1800000, "maxINR": 2500000, "description": "Top Private Deemed Universities" },
+      "pvtTier2": { "minINR": 800000, "maxINR": 1500000, "description": "State Private Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 6.5, "max": 10.5 },
+      "midLPA": { "min": 15.0, "max": 25.0 },
+      "seniorLPA": { "min": 30.0, "max": 50.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 84,
+      "growthScore": 89,
+      "disruptionIndex": 92,
+      "dataDate": "2026-10-01",
+      "dataSource": "DBT & Global Pharma GCC Hiring Index",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Hyderabad", "demandScore": 95, "costIndex": 72, "hubSpecialization": "Pharma GCCs (Novartis, Dr. Reddy's R&D)" },
+      { "location": "Bangalore", "demandScore": 92, "costIndex": 85, "hubSpecialization": "Computational Chemistry Startups" },
+      { "location": "Mumbai", "demandScore": 88, "costIndex": 90, "hubSpecialization": "Pharmaceutical Headquarters & Bio-modeling" },
+      { "location": "Pune", "demandScore": 82, "costIndex": 68, "hubSpecialization": "Biopharma Manufacturing Tech" },
+      { "location": "Ahmedabad", "demandScore": 80, "costIndex": 60, "hubSpecialization": "Generic Formulation & Clinical Analytics" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["NIPER Hyderabad", "CSIR-CDRI Lucknow"],
+      "patentActivity": "very high",
+      "nanoMechContext": "Screening traditional botanical molecules for validated active pharmaceutical compounds."
+    },
+    "entranceExams": [
+      { "exam": "IISER IAT", "difficulty": "Very High", "authority": "IISERs" },
+      { "exam": "GPAT / CUET", "difficulty": "Moderate", "authority": "NTA" }
+    ],
+    "scholarships": [
+      { "name": "CSIR Innovation Fellowship", "provider": "CSIR India", "coverage": "Tuition grants + research project sponsorship" }
+    ],
+    "alternativeCareers": ["bioinformatics_scientist", "ai_ml_engineer", "nanotechnology_materials_scientist"]
+  },
+  {
+    "id": "biomedical_device_engineer",
+    "name": "Biomedical & MedTech Device Engineer",
+    "domain": "biotech_health",
+    "description": "Engineers medical diagnostics, wearable health monitors, MRI/ultrasound signal processors, and FDA/CDSCO compliant healthcare devices.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 86, "numerical": 82, "analytical": 88, "spatial": 88, "verbal": 68 },
+    "interestProfile": { "realistic": 85, "investigative": 85, "artistic": 25, "social": 55, "enterprising": 40, "conventional": 50 },
+    "skills": [
+      { "skillId": "biomedical_instrumentation", "name": "Biomedical Instrumentation & Sensors", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "circuit_pcb_design", "name": "Circuit & PCB Design", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "embedded_c_cpp", "name": "Embedded C / C++", "importance": 0.85, "requiredLevel": 80 },
+      { "skillId": "iot_edge_ai", "name": "IoT Architectures & Edge AI", "importance": 0.80, "requiredLevel": 75 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Biomedical Engineering / Medical Electronics / Instrumentation"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 500000, "maxINR": 900000, "description": "IITs / Sree Chitra Tirunal Institute / NITs" },
+      "pvtTier1": { "minINR": 2000000, "maxINR": 2600000, "description": "Manipal / SRM / VIT Deemed Universities" },
+      "pvtTier2": { "minINR": 850000, "maxINR": 1700000, "description": "Regional Private Engineering Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 5.5, "max": 9.5 },
+      "midLPA": { "min": 13.5, "max": 22.0 },
+      "seniorLPA": { "min": 26.0, "max": 42.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 85,
+      "growthScore": 90,
+      "disruptionIndex": 91,
+      "dataDate": "2026-10-01",
+      "dataSource": "Andhra Pradesh MedTech Zone (AMTZ) & AIMED",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Andhra Pradesh (Visakhapatnam - AMTZ)", "demandScore": 96, "costIndex": 55, "hubSpecialization": "National Medical Device Manufacturing Zone" },
+      { "location": "Bangalore", "demandScore": 92, "costIndex": 85, "hubSpecialization": "MedTech Startups & Diagnostic AI" },
+      { "location": "Chennai", "demandScore": 90, "costIndex": 65, "hubSpecialization": "Hospital Healthcare Equipment Corridor" },
+      { "location": "Hyderabad", "demandScore": 88, "costIndex": 72, "hubSpecialization": "Medical Diagnostic Hubs" },
+      { "location": "Delhi NCR", "demandScore": 82, "costIndex": 80, "hubSpecialization": "Healthcare Technology Policy & Testing" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["AMTZ Visakhapatnam", "IIT Madras Healthcare Technology Innovation Centre (HTIC)"],
+      "patentActivity": "high",
+      "nanoMechContext": "Affordable, battery-operated rural diagnostic ultrasound and ECG devices for primary health centres."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" },
+      { "exam": "TNEA / MET", "difficulty": "Moderate", "authority": "Anna Univ / Manipal" }
+    ],
+    "scholarships": [
+      { "name": "National Health Mission Technical Scholarship", "provider": "Ministry of Health & Family Welfare", "coverage": "Tuition support for indigenous med-tech creators" }
+    ],
+    "alternativeCareers": ["embedded_iot_engineer", "robotics_systems_engineer", "bioinformatics_scientist"]
+  },
+  {
+    "id": "renewable_energy_systems_engineer",
+    "name": "Renewable Energy & Smart Grid Engineer",
+    "domain": "clean_energy_aerospace",
+    "description": "Designs solar photovoltaic architectures, wind energy converters, battery energy storage systems (BESS), and green hydrogen power grids.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 86, "numerical": 88, "analytical": 90, "spatial": 80, "verbal": 64 },
+    "interestProfile": { "realistic": 88, "investigative": 86, "artistic": 15, "social": 40, "enterprising": 45, "conventional": 55 },
+    "skills": [
+      { "skillId": "renewable_energy_systems", "name": "Renewable Power & Grid Integration", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "circuit_pcb_design", "name": "Circuit & PCB Design", "importance": 0.85, "requiredLevel": 80 },
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.88, "requiredLevel": 85 },
+      { "skillId": "iot_edge_ai", "name": "IoT Architectures & Edge AI", "importance": 0.80, "requiredLevel": 75 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Energy Engineering / Electrical Engineering / Sustainable Technology"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 550000, "maxINR": 950000, "description": "IITs / NITs / State Energy Technology Centres" },
+      "pvtTier1": { "minINR": 2000000, "maxINR": 2600000, "description": "Top Tier Private Engineering Universities" },
+      "pvtTier2": { "minINR": 850000, "maxINR": 1600000, "description": "State Private Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 6.0, "max": 10.5 },
+      "midLPA": { "min": 14.5, "max": 24.0 },
+      "seniorLPA": { "min": 28.0, "max": 48.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 90,
+      "growthScore": 95,
+      "disruptionIndex": 94,
+      "dataDate": "2026-10-01",
+      "dataSource": "Ministry of New and Renewable Energy (MNRE) & IESA",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Gujarat (Ahmedabad / Kutch)", "demandScore": 96, "costIndex": 60, "hubSpecialization": "World's Largest Hybrid Solar-Wind Park (Khavda)" },
+      { "location": "Rajasthan (Jaipur / Jodhpur)", "demandScore": 94, "costIndex": 58, "hubSpecialization": "Solar Mega Parks (Bhadla Solar Hub)" },
+      { "location": "Tamil Nadu (Coimbatore / Chennai)", "demandScore": 90, "costIndex": 65, "hubSpecialization": "Wind Turbine Manufacturing & Smart Grids" },
+      { "location": "Bangalore", "demandScore": 86, "costIndex": 85, "hubSpecialization": "CleanTech Energy Management Software" },
+      { "location": "Maharashtra (Pune / Mumbai)", "demandScore": 88, "costIndex": 75, "hubSpecialization": "EV Infrastructure & Industrial Solar" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["National Institute of Solar Energy (NISE Gurugram)", "National Institute of Wind Energy (NIWE Chennai)"],
+      "patentActivity": "high",
+      "nanoMechContext": "Micro-solar inverters and decentralized community bio-energy microgrids for rural schools."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" },
+      { "exam": "State CETs", "difficulty": "Moderate", "authority": "State Boards" }
+    ],
+    "scholarships": [
+      { "name": "National Renewable Energy Fellowship (MNRE)", "provider": "Ministry of New & Renewable Energy", "coverage": "Tuition grants + monthly green-tech stipend" }
+    ],
+    "alternativeCareers": ["electric_vehicle_powertrain_engineer", "climate_tech_environmental_engineer", "embedded_iot_engineer"]
+  },
+  {
+    "id": "electric_vehicle_powertrain_engineer",
+    "name": "Electric Vehicle & Battery Systems Engineer",
+    "domain": "clean_energy_aerospace",
+    "description": "Develops EV traction motor controllers, high-voltage battery management systems (BMS), regenerative braking, and thermal runaway prevention.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 88, "numerical": 86, "analytical": 90, "spatial": 88, "verbal": 62 },
+    "interestProfile": { "realistic": 90, "investigative": 85, "artistic": 15, "social": 20, "enterprising": 45, "conventional": 50 },
+    "skills": [
+      { "skillId": "renewable_energy_systems", "name": "Renewable Power & Grid Integration", "importance": 0.92, "requiredLevel": 88 },
+      { "skillId": "embedded_c_cpp", "name": "Embedded C / C++", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "circuit_pcb_design", "name": "Circuit & PCB Design", "importance": 0.88, "requiredLevel": 85 },
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.85, "requiredLevel": 80 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Automotive / Electrical / Mechanical / E-Mobility Engineering"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 600000, "maxINR": 1000000, "description": "IITs / NITs (Centrally Funded)" },
+      "pvtTier1": { "minINR": 2200000, "maxINR": 2800000, "description": "BITS Pilani / Top Universities" },
+      "pvtTier2": { "minINR": 950000, "maxINR": 1900000, "description": "Private Colleges with E-Mobility Centres" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 6.5, "max": 11.0 },
+      "midLPA": { "min": 16.0, "max": 27.0 },
+      "seniorLPA": { "min": 32.0, "max": 52.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 91,
+      "growthScore": 94,
+      "disruptionIndex": 92,
+      "dataDate": "2026-10-01",
+      "dataSource": "Society of Indian Automobile Manufacturers (SIAM) & FAME II",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Pune", "demandScore": 96, "costIndex": 68, "hubSpecialization": "Automotive Capital (Tata Motors/Bajaj EV R&D)" },
+      { "location": "Chennai", "demandScore": 94, "costIndex": 65, "hubSpecialization": "Detroit of India - EV Manufacturing (Ola Electric/Ather/Hyundai)" },
+      { "location": "Bangalore", "demandScore": 92, "costIndex": 85, "hubSpecialization": "Battery BMS & Smart Scooter Software R&D" },
+      { "location": "Delhi NCR (Gurugram/Manesar)", "demandScore": 88, "costIndex": 80, "hubSpecialization": "Commercial EV & Fleet Powertrains" },
+      { "location": "Gujarat (Sanand/Mandal)", "demandScore": 86, "costIndex": 55, "hubSpecialization": "Lithium Battery Giga-Factories" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["ARAI (Automotive Research Association of India, Pune)", "IIT Madras Battery Engineering Lab"],
+      "patentActivity": "high",
+      "nanoMechContext": "Developing lightweight, thermally stable sodium-ion and LFP battery packs for local e-rickshaws."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main / Advanced", "difficulty": "High", "authority": "NTA" },
+      { "exam": "MHT-CET / TNEA", "difficulty": "Moderate", "authority": "State CET Cells" }
+    ],
+    "scholarships": [
+      { "name": "Tata Motors E-Mobility Scholarship", "provider": "Tata Motors CSR", "coverage": "Tuition sponsorship for automotive engineering students" }
+    ],
+    "alternativeCareers": ["renewable_energy_systems_engineer", "embedded_iot_engineer", "robotics_systems_engineer"]
+  },
+  {
+    "id": "aerospace_avionics_engineer",
+    "name": "Aerospace & Avionics Systems Engineer",
+    "domain": "clean_energy_aerospace",
+    "description": "Designs flight navigation software, telemetry transceivers, fly-by-wire controls, and aerodynamic airframes for aircraft and defense drones.",
+    "riskLevel": "medium",
+    "aptitudeProfile": { "logical": 92, "numerical": 92, "analytical": 94, "spatial": 94, "verbal": 68 },
+    "interestProfile": { "realistic": 92, "investigative": 90, "artistic": 20, "social": 15, "enterprising": 40, "conventional": 50 },
+    "skills": [
+      { "skillId": "aerodynamics_propulsion", "name": "Aerodynamics & Propulsion Systems", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "embedded_c_cpp", "name": "Embedded C / C++", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.92, "requiredLevel": 90 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Aerospace / Aeronautical / Avionics Engineering"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 650000, "maxINR": 1050000, "description": "IIT Madras / IIT Bombay / IIST Thiruvananthapuram" },
+      "pvtTier1": { "minINR": 2200000, "maxINR": 2900000, "description": "Top Tier Private Aerospace Universities" },
+      "pvtTier2": { "minINR": 1000000, "maxINR": 2000000, "description": "Regional Aeronautical Institutes" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 7.0, "max": 12.0 },
+      "midLPA": { "min": 17.0, "max": 28.0 },
+      "seniorLPA": { "min": 34.0, "max": 58.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 86,
+      "growthScore": 92,
+      "disruptionIndex": 95,
+      "dataDate": "2026-10-01",
+      "dataSource": "DRDO & Society of Indian Aerospace Technologies",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 98, "costIndex": 85, "hubSpecialization": "Aviation Capital (HAL/ISRO/DRDO/Boeing R&D)" },
+      { "location": "Hyderabad", "demandScore": 94, "costIndex": 72, "hubSpecialization": "Aerospace SEZ (Adani-Elbit/Tata Boeing Aerospace)" },
+      { "location": "Thiruvananthapuram", "demandScore": 90, "costIndex": 60, "hubSpecialization": "VSSC Spacecraft Propulsion Corridor" },
+      { "location": "Chennai", "demandScore": 84, "costIndex": 65, "hubSpecialization": "Agnikul Cosmos Space Tech Incubator" },
+      { "location": "Nagpur / Pune", "demandScore": 80, "costIndex": 62, "hubSpecialization": "Defense Aerospace Maintenance (MRO)" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["IIT Madras National Centre for Combustion R&D", "IIST Space Tech Park"],
+      "patentActivity": "very high",
+      "nanoMechContext": "Building hyper-local agricultural mapping drones and autonomous search-and-rescue UAVs."
+    },
+    "entranceExams": [
+      { "exam": "JEE Advanced", "difficulty": "Very High", "authority": "IITs / IIST" },
+      { "exam": "GATE Aerospace", "difficulty": "Very High", "authority": "IITs / IISc" }
+    ],
+    "scholarships": [
+      { "name": "DOS / ISRO Financial Assistanceship", "provider": "Department of Space (Govt of India)", "coverage": "100% tuition + boarding for top IIST students" }
+    ],
+    "alternativeCareers": ["satellite_systems_engineer", "robotics_systems_engineer", "embedded_iot_engineer"]
+  },
+  {
+    "id": "satellite_systems_engineer",
+    "name": "Satellite Communications & Space Tech Engineer",
+    "domain": "clean_energy_aerospace",
+    "description": "Engineers CubeSats, satellite constellation orbital mechanics, phased-array telemetry payloads, and ground control antennas.",
+    "riskLevel": "medium",
+    "aptitudeProfile": { "logical": 92, "numerical": 94, "analytical": 95, "spatial": 92, "verbal": 66 },
+    "interestProfile": { "realistic": 88, "investigative": 95, "artistic": 15, "social": 15, "enterprising": 40, "conventional": 55 },
+    "skills": [
+      { "skillId": "aerodynamics_propulsion", "name": "Aerodynamics & Propulsion Systems", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "embedded_c_cpp", "name": "Embedded C / C++", "importance": 0.92, "requiredLevel": 88 },
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.95, "requiredLevel": 92 },
+      { "skillId": "circuit_pcb_design", "name": "Circuit & PCB Design", "importance": 0.85, "requiredLevel": 80 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech / M.Tech in Avionics / Aerospace / Telecommunications / Space Physics"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 650000, "maxINR": 1050000, "description": "IIST / IITs / IISc" },
+      "pvtTier1": { "minINR": 2200000, "maxINR": 2800000, "description": "Top Private Deemed Universities" },
+      "pvtTier2": { "minINR": 1000000, "maxINR": 1900000, "description": "Private Engineering Colleges with Space Labs" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 7.5, "max": 13.0 },
+      "midLPA": { "min": 18.0, "max": 30.0 },
+      "seniorLPA": { "min": 35.0, "max": 60.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 89,
+      "growthScore": 95,
+      "disruptionIndex": 96,
+      "dataDate": "2026-10-01",
+      "dataSource": "IN-SPACe (Indian National Space Promotion and Authorisation Centre)",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 98, "costIndex": 85, "hubSpecialization": "ISRO Telemetry & Private Space Startups (Pixxel/Bellatrix)" },
+      { "location": "Hyderabad", "demandScore": 95, "costIndex": 72, "hubSpecialization": "Skyroot Aerospace & Propulsion Testing Corridor" },
+      { "location": "Chennai", "demandScore": 92, "costIndex": 65, "hubSpecialization": "Agnikul Rocket Engine Fab & Launch Prep" },
+      { "location": "Thiruvananthapuram", "demandScore": 90, "costIndex": 60, "hubSpecialization": "Liquid Propulsion Systems Centre (LPSC)" },
+      { "location": "Ahmedabad", "demandScore": 85, "costIndex": 60, "hubSpecialization": "Space Applications Centre (SAC)" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["IN-SPACe Ahmedabad", "IIT Madras Agnikul Cosmos Test Facility"],
+      "patentActivity": "very high",
+      "nanoMechContext": "Constructing low-cost CubeSat amateur transceivers for weather data relay in remote Indian schools."
+    },
+    "entranceExams": [
+      { "exam": "JEE Advanced", "difficulty": "Very High", "authority": "IITs / IIST" },
+      { "exam": "GATE ECE / Aerospace", "difficulty": "Very High", "authority": "IITs" }
+    ],
+    "scholarships": [
+      { "name": "IN-SPACe Space Innovator Grant", "provider": "IN-SPACe / Govt of India", "coverage": "Project funding & scholarship for student space pioneers" }
+    ],
+    "alternativeCareers": ["aerospace_avionics_engineer", "embedded_iot_engineer", "vlsi_semiconductor_design_engineer"]
+  },
+  {
+    "id": "quantum_software_researcher",
+    "name": "Quantum Computing & Algorithms Researcher",
+    "domain": "ai_data",
+    "description": "Develops quantum error correction, variational quantum eigensolvers (VQE), and quantum cryptographic circuits on superconducting and photonic qubits.",
+    "riskLevel": "high",
+    "aptitudeProfile": { "logical": 98, "numerical": 98, "analytical": 98, "spatial": 85, "verbal": 70 },
+    "interestProfile": { "realistic": 25, "investigative": 100, "artistic": 20, "social": 15, "enterprising": 30, "conventional": 55 },
+    "skills": [
+      { "skillId": "quantum_algorithms", "name": "Quantum Mechanics & Algorithms", "importance": 0.98, "requiredLevel": 95 },
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.98, "requiredLevel": 95 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "data_structures", "name": "Data Structures & Algorithms", "importance": 0.90, "requiredLevel": 85 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech / BS in Physics / Computer Science / Mathematics $\\rightarrow$ MS/Ph.D. in Quantum Computing"],
+      "durationYears": 5,
+      "minDegree": "B.Tech / BS"
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 500000, "maxINR": 900000, "description": "IISc Bangalore / IIT Madras / TIFR Mumbai" },
+      "pvtTier1": { "minINR": 2000000, "maxINR": 2700000, "description": "Top Private Universities" },
+      "pvtTier2": { "minINR": 900000, "maxINR": 1700000, "description": "Regional Private Universities" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 10.0, "max": 18.0 },
+      "midLPA": { "min": 25.0, "max": 45.0 },
+      "seniorLPA": { "min": 50.0, "max": 90.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 82,
+      "growthScore": 98,
+      "disruptionIndex": 98,
+      "dataDate": "2026-10-01",
+      "dataSource": "National Quantum Mission (NQM India) & Qubit India",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 98, "costIndex": 85, "hubSpecialization": "IISc Quantum Technology Initiative & IBM Quantum Hub" },
+      { "location": "Pune", "demandScore": 90, "costIndex": 68, "hubSpecialization": "C-DAC Quantum Accelerator Lab" },
+      { "location": "Chennai", "demandScore": 92, "costIndex": 65, "hubSpecialization": "IIT Madras Quantum Computing Hub" },
+      { "location": "Delhi NCR", "demandScore": 88, "costIndex": 80, "hubSpecialization": "National Quantum Mission HQ & Defence Research" },
+      { "location": "Hyderabad", "demandScore": 82, "costIndex": 72, "hubSpecialization": "T-Hub Quantum Software Startups" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["Centre for Quantum Technologies (IISc)", "National Quantum Mission (DST New Delhi)"],
+      "patentActivity": "very high",
+      "nanoMechContext": "Simulating quantum sensor circuits for ultra-sensitive micro-magnetic anomaly detection."
+    },
+    "entranceExams": [
+      { "exam": "IISER IAT / KVPY", "difficulty": "Very High", "authority": "IISERs / DST" },
+      { "exam": "JEE Advanced", "difficulty": "Very High", "authority": "IITs" }
+    ],
+    "scholarships": [
+      { "name": "National Quantum Mission (NQM) Doctoral Fellowship", "provider": "Department of Science and Technology", "coverage": "Full research sponsorship + ₹42,000/mo stipend" }
+    ],
+    "alternativeCareers": ["ai_ml_engineer", "fintech_quantitative_analyst", "vlsi_semiconductor_design_engineer"]
+  },
+  {
+    "id": "ar_vr_spatial_computing_engineer",
+    "name": "AR/VR & Spatial Computing Engineer",
+    "domain": "design_product",
+    "description": "Constructs immersive virtual realities, spatial audio pipelines, WebXR digital twins, and real-time 3D simulation engines.",
+    "riskLevel": "medium",
+    "aptitudeProfile": { "logical": 84, "numerical": 80, "analytical": 84, "spatial": 98, "verbal": 70 },
+    "interestProfile": { "realistic": 55, "investigative": 80, "artistic": 85, "social": 30, "enterprising": 50, "conventional": 35 },
+    "skills": [
+      { "skillId": "ar_vr_spatial_computing", "name": "Spatial Computing & 3D Engines", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "data_structures", "name": "Data Structures & Algorithms", "importance": 0.85, "requiredLevel": 80 },
+      { "skillId": "ui_ux_design", "name": "UI/UX & Design Systems", "importance": 0.88, "requiredLevel": 85 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.75, "requiredLevel": 70 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Computer Science / Game Development / Spatial Computing / Digital Media"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.Des"
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 500000, "maxINR": 900000, "description": "IITs (Design/CS) / NITs" },
+      "pvtTier1": { "minINR": 2000000, "maxINR": 2800000, "description": "Top Private Deemed Universities" },
+      "pvtTier2": { "minINR": 900000, "maxINR": 1800000, "description": "Gaming & Animation Institutes" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 6.5, "max": 11.5 },
+      "midLPA": { "min": 15.0, "max": 25.0 },
+      "seniorLPA": { "min": 30.0, "max": 52.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 84,
+      "growthScore": 90,
+      "disruptionIndex": 88,
+      "dataDate": "2026-10-01",
+      "dataSource": "AVGC Task Force Report & NASSCOM Gaming Sector",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 95, "costIndex": 85, "hubSpecialization": "Spatial AI & Meta Reality Labs" },
+      { "location": "Hyderabad", "demandScore": 92, "costIndex": 72, "hubSpecialization": "Gaming Capital & VFX Studios (IMAGE Tower Hub)" },
+      { "location": "Pune", "demandScore": 88, "costIndex": 68, "hubSpecialization": "Industrial Digital Twins & 3D Simulation" },
+      { "location": "Mumbai", "demandScore": 90, "costIndex": 90, "hubSpecialization": "Media, Entertainment & Interactive Advertising" },
+      { "location": "Delhi NCR", "demandScore": 82, "costIndex": 80, "hubSpecialization": "EdTech Immersive Simulations" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["IMAGE Tower (Hyderabad AVGC Park)", "IIT Bombay Industrial Design Centre (IDC)"],
+      "patentActivity": "high",
+      "nanoMechContext": "Creating holographic educational simulations for vocational training in low-resource classrooms."
+    },
+    "entranceExams": [
+      { "exam": "UCEED / CEED", "difficulty": "High", "authority": "IIT Bombay" },
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" }
+    ],
+    "scholarships": [
+      { "name": "AVGC National Center of Excellence Scholarship", "provider": "Ministry of Information & Broadcasting", "coverage": "Tuition waivers for AR/VR creators" }
+    ],
+    "alternativeCareers": ["ui_ux_product_designer", "full_stack_software_engineer", "robotics_systems_engineer"]
+  },
+  {
+    "id": "ui_ux_product_designer",
+    "name": "UI/UX & Cognitive Product Designer",
+    "domain": "design_product",
+    "description": "Blends cognitive psychology, interaction design, visual hierarchy, and accessible design systems to create intuitive user interfaces.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 80, "numerical": 65, "analytical": 84, "spatial": 95, "verbal": 85 },
+    "interestProfile": { "realistic": 25, "investigative": 70, "artistic": 98, "social": 65, "enterprising": 60, "conventional": 40 },
+    "skills": [
+      { "skillId": "ui_ux_design", "name": "UI/UX & Design Systems", "importance": 0.98, "requiredLevel": 95 },
+      { "skillId": "product_management", "name": "Product Strategy & Metrics", "importance": 0.85, "requiredLevel": 80 },
+      { "skillId": "ethical_ai_governance", "name": "AI Ethics & Data Privacy", "importance": 0.75, "requiredLevel": 70 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Des / M.Des in Interaction Design / Human-Computer Interaction (HCI) / Product Design"],
+      "durationYears": 4,
+      "minDegree": "B.Des / B.Tech"
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 600000, "maxINR": 1000000, "description": "National Institute of Design (NID) / IIT IDC / IIT Guwahati" },
+      "pvtTier1": { "minINR": 2000000, "maxINR": 2800000, "description": "Srishti Institute / UID / MIT-WPU" },
+      "pvtTier2": { "minINR": 900000, "maxINR": 1800000, "description": "Regional Design Academies" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 6.0, "max": 11.0 },
+      "midLPA": { "min": 15.0, "max": 25.0 },
+      "seniorLPA": { "min": 28.0, "max": 48.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 87,
+      "growthScore": 89,
+      "disruptionIndex": 84,
+      "dataDate": "2026-10-01",
+      "dataSource": "Design in Tech Report & TeamLease Digital",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 98, "costIndex": 85, "hubSpecialization": "Product Design Capital & SaaS Experience Teams" },
+      { "location": "Delhi NCR (Gurugram)", "demandScore": 92, "costIndex": 80, "hubSpecialization": "Fintech & Consumer Internet UX" },
+      { "location": "Mumbai", "demandScore": 90, "costIndex": 90, "hubSpecialization": "Banking & Digital Experience Agencies" },
+      { "location": "Pune", "demandScore": 84, "costIndex": 68, "hubSpecialization": "Industrial Design & Human Machine Interfaces" },
+      { "location": "Hyderabad", "demandScore": 85, "costIndex": 72, "hubSpecialization": "Enterprise Design Systems" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["NID Ahmedabad", "IDC IIT Bombay", "DoD IIT Guwahati"],
+      "patentActivity": "moderate",
+      "nanoMechContext": "Designing multi-lingual, voice-enabled micro-interfaces for rural students and artisans."
+    },
+    "entranceExams": [
+      { "exam": "UCEED", "difficulty": "High", "authority": "IIT Bombay" },
+      { "exam": "NID DAT", "difficulty": "Very High", "authority": "National Institute of Design" }
+    ],
+    "scholarships": [
+      { "name": "NID Merit-cum-Means Financial Aid", "provider": "Ministry of Commerce & Industry", "coverage": "Up to 75% tuition waiver for eligible students" }
+    ],
+    "alternativeCareers": ["technical_product_manager", "ar_vr_spatial_computing_engineer", "full_stack_software_engineer"]
+  },
+  {
+    "id": "technical_product_manager",
+    "name": "Technical Product Manager (AI & STEAM)",
+    "domain": "design_product",
+    "description": "Defines product vision, feature requirements, user conversion metrics, and cross-functional engineering execution for AI-first products.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 88, "numerical": 80, "analytical": 92, "spatial": 70, "verbal": 94 },
+    "interestProfile": { "realistic": 25, "investigative": 80, "artistic": 40, "social": 60, "enterprising": 95, "conventional": 60 },
+    "skills": [
+      { "skillId": "product_management", "name": "Product Strategy & Metrics", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "ui_ux_design", "name": "UI/UX & Design Systems", "importance": 0.85, "requiredLevel": 80 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.70, "requiredLevel": 65 },
+      { "skillId": "ethical_ai_governance", "name": "AI Ethics & Data Privacy", "importance": 0.85, "requiredLevel": 80 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Computer Science / Engineering + MBA / Product Fellowship"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 650000, "maxINR": 1100000, "description": "IITs / NITs" },
+      "pvtTier1": { "minINR": 2400000, "maxINR": 3000000, "description": "BITS Pilani / Top Private Deemed Universities" },
+      "pvtTier2": { "minINR": 1000000, "maxINR": 2000000, "description": "State Private Engineering Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 8.0, "max": 15.0 },
+      "midLPA": { "min": 22.0, "max": 36.0 },
+      "seniorLPA": { "min": 42.0, "max": 75.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 90,
+      "growthScore": 92,
+      "disruptionIndex": 87,
+      "dataDate": "2026-10-01",
+      "dataSource": "NASSCOM & Product Leaders Forum India",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 98, "costIndex": 85, "hubSpecialization": "Product Management Capital (Unicorns & Global Tech)" },
+      { "location": "Delhi NCR (Gurugram)", "demandScore": 94, "costIndex": 80, "hubSpecialization": "E-Commerce & Quick Commerce Product Hubs" },
+      { "location": "Mumbai", "demandScore": 90, "costIndex": 90, "hubSpecialization": "Fintech & Insurtech Product Strategy" },
+      { "location": "Hyderabad", "demandScore": 88, "costIndex": 72, "hubSpecialization": "Enterprise B2B Cloud Products" },
+      { "location": "Pune", "demandScore": 82, "costIndex": 68, "hubSpecialization": "Automotive Telematics & SaaS Products" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["IIM Bangalore NSRCEL", "T-Hub Hyderabad"],
+      "patentActivity": "moderate",
+      "nanoMechContext": "Structuring market-viable unit economics for rural STEAM learning kits and regional diagnostic tools."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" },
+      { "exam": "CAT (Post-Grad)", "difficulty": "Very High", "authority": "IIMs" }
+    ],
+    "scholarships": [
+      { "name": "Aditya Birla Scholarship / Reliance Undergraduate", "provider": "Aditya Birla Group / Reliance", "coverage": "Full Tuition & Living Allowance for top scholars" }
+    ],
+    "alternativeCareers": ["ui_ux_product_designer", "full_stack_software_engineer", "ai_ml_engineer"]
+  },
+  {
+    "id": "agritech_iot_engineer",
+    "name": "Agritech & Smart Farming Systems Engineer",
+    "domain": "robotics_hardware",
+    "description": "Engineers soil telemetry sensor grids, autonomous precision irrigation controllers, drone crop-health multispectral imaging, and agri-supply chain IoT.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 84, "numerical": 80, "analytical": 86, "spatial": 88, "verbal": 64 },
+    "interestProfile": { "realistic": 92, "investigative": 85, "artistic": 15, "social": 55, "enterprising": 60, "conventional": 45 },
+    "skills": [
+      { "skillId": "iot_edge_ai", "name": "IoT Architectures & Edge AI", "importance": 0.98, "requiredLevel": 92 },
+      { "skillId": "embedded_c_cpp", "name": "Embedded C / C++", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "machine_learning", "name": "Machine Learning", "importance": 0.80, "requiredLevel": 75 },
+      { "skillId": "circuit_pcb_design", "name": "Circuit & PCB Design", "importance": 0.85, "requiredLevel": 80 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Agricultural Engineering / IoT / Electronics & Communication"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 350000, "maxINR": 750000, "description": "State Agricultural Universities (PAU/TNAU) / IIT Kharagpur" },
+      "pvtTier1": { "minINR": 1800000, "maxINR": 2400000, "description": "Top Private Universities" },
+      "pvtTier2": { "minINR": 750000, "maxINR": 1500000, "description": "Regional Engineering Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 5.5, "max": 9.5 },
+      "midLPA": { "min": 14.0, "max": 22.0 },
+      "seniorLPA": { "min": 26.0, "max": 42.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 88,
+      "growthScore": 94,
+      "disruptionIndex": 92,
+      "dataDate": "2026-10-01",
+      "dataSource": "ICAR & NITI Aayog AgriTech Innovation Mission",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Punjab (Ludhiana / Chandigarh)", "demandScore": 95, "costIndex": 55, "hubSpecialization": "Precision Agriculture & Tractor Telematics (PAU Ecosystem)" },
+      { "location": "Maharashtra (Pune / Nashik)", "demandScore": 92, "costIndex": 65, "hubSpecialization": "Horticulture Drone Sensing & Cold Chain IoT" },
+      { "location": "Tamil Nadu (Coimbatore)", "demandScore": 90, "costIndex": 60, "hubSpecialization": "TNAU Agri-Robotics Innovation Hub" },
+      { "location": "Bangalore", "demandScore": 91, "costIndex": 85, "hubSpecialization": "Agritech Startup Capital (CropIn/DeHaat R&D)" },
+      { "location": "Andhra Pradesh (Guntur/Vijayawada)", "demandScore": 86, "costIndex": 50, "hubSpecialization": "Aquaculture & Soil Telemetry" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["Punjab Agricultural University (PAU)", "ICAR-IARI Pusa New Delhi", "IIT Kharagpur Agri-Tech Incubator"],
+      "patentActivity": "high",
+      "nanoMechContext": "Direct deployment of solar soil-moisture probes and automated pest-detection vision boxes for local farmers."
+    },
+    "entranceExams": [
+      { "exam": "ICAR AIEEA", "difficulty": "Moderate", "authority": "NTA" },
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" }
+    ],
+    "scholarships": [
+      { "name": "ICAR National Talent Scholarship (NTS)", "provider": "Indian Council of Agricultural Research", "coverage": "Monthly scholarship + fee subsidies" }
+    ],
+    "alternativeCareers": ["embedded_iot_engineer", "robotics_systems_engineer", "renewable_energy_systems_engineer"]
+  },
+  {
+    "id": "climate_tech_environmental_engineer",
+    "name": "Climate Tech & Carbon Systems Engineer",
+    "domain": "clean_energy_aerospace",
+    "description": "Constructs carbon capture simulations, urban climate adaptation models, environmental telemetry networks, and industrial effluent recycling plants.",
+    "riskLevel": "low",
+    "aptitudeProfile": { "logical": 86, "numerical": 84, "analytical": 90, "spatial": 80, "verbal": 74 },
+    "interestProfile": { "realistic": 82, "investigative": 90, "artistic": 20, "social": 70, "enterprising": 45, "conventional": 50 },
+    "skills": [
+      { "skillId": "renewable_energy_systems", "name": "Renewable Power & Grid Integration", "importance": 0.90, "requiredLevel": 85 },
+      { "skillId": "computational_biology", "name": "Computational Biology & Biostatistics", "importance": 0.80, "requiredLevel": 75 },
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.88, "requiredLevel": 85 },
+      { "skillId": "ethical_ai_governance", "name": "AI Ethics & Data Privacy", "importance": 0.75, "requiredLevel": 70 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Environmental Engineering / Chemical Engineering / Climate Sciences"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 450000, "maxINR": 850000, "description": "IITs / NITs / State Environmental Technology Colleges" },
+      "pvtTier1": { "minINR": 1900000, "maxINR": 2500000, "description": "Top Private Universities" },
+      "pvtTier2": { "minINR": 800000, "maxINR": 1600000, "description": "Regional Private Engineering Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 5.5, "max": 9.5 },
+      "midLPA": { "min": 14.0, "max": 23.0 },
+      "seniorLPA": { "min": 26.0, "max": 44.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 87,
+      "growthScore": 93,
+      "disruptionIndex": 93,
+      "dataDate": "2026-10-01",
+      "dataSource": "Ministry of Environment (MoEFCC) & ESG Corporate Mandates",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Delhi NCR", "demandScore": 95, "costIndex": 80, "hubSpecialization": "Air Quality Telemetry & National Climate Policy Hub" },
+      { "location": "Bangalore", "demandScore": 90, "costIndex": 85, "hubSpecialization": "Climate Tech Software Startups & Carbon Accounting" },
+      { "location": "Mumbai", "demandScore": 88, "costIndex": 90, "hubSpecialization": "Corporate ESG Auditing & Sustainable Finance" },
+      { "location": "Chennai", "demandScore": 85, "costIndex": 65, "hubSpecialization": "Desalination & Coastal Resilience Engineering" },
+      { "location": "Gujarat (Surat/Vapi)", "demandScore": 86, "costIndex": 55, "hubSpecialization": "Industrial Effluent & Zero Liquid Discharge Hubs" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["NEERI (National Environmental Engineering Research Institute, Nagpur)", "IIT Delhi Climate Centre"],
+      "patentActivity": "high",
+      "nanoMechContext": "Low-cost air particulate sensors and micro-greywater purification filters for community schools."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" },
+      { "exam": "GATE Environmental Science", "difficulty": "High", "authority": "IITs" }
+    ],
+    "scholarships": [
+      { "name": "MoEFCC Green Skill Development Scholarship", "provider": "Ministry of Environment", "coverage": "Full tuition waivers for climate tech scholars" }
+    ],
+    "alternativeCareers": ["renewable_energy_systems_engineer", "agritech_iot_engineer", "nanotechnology_materials_scientist"]
+  },
+  {
+    "id": "blockchain_cryptographic_architect",
+    "name": "Blockchain & Cryptographic Architect",
+    "domain": "software_cloud",
+    "description": "Designs zero-knowledge proofs, smart contract security protocols, decentralized finance (DeFi) engines, and verifiable digital identity ledgers.",
+    "riskLevel": "high",
+    "aptitudeProfile": { "logical": 94, "numerical": 92, "analytical": 96, "spatial": 65, "verbal": 68 },
+    "interestProfile": { "realistic": 35, "investigative": 94, "artistic": 15, "social": 20, "enterprising": 70, "conventional": 65 },
+    "skills": [
+      { "skillId": "cybersecurity_principles", "name": "Network Security & Cryptography", "importance": 0.98, "requiredLevel": 95 },
+      { "skillId": "data_structures", "name": "Data Structures & Algorithms", "importance": 0.95, "requiredLevel": 92 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.85, "requiredLevel": 80 },
+      { "skillId": "distributed_systems", "name": "Big Data & Distributed Computing", "importance": 0.90, "requiredLevel": 88 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Computer Science / Information Technology / Cryptography"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / B.E."
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 600000, "maxINR": 1000000, "description": "IITs / NITs" },
+      "pvtTier1": { "minINR": 2200000, "maxINR": 2900000, "description": "Top Tier Private Universities" },
+      "pvtTier2": { "minINR": 950000, "maxINR": 1800000, "description": "State Private Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 8.0, "max": 15.0 },
+      "midLPA": { "min": 22.0, "max": 38.0 },
+      "seniorLPA": { "min": 45.0, "max": 80.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 80,
+      "growthScore": 86,
+      "disruptionIndex": 89,
+      "dataDate": "2026-10-01",
+      "dataSource": "NASSCOM Web3 Tracker & RBI CBDC Sandbox",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 96, "costIndex": 85, "hubSpecialization": "Web3 & Protocol Engineering Hub" },
+      { "location": "Delhi NCR (Gurugram)", "demandScore": 90, "costIndex": 80, "hubSpecialization": "Fintech & National Blockchain Strategy Hub" },
+      { "location": "Hyderabad", "demandScore": 88, "costIndex": 72, "hubSpecialization": "Telangana Blockchain District" },
+      { "location": "Mumbai", "demandScore": 92, "costIndex": 90, "hubSpecialization": "Institutional Banking & Digital Rupee (CBDC)" },
+      { "location": "Goa / Remote", "demandScore": 84, "costIndex": 55, "hubSpecialization": "Global Decentralized Protocol Teams" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["Telangana Blockchain District", "IIT Kanpur Centre for Cybersecurity & Blockchain"],
+      "patentActivity": "high",
+      "nanoMechContext": "Verifiable blockchain credentials for student academic records and regional agricultural land titles."
+    },
+    "entranceExams": [
+      { "exam": "JEE Main", "difficulty": "High", "authority": "NTA" }
+    ],
+    "scholarships": [
+      { "name": "Ethereum Foundation / Web3 India Scholar Grant", "provider": "Web3 Ecosystem", "coverage": "Research stipends & conference travel grants" }
+    ],
+    "alternativeCareers": ["cybersecurity_analyst", "cloud_devops_architect", "full_stack_software_engineer"]
+  },
+  {
+    "id": "computational_neuroscience_researcher",
+    "name": "Computational Neuroscience & BCI Specialist",
+    "domain": "biotech_health",
+    "description": "Models brain neural dynamics, neural signal decoding algorithms, brain-computer interfaces (BCI), and neuromorphic computing circuits.",
+    "riskLevel": "high",
+    "aptitudeProfile": { "logical": 95, "numerical": 92, "analytical": 96, "spatial": 88, "verbal": 74 },
+    "interestProfile": { "realistic": 40, "investigative": 100, "artistic": 30, "social": 30, "enterprising": 25, "conventional": 50 },
+    "skills": [
+      { "skillId": "deep_learning", "name": "Deep Learning & Neural Networks", "importance": 0.95, "requiredLevel": 90 },
+      { "skillId": "biomedical_instrumentation", "name": "Biomedical Instrumentation & Sensors", "importance": 0.90, "requiredLevel": 88 },
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.95, "requiredLevel": 92 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.90, "requiredLevel": 85 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Biomedical / Electrical / CS $\\rightarrow$ MS/Ph.D. in Neuroscience / Cognitive Science"],
+      "durationYears": 5,
+      "minDegree": "B.Tech / BS"
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 500000, "maxINR": 900000, "description": "IISc / IITs / NIMHANS Bangalore" },
+      "pvtTier1": { "minINR": 1900000, "maxINR": 2600000, "description": "Top Tier Private Universities" },
+      "pvtTier2": { "minINR": 850000, "maxINR": 1600000, "description": "State Private Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 7.0, "max": 12.0 },
+      "midLPA": { "min": 18.0, "max": 30.0 },
+      "seniorLPA": { "min": 35.0, "max": 65.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 80,
+      "growthScore": 94,
+      "disruptionIndex": 97,
+      "dataDate": "2026-10-01",
+      "dataSource": "DBT & NIMHANS Cognitive Science Mission",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 98, "costIndex": 85, "hubSpecialization": "NIMHANS & IISc Centre for Brain Research (CBR)" },
+      { "location": "Hyderabad", "demandScore": 88, "costIndex": 72, "hubSpecialization": "Bio-Medical AI & Neuro-Diagnostics" },
+      { "location": "Delhi NCR (Gurugram)", "demandScore": 90, "costIndex": 80, "hubSpecialization": "National Brain Research Centre (NBRC Manesar)" },
+      { "location": "Chennai", "demandScore": 84, "costIndex": 65, "hubSpecialization": "IIT Madras Neuro-Computing Centre" },
+      { "location": "Pune", "demandScore": 80, "costIndex": 68, "hubSpecialization": "Cognitive Psychology & Neural Signal Labs" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["Centre for Brain Research (IISc Bangalore)", "National Brain Research Centre (NBRC Manesar)"],
+      "patentActivity": "very high",
+      "nanoMechContext": "Affordable EEG headset signal processing for assistive communication in paralyzed patients."
+    },
+    "entranceExams": [
+      { "exam": "IISER IAT / NEST", "difficulty": "Very High", "authority": "IISERs" },
+      { "exam": "GATE / JGEEBILS", "difficulty": "Very High", "authority": "TIFR / IITs" }
+    ],
+    "scholarships": [
+      { "name": "DBT Cognitive Science Research Initiative (CSRI)", "provider": "Department of Science and Technology", "coverage": "Full fellowship + monthly stipend" }
+    ],
+    "alternativeCareers": ["bioinformatics_scientist", "ai_ml_engineer", "biomedical_device_engineer"]
+  },
+  {
+    "id": "nanotechnology_materials_scientist",
+    "name": "Nanotechnology & Advanced Materials Scientist",
+    "domain": "robotics_hardware",
+    "description": "Synthesizes 2D graphene nanomaterials, metamaterials, carbon nanotubes, and nano-composites for next-generation solar cells, chips, and aerospace.",
+    "riskLevel": "medium",
+    "aptitudeProfile": { "logical": 90, "numerical": 90, "analytical": 95, "spatial": 92, "verbal": 68 },
+    "interestProfile": { "realistic": 85, "investigative": 98, "artistic": 20, "social": 20, "enterprising": 35, "conventional": 55 },
+    "skills": [
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.95, "requiredLevel": 90 },
+      { "skillId": "circuit_pcb_design", "name": "Circuit & PCB Design", "importance": 0.80, "requiredLevel": 75 },
+      { "skillId": "renewable_energy_systems", "name": "Renewable Power & Grid Integration", "importance": 0.85, "requiredLevel": 80 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech / BS in Nanotechnology / Materials Science / Metallurgical Engineering"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / BS"
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 500000, "maxINR": 900000, "description": "CeNSE IISc / IIT Bombay / IIT Madras" },
+      "pvtTier1": { "minINR": 2000000, "maxINR": 2600000, "description": "Top Tier Private Universities" },
+      "pvtTier2": { "minINR": 850000, "maxINR": 1600000, "description": "Regional Private Engineering Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 6.0, "max": 10.5 },
+      "midLPA": { "min": 15.0, "max": 25.0 },
+      "seniorLPA": { "min": 30.0, "max": 52.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 83,
+      "growthScore": 91,
+      "disruptionIndex": 95,
+      "dataDate": "2026-10-01",
+      "dataSource": "Nano Mission India (DST) & Materials Research Society of India",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Bangalore", "demandScore": 98, "costIndex": 85, "hubSpecialization": "Centre for Nano Science and Engineering (CeNSE IISc)" },
+      { "location": "Hyderabad", "demandScore": 90, "costIndex": 72, "hubSpecialization": "ARCI (Advanced Research Centre for Powder Metallurgy & New Materials)" },
+      { "location": "Chennai", "demandScore": 88, "costIndex": 65, "hubSpecialization": "IIT Madras Advanced Materials R&D" },
+      { "location": "Pune", "demandScore": 84, "costIndex": 68, "hubSpecialization": "Automotive Nano-Coatings & Lightweight Alloys" },
+      { "location": "Delhi NCR", "demandScore": 82, "costIndex": 80, "hubSpecialization": "CSIR-NPL (National Physical Laboratory)" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["CeNSE IISc Bangalore", "ARCI Hyderabad"],
+      "patentActivity": "very high",
+      "nanoMechContext": "Developing self-cleaning nano-coatings for rural rooftop solar panels to prevent dust degradation."
+    },
+    "entranceExams": [
+      { "exam": "JEE Advanced", "difficulty": "Very High", "authority": "IITs" },
+      { "exam": "IISER IAT", "difficulty": "Very High", "authority": "IISERs" }
+    ],
+    "scholarships": [
+      { "name": "Nano Mission India Fellowship", "provider": "Department of Science & Technology", "coverage": "Full research sponsorship + equipment grants" }
+    ],
+    "alternativeCareers": ["vlsi_semiconductor_design_engineer", "renewable_energy_systems_engineer", "biomedical_device_engineer"]
+  },
+  {
+    "id": "fintech_quantitative_analyst",
+    "name": "Fintech Quantitative & Algorithmic Analyst",
+    "domain": "ai_data",
+    "description": "Constructs high-frequency algorithmic trading strategies, risk variance models, automated market-making algorithms, and quantitative portfolio optimization.",
+    "riskLevel": "high",
+    "aptitudeProfile": { "logical": 96, "numerical": 98, "analytical": 98, "spatial": 70, "verbal": 74 },
+    "interestProfile": { "realistic": 30, "investigative": 92, "artistic": 15, "social": 20, "enterprising": 92, "conventional": 80 },
+    "skills": [
+      { "skillId": "mathematical_modeling", "name": "Mathematical & Statistical Modeling", "importance": 0.98, "requiredLevel": 95 },
+      { "skillId": "python", "name": "Python Programming", "importance": 0.95, "requiredLevel": 92 },
+      { "skillId": "data_structures", "name": "Data Structures & Algorithms", "importance": 0.92, "requiredLevel": 90 },
+      { "skillId": "machine_learning", "name": "Machine Learning", "importance": 0.88, "requiredLevel": 85 }
+    ],
+    "educationPathway": {
+      "degrees": ["B.Tech in Computer Science / Mathematics & Computing / Statistics / Financial Engineering"],
+      "durationYears": 4,
+      "minDegree": "B.Tech / BS"
+    },
+    "educationCost": {
+      "govtTier": { "minINR": 650000, "maxINR": 1050000, "description": "IITs (MnC) / ISI Kolkata / NITs" },
+      "pvtTier1": { "minINR": 2400000, "maxINR": 3000000, "description": "BITS Pilani / Top Private Universities" },
+      "pvtTier2": { "minINR": 1000000, "maxINR": 2000000, "description": "State Private Colleges" },
+      "scholarshipWaiverAvailable": true
+    },
+    "salaryRange": {
+      "entryLPA": { "min": 12.0, "max": 24.0 },
+      "midLPA": { "min": 28.0, "max": 50.0 },
+      "seniorLPA": { "min": 60.0, "max": 120.0 },
+      "currency": "INR"
+    },
+    "marketData": {
+      "hiringVelocity": 92,
+      "growthScore": 94,
+      "disruptionIndex": 90,
+      "dataDate": "2026-10-01",
+      "dataSource": "SEBI Algorithmic Trading Index & High Frequency Trading Firms",
+      "refreshFrequency": "quarterly"
+    },
+    "locationDemand": [
+      { "location": "Mumbai", "demandScore": 98, "costIndex": 90, "hubSpecialization": "Financial Capital of India (BSE/NSE/Hedge Funds/Investment Banks)" },
+      { "location": "Bangalore", "demandScore": 94, "costIndex": 85, "hubSpecialization": "Fintech Unicorns & Crypto Trading Desks" },
+      { "location": "Delhi NCR (Gurugram)", "demandScore": 92, "costIndex": 80, "hubSpecialization": "Algorithmic Trading Desks (Tower Research/Graviton)" },
+      { "location": "Hyderabad", "demandScore": 88, "costIndex": 72, "hubSpecialization": "Global Banking GCCs (Goldman Sachs/JP Morgan)" },
+      { "location": "Gujarat (GIFT City Gandhinagar)", "demandScore": 90, "costIndex": 55, "hubSpecialization": "International Financial Services Centre (IFSC)" }
+    ],
+    "hyperLocalInnovation": {
+      "regionalClusters": ["GIFT City IFSC Gandhinagar", "IIT Kharagpur Mathematics and Computing Lab"],
+      "patentActivity": "high",
+      "nanoMechContext": "Creating micro-credit risk scoring models for rural self-help groups and artisanal collectives."
+    },
+    "entranceExams": [
+      { "exam": "JEE Advanced", "difficulty": "Very High", "authority": "IITs" },
+      { "exam": "ISI Admission Test", "difficulty": "Very High", "authority": "Indian Statistical Institute" }
+    ],
+    "scholarships": [
+      { "name": "Indian Statistical Institute Full Fellowship", "provider": "ISI / Ministry of Statistics", "coverage": "100% Tuition Waiver + Monthly Stipend" }
+    ],
+    "alternativeCareers": ["ai_ml_engineer", "data_platform_engineer", "quantum_software_researcher"]
+  }
+]
