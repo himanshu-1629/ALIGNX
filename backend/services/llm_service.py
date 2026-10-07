@@ -45,17 +45,22 @@ except ImportError:
     )
 
 
-# Graceful Gemini SDK Detection
-GEMINI_SDK_AVAILABLE = False
+# Graceful Gemini SDK Detection (Modern google.genai preferred over legacy google.generativeai)
+USE_MODERN_GENAI = False
+USE_LEGACY_GENAI = False
+
 try:
-    import google.generativeai as genai
-    GEMINI_SDK_AVAILABLE = True
+    from google import genai
+    from google.genai import types
+    USE_MODERN_GENAI = True
 except ImportError:
     try:
-        from google import genai
-        GEMINI_SDK_AVAILABLE = True
+        import google.generativeai as legacy_genai
+        USE_LEGACY_GENAI = True
     except ImportError:
-        GEMINI_SDK_AVAILABLE = False
+        pass
+
+GEMINI_SDK_AVAILABLE = USE_MODERN_GENAI or USE_LEGACY_GENAI
 
 
 def clean_json_response(raw_text: str) -> Dict[str, Any]:
@@ -85,25 +90,52 @@ def clean_json_response(raw_text: str) -> Dict[str, Any]:
 
 
 class LLMExplanationService:
-    def __init__(self, api_key: Optional[str] = None, model_name: str = "gemini-1.5-flash"):
+    def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
-        self.model_name = model_name
+        self.model_name = model_name or os.getenv("GEMINI_MODEL_NAME", "gemini-3.8-flash")
         self.client = None
+        self.legacy_model = None
         self.is_online = False
 
-        if self.api_key and GEMINI_SDK_AVAILABLE:
-            try:
-                genai.configure(api_key=self.api_key)
-                self.model = genai.GenerativeModel(
-                    model_name=self.model_name,
-                    system_instruction=SYSTEM_INSTRUCTION
-                )
-                self.is_online = True
-            except Exception as e:
-                print(f"⚠️ Gemini SDK initialization notice: {e}. Defaulting to deterministic offline engine.")
-                self.is_online = False
-        else:
-            self.is_online = False
+        if self.api_key:
+            if USE_MODERN_GENAI:
+                try:
+                    self.client = genai.Client(api_key=self.api_key)
+                    self.is_online = True
+                except Exception as e:
+                    print(f"⚠️ Google GenAI Client initialization notice: {e}")
+            elif USE_LEGACY_GENAI:
+                try:
+                    legacy_genai.configure(api_key=self.api_key)
+                    self.legacy_model = legacy_genai.GenerativeModel(
+                        model_name=self.model_name,
+                        system_instruction=SYSTEM_INSTRUCTION
+                    )
+                    self.is_online = True
+                except Exception as e:
+                    print(f"⚠️ Legacy Gemini SDK initialization notice: {e}")
+
+    def _generate(self, prompt: str) -> str:
+        """Centralized generation helper utilizing modern or legacy SDK."""
+        if not self.is_online:
+            raise RuntimeError("LLM Explanation Service is offline.")
+        
+        if self.client:
+            config = types.GenerateContentConfig(
+                system_instruction=SYSTEM_INSTRUCTION,
+                temperature=0.2,
+                response_mime_type="application/json"
+            )
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=prompt,
+                config=config
+            )
+            return response.text
+        elif self.legacy_model:
+            response = self.legacy_model.generate_content(prompt)
+            return response.text
+        raise RuntimeError("No active Gemini model client.")
 
     # =========================================================================
     # 1. Career DNA Synthesis
@@ -119,8 +151,8 @@ class LLMExplanationService:
         if self.is_online:
             try:
                 prompt = build_career_dna_prompt(student_name, aptitude, interests, top_traits)
-                response = self.model.generate_content(prompt)
-                return clean_json_response(response.text)
+                raw_text = self._generate(prompt)
+                return clean_json_response(raw_text)
             except Exception as ex:
                 print(f"⚠️ Live LLM invocation error: {ex}. Using deterministic generator.")
 
@@ -170,8 +202,8 @@ class LLMExplanationService:
         if self.is_online:
             try:
                 prompt = build_recommendation_explanation_prompt(student_profile, career_data, decision_scores)
-                response = self.model.generate_content(prompt)
-                return clean_json_response(response.text)
+                raw_text = self._generate(prompt)
+                return clean_json_response(raw_text)
             except Exception as ex:
                 print(f"⚠️ Live LLM invocation error: {ex}. Using deterministic generator.")
 
@@ -218,8 +250,8 @@ class LLMExplanationService:
         if self.is_online:
             try:
                 prompt = build_parent_reassurance_prompt(parent_budget, parent_expectations, career_data, financial_fit_score)
-                response = self.model.generate_content(prompt)
-                return clean_json_response(response.text)
+                raw_text = self._generate(prompt)
+                return clean_json_response(raw_text)
             except Exception as ex:
                 print(f"⚠️ Live LLM invocation error: {ex}. Using deterministic generator.")
 
@@ -261,8 +293,8 @@ class LLMExplanationService:
         if self.is_online:
             try:
                 prompt = build_skill_gap_roadmap_prompt(target_career, student_skills)
-                response = self.model.generate_content(prompt)
-                return clean_json_response(response.text)
+                raw_text = self._generate(prompt)
+                return clean_json_response(raw_text)
             except Exception as ex:
                 print(f"⚠️ Live LLM invocation error: {ex}. Using deterministic generator.")
 
