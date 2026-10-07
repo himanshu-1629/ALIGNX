@@ -191,8 +191,6 @@ const CareerSchema = new Schema<ICareer>(
   }
 );
 
-CareerSchema.index({ slug: 1 });
-CareerSchema.index({ category: 1 });
 CareerSchema.index({ 'locationDemand.location': 1 });
 
 export const Career: Model<ICareer> =

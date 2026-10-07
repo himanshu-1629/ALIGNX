@@ -376,3 +376,183 @@ export const resendInvitation = async (
     next(error);
   }
 };
+
+/**
+ * Add a parent to a family container
+ * POST /api/v1/families/:familyId/parents
+ */
+export const addParentToFamily = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { familyId } = req.params;
+    const { name, relationship, email, phone } = req.body;
+
+    if (!name || !relationship) {
+      throw new AppError('Parent name and relationship are required', 400, 'VALIDATION_ERROR');
+    }
+
+    const family = await Family.findById(familyId);
+    if (!family) {
+      throw new AppError('Family container not found', 404, 'FAMILY_NOT_FOUND');
+    }
+
+    const newParent: IParent = {
+      _id: new mongoose.Types.ObjectId(),
+      name: name.trim(),
+      relationship,
+      status: 'pending',
+      email: email ? email.trim().toLowerCase() : undefined,
+      phone: phone ? phone.trim() : undefined
+    };
+
+    family.parents.push(newParent);
+    await family.save();
+
+    sendSuccess({
+      res,
+      statusCode: 201,
+      message: 'Parent added to family successfully',
+      data: {
+        parentId: newParent._id,
+        relationship: newParent.relationship,
+        status: newParent.status
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Generate invitation for an existing parent
+ * POST /api/v1/parents/:parentId/invitation
+ */
+export const generateParentInvitation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { parentId } = req.params;
+
+    const family = await Family.findOne({ 'parents._id': parentId });
+    if (!family) {
+      throw new AppError('Parent or family not found', 404, 'PARENT_NOT_FOUND');
+    }
+
+    const parent = family.parents.find((p) => p._id && p._id.toString() === parentId);
+    if (!parent) {
+      throw new AppError('Parent not found in family', 404, 'PARENT_NOT_FOUND');
+    }
+
+    const rawToken = crypto.randomBytes(24).toString('hex');
+    const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+    const expiresAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+
+    const invitation = new ParentInvitation({
+      studentId: family.studentId,
+      familyId: family._id,
+      parentId: parent._id,
+      token: rawToken,
+      tokenHash,
+      expiresAt,
+      status: 'pending'
+    });
+
+    await invitation.save();
+
+    sendSuccess({
+      res,
+      statusCode: 201,
+      message: 'Invitation generated successfully',
+      data: {
+        invitationUrl: `/parent/invite/${rawToken}`,
+        invitationToken: rawToken,
+        expiresAt
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Get parent status for a family
+ * GET /api/v1/families/:familyId/parents/status
+ */
+export const getFamilyParentStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { familyId } = req.params;
+
+    const family = await Family.findById(familyId);
+    if (!family) {
+      throw new AppError('Family not found', 404, 'FAMILY_NOT_FOUND');
+    }
+
+    const parentStatuses = family.parents.map((p) => ({
+      parentId: p._id,
+      relationship: p.relationship,
+      status: p.status
+    }));
+
+    sendSuccess({
+      res,
+      statusCode: 200,
+      message: 'Family parent status retrieved',
+      data: parentStatuses
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Calculate or recalculate family analysis
+ * POST /api/v1/families/:familyId/analyze
+ */
+export const calculateFamilyAnalysis = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { familyId } = req.params;
+
+    const family = await Family.findById(familyId);
+    if (!family) {
+      throw new AppError('Family not found', 404, 'FAMILY_NOT_FOUND');
+    }
+
+    const student = await Student.findById(family.studentId);
+    if (!student) {
+      throw new AppError('Student profile not found for this family', 404, 'STUDENT_NOT_FOUND');
+    }
+
+    // Run aggregations
+    family.combinedFinancialContext = calculateAggregateFinancials(family);
+    family.alignmentAnalysis = calculateConflictIndexAndAlignment(student, family);
+
+    await family.save();
+
+    sendSuccess({
+      res,
+      statusCode: 200,
+      message: 'Family alignment analysis calculated successfully',
+      data: {
+        financialFit: family.alignmentAnalysis.financialFit,
+        familyAlignment: family.alignmentAnalysis.familyAlignment,
+        conflictIndex: family.alignmentAnalysis.conflictIndex
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

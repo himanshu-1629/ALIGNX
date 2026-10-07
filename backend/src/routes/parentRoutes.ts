@@ -4,7 +4,8 @@ import {
   getInvitationDetails,
   submitParentForm,
   getParentStatus,
-  resendInvitation
+  resendInvitation,
+  generateParentInvitation
 } from '../controllers/parentController';
 import {
   validateAddParent,
@@ -18,11 +19,13 @@ const router = Router();
 // 1. PUBLIC ROUTES (For Parents - Passwordless)
 // ==========================================
 
-// Open & verify invitation link
+// Open & verify invitation link (Supports both /invite/:token and /invitation/:token)
 router.get('/invite/:token', getInvitationDetails);
+router.get('/invitation/:token', getInvitationDetails);
 
 // Submit parent financial profile & expectations
 router.post('/invite/:token/submit', validateParentSubmission, submitParentForm);
+router.post('/invitation/:token/submit', validateParentSubmission, submitParentForm);
 
 // ==========================================
 // 2. PROTECTED ROUTES (For Students - JWT Auth)
@@ -30,6 +33,9 @@ router.post('/invite/:token/submit', validateParentSubmission, submitParentForm)
 
 // Add a parent & generate invitation link
 router.post('/invite', authenticate, validateAddParent, addParentAndInvite);
+
+// Generate invitation for specific parent ID
+router.post('/:parentId/invitation', generateParentInvitation);
 
 // Live status of all parents & family alignment
 router.get('/status', authenticate, getParentStatus);

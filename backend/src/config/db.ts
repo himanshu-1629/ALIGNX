@@ -19,16 +19,32 @@ export const connectDB = async (): Promise<typeof mongoose> => {
 
   try {
     const conn = await mongoose.connect(mongoUri, {
-      dbName: dbName
+      dbName: dbName,
+      serverSelectionTimeoutMS: 5000
     });
 
-    console.log(`[MongoDB] Connected successfully to Atlas Cluster: ${conn.connection.host}`);
+    console.log(`[MongoDB] Connected successfully to Primary Cluster: ${conn.connection.host}`);
     console.log(`[MongoDB] Active Database: ${conn.connection.name}`);
 
     return conn;
   } catch (error) {
-    console.error('[MongoDB] Connection error:', error);
-    throw error;
+    console.warn(`[MongoDB] Primary Cluster unavailable (${(error as Error).message}).`);
+    console.log(`[MongoDB] Attempting connection to local instance (127.0.0.1:27017)...`);
+
+    try {
+      const localUri = `mongodb://127.0.0.1:27017/${dbName}`;
+      const conn = await mongoose.connect(localUri, {
+        serverSelectionTimeoutMS: 3000
+      });
+
+      console.log(`[MongoDB] Connected to Local Database: ${conn.connection.host}`);
+      console.log(`[MongoDB] Active Database: ${conn.connection.name}`);
+
+      return conn;
+    } catch (localError) {
+      console.error('[MongoDB] Both primary and local MongoDB connections failed:', error);
+      throw error;
+    }
   }
 };
 
