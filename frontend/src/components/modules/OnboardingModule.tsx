@@ -9,24 +9,54 @@ interface OnboardingModuleProps {
   onComplete: (profile: StudentProfile) => void;
   currentUser?: { id: string; name: string; email: string } | null;
   onRequireAuth?: () => void;
+  draftProfile?: StudentProfile;
+  onUpdateDraft?: (profileUpdates: Partial<StudentProfile>) => void;
 }
 
-export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, currentUser, onRequireAuth }) => {
-  const [name, setName] = useState(currentUser?.name || 'Daksh');
-  const [stage, setStage] = useState<LifeStage>('ug');
-  const [currentField, setCurrentField] = useState('Computer Science & Engineering');
-  const [location, setLocation] = useState('Chennai / Vellore');
-  const [budgetAnnualLakhs, setBudgetAnnualLakhs] = useState<number>(12);
-  const [riskTolerance, setRiskTolerance] = useState<'low' | 'moderate' | 'high'>('moderate');
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([
-    'Artificial Intelligence',
-    'Hardware & Silicon Systems',
-    'Quantitative Algorithms'
-  ]);
-  const [selectedAspirations, setSelectedAspirations] = useState<string[]>([
-    'Architect frontier technology systems',
-    'Attain early financial leverage'
-  ]);
+export const OnboardingModule: React.FC<OnboardingModuleProps> = ({
+  onComplete,
+  currentUser,
+  onRequireAuth,
+  draftProfile,
+  onUpdateDraft
+}) => {
+  const [name, setName] = useState(draftProfile?.name || currentUser?.name || 'Daksh');
+  const [stage, setStage] = useState<LifeStage>(draftProfile?.stage || 'ug');
+  const [currentField, setCurrentField] = useState(draftProfile?.currentField || 'Computer Science & Engineering');
+  const [location, setLocation] = useState(draftProfile?.location || 'Chennai / Vellore');
+  const [budgetAnnualLakhs, setBudgetAnnualLakhs] = useState<number>(draftProfile?.budgetAnnualLakhs ?? 12);
+  const [riskTolerance, setRiskTolerance] = useState<'low' | 'moderate' | 'high'>(draftProfile?.riskTolerance || 'moderate');
+  const [selectedInterests, setSelectedInterests] = useState<string[]>(
+    draftProfile?.interests && draftProfile.interests.length > 0
+      ? draftProfile.interests
+      : [
+          'Artificial Intelligence',
+          'Hardware & Silicon Systems',
+          'Quantitative Algorithms'
+        ]
+  );
+  const [selectedAspirations, setSelectedAspirations] = useState<string[]>(
+    draftProfile?.aspirations && draftProfile.aspirations.length > 0
+      ? draftProfile.aspirations
+      : [
+          'Architect frontier technology systems',
+          'Attain early financial leverage'
+        ]
+  );
+
+  // Sync state if draftProfile changes externally
+  React.useEffect(() => {
+    if (draftProfile) {
+      if (draftProfile.name !== undefined) setName(draftProfile.name);
+      if (draftProfile.stage !== undefined) setStage(draftProfile.stage);
+      if (draftProfile.currentField !== undefined) setCurrentField(draftProfile.currentField);
+      if (draftProfile.location !== undefined) setLocation(draftProfile.location);
+      if (draftProfile.budgetAnnualLakhs !== undefined) setBudgetAnnualLakhs(draftProfile.budgetAnnualLakhs);
+      if (draftProfile.riskTolerance !== undefined) setRiskTolerance(draftProfile.riskTolerance);
+      if (draftProfile.interests !== undefined) setSelectedInterests(draftProfile.interests);
+      if (draftProfile.aspirations !== undefined) setSelectedAspirations(draftProfile.aspirations);
+    }
+  }, [draftProfile]);
 
   const interestOptions = [
     'Artificial Intelligence',
@@ -47,16 +77,50 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, 
     'Secure prestigious global placement'
   ];
 
+  const handleNameChange = (val: string) => {
+    setName(val);
+    onUpdateDraft?.({ name: val });
+  };
+
+  const handleStageChange = (val: LifeStage) => {
+    setStage(val);
+    onUpdateDraft?.({ stage: val });
+  };
+
+  const handleFieldChange = (val: string) => {
+    setCurrentField(val);
+    onUpdateDraft?.({ currentField: val });
+  };
+
+  const handleLocationChange = (val: string) => {
+    setLocation(val);
+    onUpdateDraft?.({ location: val });
+  };
+
+  const handleBudgetChange = (val: number) => {
+    setBudgetAnnualLakhs(val);
+    onUpdateDraft?.({ budgetAnnualLakhs: val });
+  };
+
+  const handleRiskChange = (val: 'low' | 'moderate' | 'high') => {
+    setRiskTolerance(val);
+    onUpdateDraft?.({ riskTolerance: val });
+  };
+
   const toggleInterest = (item: string) => {
-    setSelectedInterests(prev => 
-      prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]
-    );
+    const updated = selectedInterests.includes(item)
+      ? selectedInterests.filter(i => i !== item)
+      : [...selectedInterests, item];
+    setSelectedInterests(updated);
+    onUpdateDraft?.({ interests: updated });
   };
 
   const toggleAspiration = (item: string) => {
-    setSelectedAspirations(prev => 
-      prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]
-    );
+    const updated = selectedAspirations.includes(item)
+      ? selectedAspirations.filter(i => i !== item)
+      : [...selectedAspirations, item];
+    setSelectedAspirations(updated);
+    onUpdateDraft?.({ aspirations: updated });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -139,7 +203,7 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, 
               <input
                 type="text"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={e => handleNameChange(e.target.value)}
                 required
                 style={{
                   width: '100%',
@@ -160,7 +224,7 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, 
               <input
                 type="text"
                 value={currentField}
-                onChange={e => setCurrentField(e.target.value)}
+                onChange={e => handleFieldChange(e.target.value)}
                 required
                 style={{
                   width: '100%',
@@ -181,7 +245,7 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, 
               <input
                 type="text"
                 value={location}
-                onChange={e => setLocation(e.target.value)}
+                onChange={e => handleLocationChange(e.target.value)}
                 required
                 style={{
                   width: '100%',
@@ -209,7 +273,7 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, 
             ].map(item => (
               <div
                 key={item.id}
-                onClick={() => setStage(item.id)}
+                onClick={() => handleStageChange(item.id)}
                 className={`alignx-key ${stage === item.id ? 'active' : ''}`}
                 style={{
                   flexDirection: 'column',
@@ -253,7 +317,7 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, 
                 max="35"
                 step="1"
                 value={budgetAnnualLakhs}
-                onChange={e => setBudgetAnnualLakhs(Number(e.target.value))}
+                onChange={e => handleBudgetChange(Number(e.target.value))}
                 style={{ width: '100%', accentColor: 'var(--accent)', cursor: 'pointer' }}
               />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '4px' }}>
@@ -272,7 +336,7 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({ onComplete, 
                   <button
                     type="button"
                     key={level}
-                    onClick={() => setRiskTolerance(level)}
+                    onClick={() => handleRiskChange(level)}
                     className={`alignx-key ${riskTolerance === level ? 'active' : ''}`}
                     style={{ flex: 1, justifyContent: 'center' }}
                   >

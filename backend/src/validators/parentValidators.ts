@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../middleware/errorHandler';
 
 const VALID_RELATIONSHIPS = ['Father', 'Mother', 'Guardian', 'Other'];
-const VALID_RISK_LEVELS = ['low', 'medium', 'high'];
+const VALID_RISK_LEVELS = ['low', 'medium', 'moderate', 'high'];
 
 export const validateAddParent = (
   req: Request,
@@ -45,7 +45,17 @@ export const validateParentSubmission = (
   res: Response,
   next: NextFunction
 ): void => {
-  const { educationBudget, riskAppetite, stabilityPreference } = req.body;
+  let { educationBudget, riskAppetite, stabilityPreference } = req.body;
+
+  // Normalize 'moderate' -> 'medium'
+  if (riskAppetite === 'moderate') {
+    riskAppetite = 'medium';
+    req.body.riskAppetite = 'medium';
+  }
+  if (stabilityPreference === 'moderate') {
+    stabilityPreference = 'medium';
+    req.body.stabilityPreference = 'medium';
+  }
 
   if (educationBudget === undefined || typeof educationBudget !== 'number' || educationBudget < 0) {
     return next(
@@ -59,14 +69,14 @@ export const validateParentSubmission = (
 
   if (riskAppetite && !VALID_RISK_LEVELS.includes(riskAppetite)) {
     return next(
-      new AppError('Risk appetite must be "low", "medium", or "high"', 400, 'INVALID_RISK_APPETITE')
+      new AppError('Risk appetite must be "low", "medium", "moderate", or "high"', 400, 'INVALID_RISK_APPETITE')
     );
   }
 
   if (stabilityPreference && !VALID_RISK_LEVELS.includes(stabilityPreference)) {
     return next(
       new AppError(
-        'Stability preference must be "low", "medium", or "high"',
+        'Stability preference must be "low", "medium", "moderate", or "high"',
         400,
         'INVALID_STABILITY_PREFERENCE'
       )

@@ -53,6 +53,8 @@ export const calculateStudentFit = (student: IStudent, career: ICareer): number 
     let totalWeight = 0;
     let earnedWeight = 0;
 
+    const studentBranch = (student.branch || '').toLowerCase();
+
     career.requiredSkills.forEach((req) => {
       const weight = req.importance || 70;
       totalWeight += weight;
@@ -69,19 +71,41 @@ export const calculateStudentFit = (student: IStudent, career: ICareer): number 
         const ratio = Math.min(1.25, matchedSkill.proficiency / benchmark);
         earnedWeight += Math.min(100, ratio * 100) * (weight / 100);
       } else {
-        // Transferable readiness check from domain interests
+        // Transferable readiness check from domain interests, branch, or cognitive aptitude profile
         const hasDomainOverlap = (student.interests || []).some((i) => {
           const iName = i.name.toLowerCase();
           const syns = DOMAIN_SYNONYMS[iName] || [iName];
-          return i.category === 'domain' && syns.some((syn) => reqName.includes(syn) || syn.includes(reqName) || careerText.includes(syn));
+          return syns.some((syn) => reqName.includes(syn) || syn.includes(reqName) || careerText.includes(syn));
         });
 
-        if (hasDomainOverlap) {
-          earnedWeight += 88 * (weight / 100); // High domain interest transfer
-        } else if (student.aptitudeSnapshot && (student.aptitudeSnapshot.logical >= 85 || student.aptitudeSnapshot.analytical >= 85)) {
-          earnedWeight += 45 * (weight / 100); // Moderate cognitive capability baseline
+        const hasBranchOverlap = studentBranch && (
+          careerText.includes(studentBranch) ||
+          reqName.includes(studentBranch) ||
+          (studentBranch.includes('computer') && (reqName.includes('python') || reqName.includes('data') || reqName.includes('ai') || reqName.includes('cloud'))) ||
+          (studentBranch.includes('electr') && (reqName.includes('circuit') || reqName.includes('embedded') || reqName.includes('hardware') || reqName.includes('vlsi'))) ||
+          (studentBranch.includes('mech') && (reqName.includes('robot') || reqName.includes('cad') || reqName.includes('system')))
+        );
+
+        if (hasDomainOverlap || hasBranchOverlap) {
+          earnedWeight += 86 * (weight / 100); // High domain / academic branch readiness
+        } else if (student.aptitudeSnapshot) {
+          // Dynamically map transferable capability from specific cognitive aptitude vectors
+          const snap = student.aptitudeSnapshot;
+          let aptitudeTransfer = 50;
+
+          if (reqName.includes('hardware') || reqName.includes('circuit') || reqName.includes('cad') || reqName.includes('spatial') || reqName.includes('vlsi')) {
+            aptitudeTransfer = Math.round((snap.spatial || 70) * 0.6 + (snap.logical || 70) * 0.4);
+          } else if (reqName.includes('quantitative') || reqName.includes('statist') || reqName.includes('math') || reqName.includes('econom') || reqName.includes('algori')) {
+            aptitudeTransfer = Math.round((snap.numerical || 70) * 0.6 + (snap.analytical || 70) * 0.4);
+          } else if (reqName.includes('product') || reqName.includes('design') || reqName.includes('verbal') || reqName.includes('ethic') || reqName.includes('strategy')) {
+            aptitudeTransfer = Math.round((snap.verbal || 70) * 0.5 + (snap.analytical || 70) * 0.5);
+          } else {
+            aptitudeTransfer = Math.round((snap.analytical || 70) * 0.5 + (snap.logical || 70) * 0.5);
+          }
+
+          earnedWeight += Math.min(88, Math.max(30, aptitudeTransfer * 0.82)) * (weight / 100);
         } else {
-          earnedWeight += 20 * (weight / 100); // Minimal baseline
+          earnedWeight += 35 * (weight / 100); // Neutral exploratory baseline
         }
       }
     });
@@ -123,15 +147,25 @@ export const calculateStudentFit = (student: IStudent, career: ICareer): number 
   let riasecMatch = 55;
   let domainMatch = 30;
 
+  // Support both Mongoose Array format and raw Object format from JSON seeds
+  const careerTraits: Array<{ interest: string; importance: number }> = Array.isArray(career.interestProfile)
+    ? career.interestProfile
+    : (career.interestProfile && typeof career.interestProfile === 'object')
+    ? Object.entries(career.interestProfile).map(([interest, importance]) => ({
+        interest: interest.charAt(0).toUpperCase() + interest.slice(1),
+        importance: typeof importance === 'number' ? importance : 70
+      }))
+    : [];
+
   // C1. RIASEC Holland Correlation (55% of interest component)
-  if (career.interestProfile && career.interestProfile.length > 0) {
+  if (careerTraits.length > 0) {
     const riasecInterests = (student.interests || []).filter((i) => i.category === 'riasec');
     const traitScores = student.careerDna?.traitScores;
 
     let weightedDiffSum = 0;
     let totalWeight = 0;
 
-    const sortedCareerTraits = [...career.interestProfile].sort((a, b) => (b.importance || 70) - (a.importance || 70));
+    const sortedCareerTraits = [...careerTraits].sort((a, b) => (b.importance || 70) - (a.importance || 70));
 
     sortedCareerTraits.forEach((cp, idx) => {
       const dimName = cp.interest.toLowerCase();
@@ -193,7 +227,13 @@ export const calculateStudentFit = (student: IStudent, career: ICareer): number 
       domainMatch = 25; // Distinct penalty when student's stated passions have zero overlap
     }
   } else {
-    domainMatch = 65; // Baseline when student entered no explicit domain interests
+    // Dynamic domain affinity inferred from student branch
+    const sBranch = (student.branch || '').toLowerCase();
+    if (sBranch && careerText.includes(sBranch)) {
+      domainMatch = 88;
+    } else {
+      domainMatch = 65; // Baseline when student entered no explicit domain interests
+    }
   }
 
   interestMatch = Math.round(riasecMatch * 0.55 + domainMatch * 0.45);
@@ -463,10 +503,29 @@ export const rankAllCareers = (
     };
   });
 
-  // Sort descending by overallScore
-  results.sort((a, b) => b.overallScore - a.overallScore);
+  // Sort descending with deterministic floating-point tie-breaking across 5 dimensions
+  results.sort((a, b) => {
+    const rawA =
+      a.components.studentFit * weights.studentFit +
+      a.components.financialFit * weights.financialFit +
+      a.components.familyAlignment * weights.familyAlignment +
+      a.components.marketFit * weights.marketFit +
+      a.components.locationFit * weights.locationFit;
 
-  // Assign ranks
+    const rawB =
+      b.components.studentFit * weights.studentFit +
+      b.components.financialFit * weights.financialFit +
+      b.components.familyAlignment * weights.familyAlignment +
+      b.components.marketFit * weights.marketFit +
+      b.components.locationFit * weights.locationFit;
+
+    if (Math.abs(rawB - rawA) > 0.05) return rawB - rawA;
+    if (b.components.studentFit !== a.components.studentFit) return b.components.studentFit - a.components.studentFit;
+    if (b.components.marketFit !== a.components.marketFit) return b.components.marketFit - a.components.marketFit;
+    return b.components.financialFit - a.components.financialFit;
+  });
+
+  // Assign distinct ranks
   results.forEach((item, index) => {
     item.rank = index + 1;
   });

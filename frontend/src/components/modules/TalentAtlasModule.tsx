@@ -50,20 +50,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Bengaluru Corridor',
     zone: 'South',
     tagline: 'DeepTech, AI Infrastructure & Global Innovation Alliances',
-    startingCtcLakhs: 18.5,
-    fiveYearCtcLakhs: 38.0,
+    startingCtcLakhs: 11.9,
+    fiveYearCtcLakhs: 28.3,
     hiringVelocity: 38,
     arbitrageYield: '1.85x Tech Alpha (High Urban Capex)',
     topCareers: [
-      { title: 'AI & Machine Learning Engineer', domain: 'AI & Data Science', surge: '+42%', avgCtc: 21.5 },
-      { title: 'Autonomous Robotics & Drone Architect', domain: 'Robotics & Hardware', surge: '+34%', avgCtc: 18.0 },
-      { title: 'Cloud & Distributed Systems Architect', domain: 'Software & Cloud', surge: '+29%', avgCtc: 19.5 },
-      { title: 'Semiconductor VLSI Physical Design', domain: 'Hardware Systems', surge: '+36%', avgCtc: 17.0 }
+      { title: 'AI & Machine Learning Engineer', domain: 'AI & Data Science', surge: '+42%', avgCtc: 12.8 },
+      { title: 'VLSI & Semiconductor Design Engineer', domain: 'Hardware Systems', surge: '+36%', avgCtc: 12.8 },
+      { title: 'Technical Product Manager (AI & STEAM)', domain: 'Product Management', surge: '+32%', avgCtc: 11.5 },
+      { title: 'Satellite Communications & Space Tech Engineer', domain: 'SpaceTech & Defense', surge: '+30%', avgCtc: 10.3 }
     ],
     keyHubs: ['Whitefield', 'Electronic City', 'Outer Ring Road', 'Koramangala'],
     keyEmployers: ['Google DeepMind Lab', 'NVIDIA Research', 'Infosys Center of AI', 'ISRO Tech Base', 'Flipkart'],
     feederInstitutes: ['IISc Bengaluru', 'IIIT-Bangalore', 'RV College of Engineering', 'BMS College'],
-    deficitTag: 'CRITICAL: GPU Kernel Developers & Distributed ML Engineers'
+    deficitTag: 'CRITICAL: GPU Kernel Developers & Distributed ML Engineers',
+    plfs: { lfpr: 45.4, ur: 2.7, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 77.84, city: 'Bengaluru (77.8%)', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 680, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'maharashtra',
@@ -71,20 +74,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Mumbai · Pune Twin Cluster',
     zone: 'West',
     tagline: 'Capital Markets, Quantitative Finance & Mechatronic EV R&D',
-    startingCtcLakhs: 17.2,
-    fiveYearCtcLakhs: 35.5,
+    startingCtcLakhs: 11.3,
+    fiveYearCtcLakhs: 25.9,
     hiringVelocity: 29,
     arbitrageYield: '1.70x Capital Alpha (Tier-1 Financial Nexus)',
     topCareers: [
-      { title: 'Quantitative Algorithm Strategist', domain: 'Quantitative Finance', surge: '+44%', avgCtc: 24.0 },
-      { title: 'Electric Vehicle & Battery Mechatronics', domain: 'Hardware Systems', surge: '+31%', avgCtc: 16.5 },
-      { title: 'Cyber Defense & Cryptographic Security', domain: 'Cybersecurity', surge: '+28%', avgCtc: 17.8 },
-      { title: 'FinTech Distributed Systems Architect', domain: 'Software & Cloud', surge: '+26%', avgCtc: 18.2 }
+      { title: 'Fintech Quantitative & Algorithmic Analyst', domain: 'Quantitative Finance', surge: '+44%', avgCtc: 18.0 },
+      { title: 'Electric Vehicle & Battery Systems Engineer', domain: 'Automotive & CleanTech', surge: '+31%', avgCtc: 8.8 },
+      { title: 'Robotics & Autonomous Systems Engineer', domain: 'Hardware Systems', surge: '+29%', avgCtc: 9.0 },
+      { title: 'Cybersecurity & Cryptographic Analyst', domain: 'Cybersecurity', surge: '+28%', avgCtc: 9.5 }
     ],
     keyHubs: ['BKC Mumbai', 'Hinjawadi Pune', 'Powai Tech Cluster', 'Chakan Auto Hub'],
     keyEmployers: ['Tower Research', 'Goldman Sachs Tech', 'Tata Motors EV Lab', 'Morgan Stanley', 'NPCI'],
     feederInstitutes: ['IIT Bombay', 'COEP Technological University', 'VJTI Mumbai', 'SPIT Mumbai'],
-    deficitTag: 'CRITICAL: High-Frequency Trading Systems & Battery Chemistry'
+    deficitTag: 'CRITICAL: High-Frequency Trading Systems & Battery Chemistry',
+    plfs: { lfpr: 46.8, ur: 3.3, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 78.92, city: 'Pune (78.9%) · Mumbai (75.1%)', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 390, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'telangana',
@@ -92,20 +98,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Hyderabad Cyber-Corridor',
     zone: 'South',
     tagline: 'Bio-Computing, Cloud Hyperscalers & Semiconductor Packaging',
-    startingCtcLakhs: 15.8,
-    fiveYearCtcLakhs: 32.0,
+    startingCtcLakhs: 9.5,
+    fiveYearCtcLakhs: 22.5,
     hiringVelocity: 33,
     arbitrageYield: '2.15x CoL Arbitrage (Optimized Living Yield)',
     topCareers: [
-      { title: 'Computational Biologist & Genomic Analyst', domain: 'Biotech & Health', surge: '+37%', avgCtc: 16.0 },
-      { title: 'Cloud Infrastructure & DevOps Engineer', domain: 'Software & Cloud', surge: '+31%', avgCtc: 17.0 },
-      { title: 'Advanced Semiconductor Verification', domain: 'Hardware Systems', surge: '+35%', avgCtc: 15.5 },
-      { title: 'Enterprise Generative AI Integrator', domain: 'AI & Data Science', surge: '+39%', avgCtc: 18.5 }
+      { title: 'Bioinformatics & Genomic Data Scientist', domain: 'Biotech & Health', surge: '+37%', avgCtc: 8.0 },
+      { title: 'Computational Biologist & Drug Discovery Specialist', domain: 'Biotech & Health', surge: '+35%', avgCtc: 8.5 },
+      { title: 'Data Platform & Cloud Engineer', domain: 'Software & Cloud', surge: '+33%', avgCtc: 11.3 },
+      { title: 'Satellite Communications & Space Tech Engineer', domain: 'SpaceTech & Defense', surge: '+31%', avgCtc: 10.3 }
     ],
     keyHubs: ['HITEC City', 'Financial District', 'Genome Valley', 'Gachibowli'],
     keyEmployers: ['Microsoft IDC', 'Amazon Web Services', 'Dr. Reddy’s Digital Lab', 'Qualcomm', 'Novartis'],
     feederInstitutes: ['IIT Hyderabad', 'IIIT-Hyderabad', 'BITS Pilani Hyderabad', 'JNTU'],
-    deficitTag: 'CRITICAL: Bioinformaticians & ASIC Verification Leads'
+    deficitTag: 'CRITICAL: Bioinformaticians & ASIC Verification Leads',
+    plfs: { lfpr: 48.0, ur: 4.8, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 76.20, city: 'Hyderabad (76.2%)', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 420, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'delhi_ncr',
@@ -113,20 +122,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Gurugram · Noida Metro Area',
     zone: 'North',
     tagline: 'Consumer Scale Platforms, GovTech & AI Product Management',
-    startingCtcLakhs: 16.4,
-    fiveYearCtcLakhs: 33.5,
+    startingCtcLakhs: 10.0,
+    fiveYearCtcLakhs: 23.5,
     hiringVelocity: 27,
     arbitrageYield: '1.75x Scale Alpha (National Capital Ecosystem)',
     topCareers: [
-      { title: 'Product Management Systems Architect', domain: 'Design & Product', surge: '+30%', avgCtc: 19.0 },
-      { title: 'Data Platform & Analytics Engineer', domain: 'AI & Data Science', surge: '+28%', avgCtc: 17.5 },
-      { title: 'Zero-Trust Cyber Defense Specialist', domain: 'Cybersecurity', surge: '+33%', avgCtc: 16.8 },
-      { title: 'Supply Chain AI & Logistics Optimizer', domain: 'Enterprise Tech', surge: '+25%', avgCtc: 15.5 }
+      { title: 'Technical Product Manager (AI & STEAM)', domain: 'Product Management', surge: '+32%', avgCtc: 11.5 },
+      { title: 'Data Platform & Cloud Engineer', domain: 'AI & Data Science', surge: '+28%', avgCtc: 11.3 },
+      { title: 'Cybersecurity & Cryptographic Analyst', domain: 'Cybersecurity', surge: '+33%', avgCtc: 9.5 },
+      { title: 'Climate Tech & Carbon Systems Engineer', domain: 'CleanTech & Climate', surge: '+25%', avgCtc: 7.5 }
     ],
     keyHubs: ['Cyber City Gurugram', 'Golf Course Ext.', 'Sector 62 Noida', 'Aerocity'],
     keyEmployers: ['Zomato Tech', 'Paytm Core', 'Airtel Digital', 'Adobe India', 'Samsung R&D'],
     feederInstitutes: ['IIT Delhi', 'DTU', 'NSUT Delhi', 'IIIT-Delhi'],
-    deficitTag: 'CRITICAL: High-Concurrency Backend & Cyber Forensics'
+    deficitTag: 'CRITICAL: High-Concurrency Backend & Cyber Forensics',
+    plfs: { lfpr: 36.0, ur: 2.1, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 76.80, city: 'Gurugram · Noida', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 310, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'tamil_nadu',
@@ -134,20 +146,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Chennai · Coimbatore Belt',
     zone: 'South',
     tagline: 'SaaS Powerhouse, Industrial IoT & Renewable Mobility Hub',
-    startingCtcLakhs: 14.2,
-    fiveYearCtcLakhs: 29.5,
+    startingCtcLakhs: 10.5,
+    fiveYearCtcLakhs: 23.8,
     hiringVelocity: 25,
     arbitrageYield: '2.20x Stability Yield (Low Attrition Cluster)',
     topCareers: [
-      { title: 'Enterprise SaaS Full-Stack Architect', domain: 'Software & Cloud', surge: '+28%', avgCtc: 16.0 },
-      { title: 'Embedded Systems & Firmware Engineer', domain: 'Hardware & Robotics', surge: '+32%', avgCtc: 15.0 },
-      { title: 'Renewable Power Grid Systems Architect', domain: 'CleanTech & Energy', surge: '+35%', avgCtc: 14.5 },
-      { title: 'Industrial Robotics Automation Engineer', domain: 'Hardware Systems', surge: '+27%', avgCtc: 14.0 }
+      { title: 'Electric Vehicle & Battery Systems Engineer', domain: 'CleanTech & EV', surge: '+35%', avgCtc: 8.8 },
+      { title: 'Robotics & Autonomous Systems Engineer', domain: 'Hardware Systems', surge: '+28%', avgCtc: 9.0 },
+      { title: 'Satellite Communications & Space Tech Engineer', domain: 'SpaceTech & Defense', surge: '+32%', avgCtc: 10.3 },
+      { title: 'Quantum Computing & Algorithms Researcher', domain: 'DeepTech & Quantum', surge: '+27%', avgCtc: 14.0 }
     ],
     keyHubs: ['OMR Tech Corridor', 'Sriperumbudur Industrial SEZ', 'Taramani', 'Coimbatore IT Hub'],
     keyEmployers: ['Zoho Corporation', 'Freshworks', 'Ather Energy R&D', 'Ford Global Tech', 'Hyundai R&D'],
     feederInstitutes: ['IIT Madras', 'Anna University', 'PSG College of Technology', 'NIT Trichy'],
-    deficitTag: 'CRITICAL: Embedded Real-Time Firmware & EV Powertrain'
+    deficitTag: 'CRITICAL: Embedded Real-Time Firmware & EV Powertrain',
+    plfs: { lfpr: 47.2, ur: 3.5, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 73.80, city: 'Chennai · Coimbatore', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 290, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'gujarat',
@@ -155,20 +170,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'GIFT City · Ahmedabad · Sanand',
     zone: 'West',
     tagline: 'International FinTech SEZ, Green Hydrogen & Silicon Fabs',
-    startingCtcLakhs: 14.8,
-    fiveYearCtcLakhs: 31.0,
+    startingCtcLakhs: 10.6,
+    fiveYearCtcLakhs: 24.2,
     hiringVelocity: 41,
     arbitrageYield: '2.35x High Growth Yield (Fastest Expanding Hub)',
     topCareers: [
-      { title: 'GIFT City Cross-Border Quant Analyst', domain: 'Quantitative Finance', surge: '+48%', avgCtc: 21.0 },
-      { title: 'Semiconductor Fabrication Operations', domain: 'Hardware Systems', surge: '+45%', avgCtc: 16.5 },
-      { title: 'Clean Hydrogen & Energy Systems Lead', domain: 'CleanTech & Energy', surge: '+38%', avgCtc: 15.0 },
-      { title: 'Chemical Data & Materials Modeler', domain: 'Biotech & Health', surge: '+29%', avgCtc: 13.5 }
+      { title: 'Renewable Energy & Smart Grid Engineer', domain: 'CleanTech & Energy', surge: '+45%', avgCtc: 8.3 },
+      { title: 'Fintech Quantitative & Algorithmic Analyst', domain: 'Quantitative Finance', surge: '+48%', avgCtc: 18.0 },
+      { title: 'Electric Vehicle & Battery Systems Engineer', domain: 'Hardware & EV', surge: '+38%', avgCtc: 8.8 },
+      { title: 'Climate Tech & Carbon Systems Engineer', domain: 'Climate Tech', surge: '+29%', avgCtc: 7.5 }
     ],
     keyHubs: ['GIFT City SEZ Gandhinagar', 'Sanand Industrial Cluster', 'Dholera Special Region'],
     keyEmployers: ['Tata Semiconductor Fab', 'NSE International Exchange', 'Adani Clean Energy', 'Micron Assembly'],
     feederInstitutes: ['IIT Gandhinagar', 'SVNIT Surat', 'DA-IICT Gandhinagar', 'Nirma University'],
-    deficitTag: 'CRITICAL: Clean Hydrogen Process Engineers & Fab Yield Leads'
+    deficitTag: 'CRITICAL: Clean Hydrogen Process Engineers & Fab Yield Leads',
+    plfs: { lfpr: 49.6, ur: 1.1, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 72.40, city: 'GIFT City · Ahmedabad', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 85, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'kerala',
@@ -176,21 +194,21 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Kochi · Thiruvananthapuram',
     zone: 'South',
     tagline: 'SpaceTech Ecosystem, Marine Robotics & Digital Health',
-    startingCtcLakhs: 12.8,
-    fiveYearCtcLakhs: 26.0,
+    startingCtcLakhs: 9.1,
+    fiveYearCtcLakhs: 20.8,
     hiringVelocity: 23,
     arbitrageYield: '2.50x Quality-of-Life CoL Arbitrage',
     topCareers: [
-      { title: 'Aerospace & Spacecraft Telemetry Engineer', domain: 'Hardware & Robotics', surge: '+34%', avgCtc: 15.0 },
-      { title: 'Spatial Computing & AR/VR Systems Lead', domain: 'Design & Product', surge: '+28%', avgCtc: 13.5 },
-      { title: 'Marine Autonomous Vehicle Engineer', domain: 'Robotics & Hardware', surge: '+30%', avgCtc: 14.0 },
-      { title: 'Digital Health AI Informatics Specialist', domain: 'Biotech & Health', surge: '+26%', avgCtc: 13.0 }
+      { title: 'Aerospace & Avionics Systems Engineer', domain: 'Hardware & SpaceTech', surge: '+34%', avgCtc: 9.5 },
+      { title: 'Satellite Communications & Space Tech Engineer', domain: 'SpaceTech & Defense', surge: '+30%', avgCtc: 10.3 },
+      { title: 'Biomedical & MedTech Device Engineer', domain: 'Biotech & Health', surge: '+28%', avgCtc: 7.5 },
+      { title: 'AR/VR & Spatial Computing Engineer', domain: 'Design & Product', surge: '+26%', avgCtc: 9.0 }
     ],
     keyHubs: ['Technopark Trivandrum', 'Infopark Kochi', 'ISRO Propulsion Cluster'],
     keyEmployers: ['VSSC / ISRO Hub', 'Tata Elxsi Innovation', 'NeST Digital', 'Maker Village Kochi'],
     feederInstitutes: ['IIST Thiruvananthapuram', 'NIT Calicut', 'CET Trivandrum', 'CUSAT'],
     deficitTag: 'CRITICAL: Satellite Avionics & Autonomous Subsea Control',
-    plfs: { lfpr: 39.2, ur: 7.0, source: 'MoSPI PLFS 2023-24' },
+    plfs: { lfpr: 45.4, ur: 7.2, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
     employability: { rate: 76.56, city: 'Kochi (76.6%) · Trivandrum', source: 'Wheebox India Skills Report 2026' },
     gccDensity: { count: 55, source: 'NASSCOM GCC Review 2026' }
   }
@@ -273,82 +291,82 @@ interface PopularCareer {
 
 const NATIONAL_POPULAR_CAREERS: PopularCareer[] = [
   {
-    id: 'ai-ml',
+    id: 'ai_ml_engineer',
     rank: 1,
     title: 'AI & Machine Learning Engineer',
     domain: 'AI & Data Science',
-    nationalSurge: '+41.8%',
-    startingCtc: '₹18 - ₹24 LPA',
-    fiveYearCtc: '₹38 - ₹65 LPA',
-    popularityScore: 98,
-    topStates: ['Karnataka', 'Telangana', 'Delhi-NCR'],
-    shortageIndex: 'SEVERELY DEFICIENT (-46% Talent Gap)',
-    whyPopular: 'Explosion of Generative AI foundational model training, enterprise automation, and sovereign GPU cloud installations across India.'
+    nationalSurge: '+97.0% Surge',
+    startingCtc: '₹9.5 - ₹16.0 LPA',
+    fiveYearCtc: '₹24.0 - ₹38.0 LPA',
+    popularityScore: 97,
+    topStates: ['Bangalore', 'Hyderabad', 'Pune'],
+    shortageIndex: 'CRITICAL DEFICIT (Risk: MEDIUM)',
+    whyPopular: 'Designs, builds, and deploys scalable machine learning models, neural networks, and generative AI systems into production architectures. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   },
   {
-    id: 'quant-finance',
+    id: 'vlsi_semiconductor_design_engineer',
     rank: 2,
-    title: 'Quantitative Algorithm Strategist',
-    domain: 'Quantitative Finance',
-    nationalSurge: '+38.5%',
-    startingCtc: '₹22 - ₹36 LPA',
-    fiveYearCtc: '₹55 - ₹1.2 Cr LPA',
-    popularityScore: 95,
-    topStates: ['Maharashtra', 'Gujarat (GIFT)', 'Karnataka'],
-    shortageIndex: 'CRITICAL DEFICIT (-52% Talent Gap)',
-    whyPopular: 'Algorithmic trading desks, high-frequency market makers, and GIFT City tax incentives driving record compensation premiums.'
+    title: 'VLSI & Semiconductor Design Engineer',
+    domain: 'Hardware & Semiconductor Systems',
+    nationalSurge: '+96.0% Surge',
+    startingCtc: '₹9.0 - ₹16.5 LPA',
+    fiveYearCtc: '₹22.0 - ₹36.0 LPA',
+    popularityScore: 98,
+    topStates: ['Bangalore', 'Hyderabad', 'Noida / Delhi NCR'],
+    shortageIndex: 'CRITICAL DEFICIT (Risk: LOW)',
+    whyPopular: 'Designs microchips, ASIC architectures, FPGA synthesis blocks, and system-on-chips (SoC) for modern computing and India Semiconductor Mission. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   },
   {
-    id: 'autonomous-robotics',
+    id: 'cybersecurity_analyst',
     rank: 3,
-    title: 'Autonomous Robotics & Drone Architect',
-    domain: 'Hardware & Robotics',
-    nationalSurge: '+34.2%',
-    startingCtc: '₹15 - ₹20 LPA',
-    fiveYearCtc: '₹32 - ₹48 LPA',
-    popularityScore: 92,
-    topStates: ['Karnataka', 'Tamil Nadu', 'Maharashtra'],
-    shortageIndex: 'HIGH DEFICIT (-38% Talent Gap)',
-    whyPopular: 'Defense modernization, precision agricultural drones, and automated warehouse logistics scaling under Make-in-India mandates.'
+    title: 'Cybersecurity & Cryptographic Analyst',
+    domain: 'Software & Cloud Systems',
+    nationalSurge: '+94.0% Surge',
+    startingCtc: '₹7.0 - ₹12.0 LPA',
+    fiveYearCtc: '₹17.0 - ₹27.0 LPA',
+    popularityScore: 94,
+    topStates: ['Bangalore', 'Delhi NCR', 'Hyderabad'],
+    shortageIndex: 'CRITICAL DEFICIT (Risk: LOW)',
+    whyPopular: 'Protects enterprise systems against cyber warfare, vulnerability exploits, and data breaches using zero-trust architecture and cryptographic protocols. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   },
   {
-    id: 'semiconductor-vlsi',
+    id: 'fintech_quantitative_analyst',
     rank: 4,
-    title: 'Semiconductor VLSI & Chip Architect',
-    domain: 'Hardware Systems',
-    nationalSurge: '+39.4%',
-    startingCtc: '₹16 - ₹22 LPA',
-    fiveYearCtc: '₹35 - ₹55 LPA',
-    popularityScore: 90,
-    topStates: ['Karnataka', 'Gujarat', 'Telangana'],
-    shortageIndex: 'CRITICAL DEFICIT (-58% Talent Gap)',
-    whyPopular: 'India Semiconductor Mission (ISM) driving multi-billion dollar fab and ATMP assembly operations across Gujarat, Bengaluru, and Noida.'
+    title: 'Fintech Quantitative & Algorithmic Analyst',
+    domain: 'Quantitative Finance & FinTech',
+    nationalSurge: '+94.0% Surge',
+    startingCtc: '₹12.0 - ₹24.0 LPA',
+    fiveYearCtc: '₹28.0 - ₹50.0 LPA',
+    popularityScore: 95,
+    topStates: ['Mumbai', 'Bangalore', 'Delhi NCR (Gurugram)'],
+    shortageIndex: 'CRITICAL DEFICIT (Risk: HIGH)',
+    whyPopular: 'Constructs high-frequency algorithmic trading strategies, risk variance models, automated market-making algorithms, and quantitative portfolio optimization. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   },
   {
-    id: 'cleantech-energy',
+    id: 'data_platform_engineer',
     rank: 5,
-    title: 'CleanTech & Green Hydrogen Systems Lead',
-    domain: 'CleanTech & Energy',
-    nationalSurge: '+33.0%',
-    startingCtc: '₹14 - ₹19 LPA',
-    fiveYearCtc: '₹28 - ₹42 LPA',
-    popularityScore: 88,
-    topStates: ['Gujarat', 'Tamil Nadu', 'Maharashtra'],
-    shortageIndex: 'MODERATE DEFICIT (-30% Talent Gap)',
-    whyPopular: 'National Green Hydrogen Mission and massive solar-wind grid storage investments creating brand-new engineering disciplines.'
+    title: 'Data Platform & Cloud Engineer',
+    domain: 'AI & Data Science',
+    nationalSurge: '+93.0% Surge',
+    startingCtc: '₹8.5 - ₹14.0 LPA',
+    fiveYearCtc: '₹20.0 - ₹32.0 LPA',
+    popularityScore: 93,
+    topStates: ['Bangalore', 'Hyderabad', 'Pune'],
+    shortageIndex: 'HIGH DEFICIT (Risk: LOW)',
+    whyPopular: 'Constructs high-throughput distributed data pipelines, lakehouses, and stream-processing infrastructure for enterprise analytics. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   },
   {
-    id: 'computational-biology',
+    id: 'electric_vehicle_powertrain_engineer',
     rank: 6,
-    title: 'Computational Biologist & Drug Designer',
-    domain: 'Biotech & Health',
-    nationalSurge: '+31.8%',
-    startingCtc: '₹13 - ₹18 LPA',
-    fiveYearCtc: '₹28 - ₹40 LPA',
-    popularityScore: 85,
-    topStates: ['Telangana', 'Karnataka', 'Maharashtra'],
-    shortageIndex: 'HIGH DEFICIT (-36% Talent Gap)',
-    whyPopular: 'Shift towards AI-driven molecular synthesis and custom genomic medicine, transforming India into a drug discovery capital.'
+    title: 'Electric Vehicle & Battery Systems Engineer',
+    domain: 'CleanTech & Automotive Mobility',
+    nationalSurge: '+92.0% Surge',
+    startingCtc: '₹6.5 - ₹11.0 LPA',
+    fiveYearCtc: '₹16.0 - ₹27.0 LPA',
+    popularityScore: 94,
+    topStates: ['Pune', 'Chennai', 'Bangalore'],
+    shortageIndex: 'CRITICAL DEFICIT (Risk: LOW)',
+    whyPopular: 'Develops EV traction motor controllers, high-voltage battery management systems (BMS), regenerative braking, and thermal runaway prevention. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   }
 ];
 
@@ -560,25 +578,26 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
           <button
             onClick={() => onStartAssessment('onboarding')}
             style={{
-              height: '38px',
-              padding: '0 20px',
-              backgroundColor: '#181816',
-              color: '#F6F5F1',
+              height: '40px',
+              padding: '0 22px',
+              backgroundColor: '#2D5A43',
+              color: '#FFFFFF',
               border: 'none',
               borderRadius: '0px',
               fontFamily: "'Martian Mono', monospace",
               fontSize: '11px',
-              fontWeight: 600,
+              fontWeight: 700,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              transition: 'background-color 0.2s ease'
+              transition: 'background-color 0.2s ease',
+              boxShadow: '0 2px 8px rgba(45, 90, 67, 0.15)'
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#181816')}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#234735')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
           >
             <span>■</span>
             <span>START CALIBRATED ASSESSMENT</span>
@@ -617,15 +636,15 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
           </p>
         </div>
 
-        {/* Live Talent Demand Radar Telemetry Bar */}
+        {/* Live Talent Demand Radar Telemetry Bar - Refined Light Architectural Theme */}
         <div
           style={{
-            backgroundColor: '#181816',
-            color: '#F6F5F1',
-            padding: '20px 24px',
-            marginBottom: '32px',
-            border: '1px solid rgba(24, 24, 22, 0.25)',
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)'
+            backgroundColor: '#FFFFFF',
+            color: '#181816',
+            padding: '28px 32px',
+            marginBottom: '36px',
+            border: '1px solid rgba(24, 24, 22, 0.12)',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)'
           }}
         >
           {/* Top row of banner: live indicator, mode, and controls */}
@@ -635,10 +654,10 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
               justifyContent: 'space-between',
               alignItems: 'center',
               flexWrap: 'wrap',
-              gap: '12px',
-              borderBottom: '1px solid rgba(246, 245, 241, 0.12)',
-              paddingBottom: '14px',
-              marginBottom: '16px'
+              gap: '14px',
+              borderBottom: '1px solid rgba(24, 24, 22, 0.08)',
+              paddingBottom: '18px',
+              marginBottom: '22px'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
@@ -660,7 +679,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                     fontSize: '11.5px',
                     fontWeight: 700,
                     letterSpacing: '0.12em',
-                    color: '#10B981'
+                    color: '#2D5A43'
                   }}
                 >
                   LIVE TALENT DEMAND RADAR · BHARAT
@@ -670,10 +689,10 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                 style={{
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '10px',
-                  color: 'rgba(246, 245, 241, 0.6)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                  padding: '2px 8px',
-                  borderRadius: '2px'
+                  color: '#6E6A61',
+                  backgroundColor: '#F6F5F1',
+                  border: '1px solid rgba(24, 24, 22, 0.08)',
+                  padding: '3px 8px'
                 }}
               >
                 15s CADENCE · CONTINUOUS TELEMETRY
@@ -681,18 +700,18 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: 'rgba(246, 245, 241, 0.7)' }}>
-                <Clock size={12} style={{ color: '#10B981' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
+                <Clock size={12} style={{ color: '#2D5A43' }} />
                 <span>SYNC: {timeAgo}</span>
               </div>
 
               <button
                 onClick={() => setAutoSync(!autoSync)}
                 style={{
-                  background: 'none',
-                  border: '1px solid rgba(246, 245, 241, 0.2)',
-                  color: autoSync ? '#10B981' : '#9CA3AF',
-                  padding: '4px 10px',
+                  background: '#F6F5F1',
+                  border: '1px solid rgba(24, 24, 22, 0.15)',
+                  color: autoSync ? '#2D5A43' : '#6E6A61',
+                  padding: '5px 12px',
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '10px',
                   fontWeight: 600,
@@ -713,7 +732,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   backgroundColor: '#2D5A43',
                   color: '#FFFFFF',
                   border: 'none',
-                  padding: '6px 14px',
+                  padding: '7px 16px',
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '10.5px',
                   fontWeight: 600,
@@ -721,7 +740,13 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  transition: 'opacity 0.2s'
+                  transition: 'background-color 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSyncing) e.currentTarget.style.backgroundColor = '#234735';
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSyncing) e.currentTarget.style.backgroundColor = '#2D5A43';
                 }}
               >
                 <RefreshCw
@@ -739,67 +764,67 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '16px'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+              gap: '18px'
             }}
           >
-            <div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.6)', letterSpacing: '0.08em' }}>
+            <div style={{ backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)', padding: '20px 22px' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', letterSpacing: '0.08em', fontWeight: 600 }}>
                 VERIFIED STEAM OPENINGS
               </div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '28px', fontWeight: 800, color: '#FFFFFF', margin: '2px 0' }}>
+              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#181816', margin: '3px 0' }}>
                 {(pulseData?.activeOpenings || 285560).toLocaleString()}
               </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#10B981' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#2D5A43', fontWeight: 600 }}>
                 {pulseData?.openingsDelta || '+1,217 verified past 24h'}
               </div>
             </div>
 
-            <div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.6)', letterSpacing: '0.08em' }}>
+            <div style={{ backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)', padding: '20px 22px' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', letterSpacing: '0.08em', fontWeight: 600 }}>
                 NATIONAL HIRING VELOCITY
               </div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '28px', fontWeight: 800, color: '#10B981', margin: '2px 0' }}>
+              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#2D5A43', margin: '3px 0' }}>
                 +{pulseData?.nationalVelocity || 33.7}%
               </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.7)' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                 Annualized talent intake expansion
               </div>
             </div>
 
-            <div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.6)', letterSpacing: '0.08em' }}>
+            <div style={{ backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)', padding: '20px 22px' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', letterSpacing: '0.08em', fontWeight: 600 }}>
                 ACTIVE EPICENTER HUB
               </div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '20px', fontWeight: 800, color: '#FFFFFF', margin: '4px 0', lineHeight: 1.1 }}>
+              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '22px', fontWeight: 800, color: '#181816', margin: '5px 0', lineHeight: 1.15 }}>
                 {pulseData?.hotHub || 'Bengaluru · Hyderabad DeepTech Corridor'}
               </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.7)' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                 Peak quarterly hiring density
               </div>
             </div>
 
-            <div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.6)', letterSpacing: '0.08em' }}>
+            <div style={{ backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)', padding: '20px 22px' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', letterSpacing: '0.08em', fontWeight: 600 }}>
                 DOMINANT SECTOR SHORTAGE
               </div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '20px', fontWeight: 800, color: '#F59E0B', margin: '4px 0', lineHeight: 1.1 }}>
+              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '22px', fontWeight: 800, color: '#C05621', margin: '5px 0', lineHeight: 1.15 }}>
                 {pulseData?.dominantSector || 'Generative AI & Semiconductor VLSI'}
               </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.7)' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                 Deficit Volatility: {pulseData?.volatilityScore || '14.2'} (Severe)
               </div>
             </div>
           </div>
         </div>
 
-        {/* View Switcher Tabs */}
+        {/* View Switcher Tabs - Spacious Light Design */}
         <div
           style={{
             display: 'flex',
             gap: '0px',
-            borderBottom: '1px solid rgba(24, 24, 22, 0.16)',
-            marginBottom: '32px'
+            borderBottom: '1px solid rgba(24, 24, 22, 0.12)',
+            marginBottom: '36px'
           }}
         >
           {[
@@ -819,11 +844,12 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   }
                 }}
                 style={{
-                  padding: '14px 22px',
-                  backgroundColor: isActive ? '#ECE9E2' : 'transparent',
-                  color: isActive ? '#181816' : '#6E6A61',
-                  border: 'none',
-                  borderBottom: isActive ? '2px solid #2D5A43' : '2px solid transparent',
+                  padding: '16px 28px',
+                  backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                  color: isActive ? '#2D5A43' : '#6E6A61',
+                  border: '1px solid',
+                  borderColor: isActive ? 'rgba(24, 24, 22, 0.12) rgba(24, 24, 22, 0.12) transparent' : 'transparent',
+                  borderBottom: isActive ? '2px solid #2D5A43' : 'none',
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '11px',
                   fontWeight: isActive ? 700 : 500,
@@ -832,7 +858,8 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  transition: 'all 0.18s ease'
+                  transition: 'all 0.18s ease',
+                  marginBottom: '-1px'
                 }}
               >
                 <span style={{ color: isActive ? '#2D5A43' : '#6E6A61' }}>{tab.icon}</span>
@@ -848,8 +875,8 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
         {activeTab === 'states' && (
           <div>
             {/* Zone Filter Pill Bar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
-              <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#6E6A61', marginRight: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px', flexWrap: 'wrap' }}>
+              <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#6E6A61', marginRight: '6px', fontWeight: 600 }}>
                 FILTER REGION:
               </span>
               {(['All', 'South', 'West', 'North'] as const).map((zone) => (
@@ -857,15 +884,16 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   key={zone}
                   onClick={() => setZoneFilter(zone)}
                   style={{
-                    padding: '6px 14px',
-                    backgroundColor: zoneFilter === zone ? '#2D5A43' : '#ECE9E2',
+                    padding: '8px 18px',
+                    backgroundColor: zoneFilter === zone ? '#2D5A43' : '#FFFFFF',
                     color: zoneFilter === zone ? '#FFFFFF' : '#181816',
-                    border: '1px solid rgba(24, 24, 22, 0.1)',
+                    border: zoneFilter === zone ? '1px solid #2D5A43' : '1px solid rgba(24, 24, 22, 0.14)',
                     fontFamily: "'Martian Mono', monospace",
                     fontSize: '10.5px',
                     fontWeight: 600,
                     cursor: 'pointer',
-                    transition: 'all 0.15s ease'
+                    transition: 'all 0.15s ease',
+                    boxShadow: zoneFilter === zone ? '0 2px 6px rgba(45, 90, 67, 0.2)' : 'none'
                   }}
                 >
                   {zone.toUpperCase()} HUBS
@@ -877,14 +905,14 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'minmax(280px, 360px) 1fr',
-                gap: '24px',
+                gridTemplateColumns: 'minmax(320px, 380px) 1fr',
+                gap: '32px',
                 alignItems: 'start'
               }}
               className="responsive-stack"
             >
               {/* Left Column: State Cards List */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {filteredStates.map((st) => {
                   const isSelected = selectedStateId === st.id;
                   return (
@@ -892,18 +920,18 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       key={st.id}
                       onClick={() => setSelectedStateId(st.id)}
                       style={{
-                        padding: '18px 20px',
-                        backgroundColor: isSelected ? '#FFFFFF' : '#ECE9E2',
-                        border: isSelected ? '1.5px solid #2D5A43' : '1px solid rgba(24, 24, 22, 0.12)',
+                        padding: '20px 22px',
+                        backgroundColor: isSelected ? '#FFFFFF' : '#F9F8F5',
+                        border: isSelected ? '2px solid #2D5A43' : '1px solid rgba(24, 24, 22, 0.1)',
                         boxShadow: isSelected ? '0 8px 24px rgba(45, 90, 67, 0.08)' : 'none',
                         cursor: 'pointer',
                         transition: 'all 0.18s ease'
                       }}
                       onMouseEnter={(e) => {
-                        if (!isSelected) e.currentTarget.style.backgroundColor = '#F0EEE8';
+                        if (!isSelected) e.currentTarget.style.backgroundColor = '#FFFFFF';
                       }}
                       onMouseLeave={(e) => {
-                        if (!isSelected) e.currentTarget.style.backgroundColor = '#ECE9E2';
+                        if (!isSelected) e.currentTarget.style.backgroundColor = '#F9F8F5';
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
@@ -919,12 +947,12 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                         >
                           {st.name}
                         </span>
-                        <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61' }}>
+                        <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', fontWeight: 600 }}>
                           {st.zone.toUpperCase()}
                         </span>
                       </div>
 
-                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#181816', fontWeight: 600, marginBottom: '6px' }}>
+                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#181816', fontWeight: 600, marginBottom: '8px' }}>
                         {st.capital}
                       </div>
 
@@ -934,7 +962,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       </div>
 
                       {st.activePostings && (
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px', paddingTop: '6px', borderTop: '1px dashed rgba(24, 24, 22, 0.08)', fontFamily: "'Martian Mono', monospace", fontSize: '9.5px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', paddingTop: '8px', borderTop: '1px dashed rgba(24, 24, 22, 0.1)', fontFamily: "'Martian Mono', monospace", fontSize: '9.5px' }}>
                           <span style={{ color: '#2D5A43', fontWeight: 600 }}>● {st.activePostings.toLocaleString()} ROLES</span>
                           <span style={{ color: '#10B981', fontWeight: 700 }}>{st.liveDelta || '+2.4%'}</span>
                         </div>
@@ -948,14 +976,14 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
               <div
                 style={{
                   backgroundColor: '#FFFFFF',
-                  border: '1px solid rgba(24, 24, 22, 0.16)',
-                  padding: '36px',
-                  boxShadow: '0 12px 36px rgba(0, 0, 0, 0.04)'
+                  border: '1px solid rgba(24, 24, 22, 0.12)',
+                  padding: '40px 48px',
+                  boxShadow: '0 6px 28px rgba(0, 0, 0, 0.03)'
                 }}
               >
                 {/* State Title Header */}
-                <div style={{ borderBottom: '1px solid rgba(24, 24, 22, 0.12)', paddingBottom: '22px', marginBottom: '24px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '14px' }}>
+                <div style={{ borderBottom: '1px solid rgba(24, 24, 22, 0.1)', paddingBottom: '24px', marginBottom: '28px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
                     <div>
                       <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#2D5A43', fontWeight: 700, letterSpacing: '0.12em' }}>
                         {selectedState.zone.toUpperCase()} INDIA INNOVATION CORRIDOR
@@ -963,16 +991,16 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       <h2
                         style={{
                           fontFamily: "'Big Shoulders Display', sans-serif",
-                          fontSize: '38px',
+                          fontSize: '40px',
                           fontWeight: 800,
                           textTransform: 'uppercase',
-                          margin: '4px 0 6px 0',
+                          margin: '6px 0 8px 0',
                           lineHeight: 1
                         }}
                       >
                         {selectedState.name} — {selectedState.capital}
                       </h2>
-                      <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '15px', color: '#6E6A61' }}>
+                      <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '15px', color: '#6E6A61', lineHeight: 1.5 }}>
                         {selectedState.tagline}
                       </div>
                     </div>
@@ -980,11 +1008,11 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                     {/* Deficit Badge */}
                     <div
                       style={{
-                        padding: '6px 12px',
-                        backgroundColor: 'rgba(239, 68, 68, 0.08)',
-                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                        padding: '8px 14px',
+                        backgroundColor: 'rgba(220, 38, 38, 0.06)',
+                        border: '1px solid rgba(220, 38, 38, 0.25)',
                         fontFamily: "'Martian Mono', monospace",
-                        fontSize: '10px',
+                        fontSize: '10.5px',
                         fontWeight: 700,
                         color: '#DC2626',
                         letterSpacing: '0.06em'
@@ -999,28 +1027,28 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-                    gap: '16px',
-                    marginBottom: '28px'
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                    gap: '18px',
+                    marginBottom: '32px'
                   }}
                 >
-                  <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                  <div style={{ padding: '20px 22px', backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)' }}>
                     <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                       STARTING CTC (ENTRY)
                     </div>
-                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '30px', fontWeight: 800, color: '#181816', margin: '4px 0' }}>
+                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#181816', margin: '4px 0' }}>
                       ₹{selectedState.startingCtcLakhs} LPA
                     </div>
-                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#2D5A43' }}>
+                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#2D5A43', fontWeight: 600 }}>
                       Across Seeded STEAM Roles
                     </div>
                   </div>
 
-                  <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                  <div style={{ padding: '20px 22px', backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)' }}>
                     <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                       5-YEAR COMPOUND CTC
                     </div>
-                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '30px', fontWeight: 800, color: '#2D5A43', margin: '4px 0' }}>
+                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#2D5A43', margin: '4px 0' }}>
                       ₹{selectedState.fiveYearCtcLakhs} LPA
                     </div>
                     <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61' }}>
@@ -1028,26 +1056,26 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                     </div>
                   </div>
 
-                  <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                  <div style={{ padding: '20px 22px', backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)' }}>
                     <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                       HIRING VELOCITY
                     </div>
-                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '30px', fontWeight: 800, color: '#181816', margin: '4px 0' }}>
+                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#181816', margin: '4px 0' }}>
                       +{selectedState.hiringVelocity}%
                     </div>
-                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#2D5A43' }}>
+                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#2D5A43', fontWeight: 600 }}>
                       Annual Talent Intake Surge
                     </div>
                   </div>
 
-                  <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(45, 90, 67, 0.25)', position: 'relative' }}>
+                  <div style={{ padding: '20px 22px', backgroundColor: '#F9F8F5', border: '1px solid rgba(45, 90, 67, 0.25)', position: 'relative' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#2D5A43', fontWeight: 700 }}>
                         ACTIVE POSTINGS
                       </div>
                       <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10B981', boxShadow: '0 0 6px #10B981' }} />
                     </div>
-                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '30px', fontWeight: 800, color: '#2D5A43', margin: '4px 0' }}>
+                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#2D5A43', margin: '4px 0' }}>
                       {(selectedState.activePostings || 54200).toLocaleString()}
                     </div>
                     <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#10B981', fontWeight: 700 }}>
@@ -1059,16 +1087,16 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                 {/* Official MoSPI PLFS & NASSCOM Macro Benchmark Strip */}
                 <div
                   style={{
-                    backgroundColor: '#F0EEE8',
-                    border: '1px solid rgba(24, 24, 22, 0.12)',
-                    padding: '16px 20px',
-                    marginBottom: '28px'
+                    backgroundColor: '#F5F4EE',
+                    border: '1px solid rgba(24, 24, 22, 0.1)',
+                    padding: '20px 24px',
+                    marginBottom: '32px'
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <ShieldCheck size={14} color="#2D5A43" />
-                      <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', fontWeight: 700, color: '#2D5A43', letterSpacing: '0.08em' }}>
+                      <ShieldCheck size={15} color="#2D5A43" />
+                      <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, color: '#2D5A43', letterSpacing: '0.08em' }}>
                         OFFICIAL MoSPI PLFS 2023-24 & NASSCOM BENCHMARKS
                       </span>
                     </div>
@@ -1079,8 +1107,8 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                         border: 'none',
                         color: '#2D5A43',
                         fontFamily: "'Martian Mono', monospace",
-                        fontSize: '10px',
-                        fontWeight: 600,
+                        fontSize: '10.5px',
+                        fontWeight: 700,
                         cursor: 'pointer',
                         textDecoration: 'underline'
                       }}
@@ -1093,14 +1121,14 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                     style={{
                       display: 'grid',
                       gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                      gap: '14px'
+                      gap: '16px'
                     }}
                   >
                     <div>
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61' }}>
                         MoSPI UNEMPLOYMENT RATE (UR)
                       </div>
-                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '15px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
+                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '16px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
                         {selectedState.plfs?.ur ?? 2.7}%
                         <span style={{ fontSize: '9.5px', color: '#2D5A43', marginLeft: '6px', fontWeight: 600 }}>[LOW UR]</span>
                       </div>
@@ -1113,7 +1141,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61' }}>
                         LABOUR FORCE PARTICIPATION (LFPR)
                       </div>
-                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '15px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
+                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '16px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
                         {selectedState.plfs?.lfpr ?? 45.4}%
                       </div>
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9px', color: '#6E6A61' }}>
@@ -1125,7 +1153,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61' }}>
                         WHEEBOX YOUTH EMPLOYABILITY
                       </div>
-                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '15px', fontWeight: 700, color: '#2D5A43', marginTop: '2px' }}>
+                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '16px', fontWeight: 700, color: '#2D5A43', marginTop: '2px' }}>
                         {selectedState.employability?.rate ?? 77.8}%
                       </div>
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9px', color: '#6E6A61' }}>
@@ -1137,7 +1165,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61' }}>
                         NASSCOM GCC DENSITY
                       </div>
-                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '15px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
+                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '16px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
                         {selectedState.gccDensity?.count ?? 680}+ GCCs
                       </div>
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9px', color: '#6E6A61' }}>
@@ -1148,34 +1176,34 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                 </div>
 
                 {/* Top In-Demand Careers in This State */}
-                <div style={{ marginBottom: '28px' }}>
-                  <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', color: '#181816', marginBottom: '14px' }}>
+                <div style={{ marginBottom: '32px' }}>
+                  <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', color: '#181816', marginBottom: '16px' }}>
                     MOST IN-DEMAND CAREER ROLES IN {selectedState.name.toUpperCase()}:
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
                     {selectedState.topCareers.map((c, idx) => (
                       <div
                         key={idx}
                         style={{
-                          padding: '14px 16px',
-                          backgroundColor: '#ECE9E2',
-                          border: '1px solid rgba(24, 24, 22, 0.12)',
+                          padding: '18px 20px',
+                          backgroundColor: '#F9F8F5',
+                          border: '1px solid rgba(24, 24, 22, 0.08)',
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'space-between',
-                          gap: '10px'
+                          gap: '12px'
                         }}
                       >
                         <div>
-                          <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#2D5A43', fontWeight: 600 }}>
+                          <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#2D5A43', fontWeight: 700 }}>
                             {c.domain.toUpperCase()}
                           </div>
-                          <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '14px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
+                          <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '14.5px', fontWeight: 700, color: '#181816', marginTop: '4px' }}>
                             {c.title}
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(24, 24, 22, 0.08)', paddingTop: '8px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(24, 24, 22, 0.08)', paddingTop: '10px' }}>
                           <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#181816', fontWeight: 700 }}>
                             ₹{c.avgCtc}L Entry
                           </span>
@@ -1225,24 +1253,24 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr',
-                    gap: '20px',
-                    borderTop: '1px solid rgba(24, 24, 22, 0.12)',
-                    paddingTop: '24px',
-                    marginBottom: '28px'
+                    gap: '28px',
+                    borderTop: '1px solid rgba(24, 24, 22, 0.1)',
+                    paddingTop: '28px',
+                    marginBottom: '32px'
                   }}
                   className="responsive-stack"
                 >
                   <div>
-                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, color: '#6E6A61', marginBottom: '8px' }}>
+                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, color: '#6E6A61', marginBottom: '10px' }}>
                       KEY TECH SUB-DISTRICTS:
                     </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {selectedState.keyHubs.map((hub, i) => (
                         <span
                           key={i}
                           style={{
-                            padding: '4px 10px',
-                            backgroundColor: '#F6F5F1',
+                            padding: '6px 12px',
+                            backgroundColor: '#F9F8F5',
                             border: '1px solid rgba(24, 24, 22, 0.1)',
                             fontFamily: "'Martian Mono', monospace",
                             fontSize: '10.5px'
@@ -1255,16 +1283,16 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   </div>
 
                   <div>
-                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, color: '#6E6A61', marginBottom: '8px' }}>
+                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, color: '#6E6A61', marginBottom: '10px' }}>
                       PROMINENT RESEARCH LABS & HIRERS:
                     </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {selectedState.keyEmployers.map((emp, i) => (
                         <span
                           key={i}
                           style={{
-                            padding: '4px 10px',
-                            backgroundColor: '#F6F5F1',
+                            padding: '6px 12px',
+                            backgroundColor: '#F9F8F5',
                             border: '1px solid rgba(24, 24, 22, 0.1)',
                             fontFamily: "'Martian Mono', monospace",
                             fontSize: '10.5px'
@@ -1277,24 +1305,25 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   </div>
                 </div>
 
-                {/* Action Strip on State Board */}
+                {/* Action Strip on State Board - Clean Light Architectural Theme */}
                 <div
                   style={{
-                    backgroundColor: '#181816',
-                    color: '#F6F5F1',
-                    padding: '20px 24px',
+                    backgroundColor: '#F3F6F4',
+                    border: '1px solid rgba(45, 90, 67, 0.25)',
+                    borderLeft: '4px solid #2D5A43',
+                    padding: '26px 30px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     flexWrap: 'wrap',
-                    gap: '14px'
+                    gap: '16px'
                   }}
                 >
                   <div>
-                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '20px', fontWeight: 700, letterSpacing: '0.04em' }}>
+                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '22px', fontWeight: 800, letterSpacing: '0.02em', textTransform: 'uppercase', color: '#181816' }}>
                       CURIOUS HOW YOUR APTITUDE MATCHES {selectedState.name.toUpperCase()}’S ROLES?
                     </div>
-                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#A7A29A' }}>
+                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#6E6A61', marginTop: '4px' }}>
                       Run our 5D mathematical model to calibrate your fit score across 25 career options.
                     </div>
                   </div>
@@ -1302,8 +1331,8 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   <button
                     onClick={() => onStartAssessment('onboarding')}
                     style={{
-                      height: '38px',
-                      padding: '0 20px',
+                      height: '42px',
+                      padding: '0 24px',
                       backgroundColor: '#2D5A43',
                       color: '#FFFFFF',
                       border: 'none',
@@ -1315,8 +1344,12 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '8px'
+                      gap: '8px',
+                      transition: 'background-color 0.2s',
+                      boxShadow: '0 2px 8px rgba(45, 90, 67, 0.2)'
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#234735')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
                   >
                     <span>TEST MY FIT</span>
                     <ArrowRight size={14} />
@@ -1456,18 +1489,20 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                     <button
                       onClick={() => onStartAssessment('onboarding')}
                       style={{
-                        padding: '8px 14px',
-                        backgroundColor: '#181816',
-                        color: '#F6F5F1',
+                        padding: '10px 18px',
+                        backgroundColor: '#2D5A43',
+                        color: '#FFFFFF',
                         border: 'none',
                         fontFamily: "'Martian Mono', monospace",
-                        fontSize: '10.5px',
-                        fontWeight: 600,
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        letterSpacing: '0.06em',
                         cursor: 'pointer',
-                        transition: 'background-color 0.2s ease'
+                        transition: 'background-color 0.2s ease',
+                        boxShadow: '0 2px 6px rgba(45, 90, 67, 0.2)'
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
-                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#181816')}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#234735')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
                     >
                       CHECK FIT →
                     </button>
@@ -2138,15 +2173,19 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
               <button
                 onClick={() => setIsProvenanceModalOpen(false)}
                 style={{
-                  backgroundColor: '#181816',
+                  backgroundColor: '#2D5A43',
                   color: '#FFFFFF',
                   border: 'none',
-                  padding: '8px 18px',
+                  padding: '9px 22px',
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '11px',
-                  fontWeight: 600,
-                  cursor: 'pointer'
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s ease',
+                  boxShadow: '0 2px 6px rgba(45, 90, 67, 0.2)'
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#234735')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
               >
                 GOT IT
               </button>

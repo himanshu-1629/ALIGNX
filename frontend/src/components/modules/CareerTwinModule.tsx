@@ -3,8 +3,11 @@ import { INITIAL_CAREERS } from '../../data/mockAlignxData';
 import { ApiService } from '../../services/api';
 import { ArrowRight, Cpu, CheckCircle2, AlertCircle, GitBranch } from 'lucide-react';
 
+import type { AlignxSessionProgress } from '../../types/alignx';
+
 interface CareerTwinModuleProps {
   careerId?: string;
+  sessionProgress?: AlignxSessionProgress;
   onOpenRoadmap: () => void;
   onBackToDashboard?: () => void;
   onOpenWhatIf?: () => void;
@@ -13,15 +16,21 @@ interface CareerTwinModuleProps {
 
 export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
   careerId = 'ai-engineer',
+  sessionProgress,
   onOpenRoadmap,
   onSelectCareer
 }) => {
-  const [career, setCareer] = useState(() => INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0]);
+  const normalizeSlug = (slug?: string) => (slug || '').toLowerCase().replace(/[-_]/g, '');
+
+  const [career, setCareer] = useState(() =>
+    INITIAL_CAREERS.find(c => normalizeSlug(c.id) === normalizeSlug(careerId)) || INITIAL_CAREERS[0]
+  );
   const [twinBackendData, setTwinBackendData] = useState<any>(null);
 
   useEffect(() => {
     let isMounted = true;
-    const staticMatched = INITIAL_CAREERS.find(c => c.id === careerId) || INITIAL_CAREERS[0];
+    const staticMatched =
+      INITIAL_CAREERS.find(c => normalizeSlug(c.id) === normalizeSlug(careerId)) || INITIAL_CAREERS[0];
     setCareer(staticMatched);
 
     ApiService.getCareerTwin(careerId)
@@ -110,7 +119,43 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {career.requiredSkills.map((skillName, idx) => {
-              const baselineLevel = Math.max(35, Math.min(85, 80 - idx * 10));
+              const rawMetrics: any = sessionProgress?.aptitudeMetrics || {};
+              const baseAptitude = sessionProgress?.aptitudeScore || 78;
+
+              const logic = rawMetrics.abstractLogic ?? rawMetrics.logical ?? baseAptitude;
+              const quant = rawMetrics.quantitativeEstimation ?? rawMetrics.numerical ?? baseAptitude;
+              const systems = rawMetrics.systemsThinking ?? rawMetrics.analytical ?? baseAptitude;
+              const spatial = rawMetrics.spatialArchitecture ?? rawMetrics.spatial ?? baseAptitude;
+              const verbal = rawMetrics.riskTolerance ?? rawMetrics.verbal ?? baseAptitude;
+
+              const sLower = skillName.toLowerCase();
+              let cognitiveSignal = baseAptitude;
+
+              if (sLower.includes('hardware') || sLower.includes('circuit') || sLower.includes('embedded') || sLower.includes('pcb') || sLower.includes('cad') || sLower.includes('iot')) {
+                cognitiveSignal = Math.round(spatial * 0.50 + systems * 0.30 + logic * 0.20);
+              } else if (sLower.includes('machine learning') || sLower.includes('ai') || sLower.includes('algorithm') || sLower.includes('neural')) {
+                cognitiveSignal = Math.round(logic * 0.45 + quant * 0.35 + systems * 0.20);
+              } else if (sLower.includes('data') || sLower.includes('database') || sLower.includes('cloud') || sLower.includes('distributed')) {
+                cognitiveSignal = Math.round(systems * 0.50 + logic * 0.30 + quant * 0.20);
+              } else if (sLower.includes('math') || sLower.includes('statist') || sLower.includes('quantitative') || sLower.includes('fintech')) {
+                cognitiveSignal = Math.round(quant * 0.55 + logic * 0.30 + systems * 0.15);
+              } else if (sLower.includes('product') || sLower.includes('design') || sLower.includes('ui') || sLower.includes('ux')) {
+                cognitiveSignal = Math.round(verbal * 0.45 + systems * 0.35 + spatial * 0.20);
+              } else {
+                cognitiveSignal = Math.round(systems * 0.40 + logic * 0.35 + quant * 0.25);
+              }
+
+              const branch = ((sessionProgress?.studentProfile as any)?.branch || sessionProgress?.studentProfile?.currentField || '').toLowerCase();
+              let branchBonus = 0;
+              if (branch) {
+                if ((branch.includes('elect') || branch.includes('ece')) && (sLower.includes('circuit') || sLower.includes('embedded') || sLower.includes('hardware') || sLower.includes('iot'))) branchBonus = 6;
+                else if ((branch.includes('comp') || branch.includes('it')) && (sLower.includes('python') || sLower.includes('c++') || sLower.includes('data') || sLower.includes('software'))) branchBonus = 6;
+                else if (branch.includes('mech') && (sLower.includes('cad') || sLower.includes('robot') || sLower.includes('sensor'))) branchBonus = 6;
+              }
+
+              // Realistic student foundational baseline
+              const baselineLevel = Math.min(84, Math.max(38, Math.round(cognitiveSignal * 0.74 + branchBonus)));
+
               return (
                 <div key={idx}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginBottom: '6px' }}>
@@ -143,7 +188,7 @@ export const CareerTwinModule: React.FC<CareerTwinModuleProps> = ({
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {career.requiredSkills.map((skillName, idx) => {
-              const targetLevel = 90 + (idx % 3) * 3;
+              const targetLevel = 90 + ((idx * 2) % 6);
               return (
                 <div key={idx}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginBottom: '6px' }}>

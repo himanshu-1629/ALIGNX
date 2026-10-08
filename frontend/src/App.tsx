@@ -15,23 +15,42 @@ import { WhatIfModule } from './components/modules/WhatIfModule';
 import { RoadmapModule } from './components/modules/RoadmapModule';
 import { TalentAtlasModule } from './components/modules/TalentAtlasModule';
 import { AssessmentGateModal } from './components/AssessmentGateModal';
-import type { StudentProfile, AlignxSessionProgress } from './types/alignx';
-import { getSessionProgress, saveSessionProgress, clearSessionProgress, DEFAULT_SESSION_PROGRESS } from './utils/sessionManager';
+import type { StudentProfile, AlignxSessionProgress, AssessmentDraftState } from './types/alignx';
+import {
+  getSessionProgress,
+  saveSessionProgress,
+  clearSessionProgress,
+  DEFAULT_SESSION_PROGRESS,
+  getAssessmentDraft,
+  saveAssessmentDraft,
+  clearAssessmentDraft,
+  DEFAULT_ASSESSMENT_DRAFT
+} from './utils/sessionManager';
 import { AuthModal } from './components/auth/AuthModal';
 import { ParentInvitePortal } from './components/portal/ParentInvitePortal';
 import { ApiService } from './services/api';
 
 function extractInviteToken(): string | null {
   try {
+    const searchParams = new URLSearchParams(window.location.search);
+    const queryToken = searchParams.get('token') || searchParams.get('invite');
+    if (queryToken && queryToken.trim()) return queryToken.trim();
+
     const path = window.location.pathname;
     if (path.includes('/parent/invite/')) {
       const parts = path.split('/parent/invite/');
-      if (parts[1]) return parts[1].split('/')[0].split('?')[0];
+      if (parts[1]) {
+        const cleaned = parts[1].split('/')[0].split('?')[0].split('#')[0].trim();
+        if (cleaned) return cleaned;
+      }
     }
     const hash = window.location.hash;
     if (hash.includes('/parent/invite/')) {
       const parts = hash.split('/parent/invite/');
-      if (parts[1]) return parts[1].split('/')[0].split('?')[0];
+      if (parts[1]) {
+        const cleaned = parts[1].split('/')[0].split('?')[0].trim();
+        if (cleaned) return cleaned;
+      }
     }
   } catch {
     // fallback
@@ -41,11 +60,17 @@ function extractInviteToken(): string | null {
 
 export function App() {
   const [currentView, setCurrentView] = useState<AppView>('home');
-  const [selectedCareerId, setSelectedCareerId] = useState<string>('ai-engineer');
+  const [selectedCareerId, setSelectedCareerId] = useState<string>('');
   const [, setStudentProfile] = useState<StudentProfile | null>(null);
   const [sessionProgress, setSessionProgress] = useState<AlignxSessionProgress>(getSessionProgress());
+  const [assessmentDraft, setAssessmentDraft] = useState<AssessmentDraftState>(() => getAssessmentDraft());
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [inviteToken, setInviteToken] = useState<string | null>(extractInviteToken);
+
+  const handleUpdateDraft = (updates: Partial<AssessmentDraftState>) => {
+    const updated = saveAssessmentDraft(updates);
+    setAssessmentDraft(updated);
+  };
 
   // Listen to popstate and hashchange for invite URLs
   useEffect(() => {
@@ -151,15 +176,18 @@ export function App() {
   };
 
   const handleResetSession = () => {
+    clearAssessmentDraft();
     const fresh = clearSessionProgress();
     setSessionProgress(fresh);
     setStudentProfile(null);
+    setAssessmentDraft(DEFAULT_ASSESSMENT_DRAFT);
     setCurrentView('home');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleOnboardingComplete = (profile: StudentProfile) => {
     setStudentProfile(profile);
+    handleUpdateDraft({ profile });
     const updated = saveSessionProgress({
       lastActiveView: 'discovery',
       studentProfile: profile,
@@ -339,12 +367,28 @@ export function App() {
             onComplete={handleOnboardingComplete}
             currentUser={currentUser}
             onRequireAuth={() => setIsAuthModalOpen(true)}
+            draftProfile={assessmentDraft.profile}
+            onUpdateDraft={(profileUpdates) =>
+              handleUpdateDraft({
+                profile: { ...assessmentDraft.profile, ...profileUpdates }
+              })
+            }
           />
         )}
 
         {currentView === 'discovery' && (
           <DiscoveryModule
             onComplete={handleDiscoveryComplete}
+            onBack={() => {
+              setCurrentView('onboarding');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            draftDiscovery={assessmentDraft.discovery}
+            onUpdateDraft={(discoveryUpdates) =>
+              handleUpdateDraft({
+                discovery: { ...assessmentDraft.discovery, ...discoveryUpdates }
+              })
+            }
             onSkipToAptitude={() => {
               setCurrentView('aptitude');
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -355,6 +399,16 @@ export function App() {
         {currentView === 'aptitude' && (
           <AptitudeModule
             onComplete={handleAptitudeComplete}
+            onBack={() => {
+              setCurrentView('discovery');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            draftAptitude={assessmentDraft.aptitude}
+            onUpdateDraft={(aptitudeUpdates) =>
+              handleUpdateDraft({
+                aptitude: { ...assessmentDraft.aptitude, ...aptitudeUpdates }
+              })
+            }
             onSkipToDna={() => {
               setCurrentView('dna');
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -401,7 +455,8 @@ export function App() {
 
         {currentView === 'twin' && (
           <CareerTwinModule
-            careerId={selectedCareerId}
+            careerId={selectedCareerId || 'ai_ml_engineer'}
+            sessionProgress={sessionProgress}
             onOpenRoadmap={handleOpenRoadmap}
             onBackToDashboard={() => {
               setCurrentView('dashboard');
@@ -417,7 +472,9 @@ export function App() {
 
         {currentView === 'whatif' && (
           <WhatIfModule
-            careerId={selectedCareerId}
+            careerId={selectedCareerId || 'ai_ml_engineer'}
+            sessionProgress={sessionProgress}
+            onSelectCareer={(cId) => setSelectedCareerId(cId)}
             onContinueToRoadmap={handleOpenRoadmap}
             onBackToDashboard={() => {
               setCurrentView('dashboard');
@@ -432,7 +489,9 @@ export function App() {
 
         {currentView === 'roadmap' && (
           <RoadmapModule
-            careerId={selectedCareerId}
+            careerId={selectedCareerId || 'ai_ml_engineer'}
+            sessionProgress={sessionProgress}
+            onSelectCareer={(cId) => setSelectedCareerId(cId)}
             onBackToDashboard={() => {
               setCurrentView('dashboard');
               window.scrollTo({ top: 0, behavior: 'smooth' });
