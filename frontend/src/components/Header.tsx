@@ -108,7 +108,8 @@ export const Header: React.FC<HeaderProps> = ({
           height: '100%',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          position: 'relative'
         }}
       >
         {/* Brand: ALIGNX . in Big Shoulders Display with Pine period */}
@@ -140,7 +141,14 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Center: 4 Core Routes in Martian Mono */}
         <nav
-          style={{ display: 'flex', alignItems: 'center', gap: '30px' }}
+          style={{
+            position: 'absolute',
+            left: 'calc(50% - 70px)',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '24px'
+          }}
           className="hide-mobile"
           aria-label="Main navigation"
         >

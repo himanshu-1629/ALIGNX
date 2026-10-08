@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { AppView } from '../Header';
 import type { AlignxSessionProgress } from '../../types/alignx';
+import { AuthenticCompass } from '../common/AuthenticCompass';
+import { EquilibriumRadar3D } from '../common/EquilibriumRadar3D';
 
 interface CinematicFramesProps {
   onEnterApp: (view?: AppView) => void;
@@ -13,10 +15,8 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
   sessionProgress: _sessionProgress,
   onResetSession: _onResetSession
 }) => {
-  // Scroll telemetry for the split wordmark and pinned equilibrium study
+  // Scroll telemetry for the split wordmark and compass rotation across the first 700px
   const [scrollY, setScrollY] = useState(0);
-  const pinnedSectionRef = useRef<HTMLDivElement | null>(null);
-  const [pinnedProgress, setPinnedProgress] = useState(0);
 
   useEffect(() => {
     let ticking = false;
@@ -24,18 +24,7 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const currentScroll = window.scrollY;
-          setScrollY(currentScroll);
-
-          // Compute scroll progress for the pinned equilibrium study section
-          if (pinnedSectionRef.current) {
-            const rect = pinnedSectionRef.current.getBoundingClientRect();
-            const totalHeight = pinnedSectionRef.current.offsetHeight - window.innerHeight;
-            if (totalHeight > 0) {
-              const progress = Math.min(1, Math.max(0, -rect.top / totalHeight));
-              setPinnedProgress(progress);
-            }
-          }
+          setScrollY(window.scrollY);
           ticking = false;
         });
         ticking = true;
@@ -51,14 +40,6 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
   const heroProgress = Math.min(1, Math.max(0, scrollY / 700));
   const wordmarkSpreadVw = heroProgress * 15; // 0 to 15vw
   const astrolabeRotationDeg = heroProgress * 180; // 0 to 180 deg
-
-  // Compute Pinned Equilibrium needle swing & readouts
-  // Needle swings from -75deg (extreme constraint skew) towards 0deg (calibrated equilibrium)
-  const needleAngleDeg = -75 * (1 - Math.sin(pinnedProgress * Math.PI * 0.5));
-  const consensusPercent = (78.2 + pinnedProgress * 18.2).toFixed(1);
-  const tuitionCapLakhs = (26.5 - pinnedProgress * 12.3).toFixed(1);
-  const marketAlpha = (11.4 + pinnedProgress * 6.8).toFixed(1);
-  const deviationIndex = Math.abs(needleAngleDeg / 75 * 10).toFixed(1);
 
   const catalogItems = [
     {
@@ -222,7 +203,7 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
                 onClick={() => onEnterApp('explore')}
                 style={{
                   height: '42px',
-                  padding: '0 20px',
+                  padding: '0 18px',
                   backgroundColor: '#ECE9E2',
                   color: '#181816',
                   border: '1px solid rgba(24, 24, 22, 0.25)',
@@ -249,40 +230,9 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
                   e.currentTarget.style.color = '#181816';
                 }}
               >
-                <span>EXPLORE INDIA TALENT ATLAS</span>
+                <span>EXPLORE</span>
                 <span style={{ color: '#2D5A43' }}>→</span>
               </button>
-
-              <a
-                href="#section-equilibrium"
-                style={{
-                  height: '42px',
-                  padding: '0 18px',
-                  backgroundColor: 'transparent',
-                  color: '#6E6A61',
-                  border: '1px solid rgba(24, 24, 22, 0.16)',
-                  borderRadius: '0px',
-                  fontFamily: "'Martian Mono', monospace",
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  transition: 'border-color 0.2s ease, color 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#2D5A43';
-                  e.currentTarget.style.color = '#2D5A43';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(24, 24, 22, 0.16)';
-                  e.currentTarget.style.color = '#6E6A61';
-                }}
-              >
-                EQUILIBRIUM ↓
-              </a>
             </div>
           </div>
 
@@ -397,73 +347,31 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
             ALIGN
           </div>
 
-          {/* Center Instrument: Precision Multi-Axis Astrolabe */}
+          {/* Center Instrument: Authentic 3D Horological & Surveyor Compass in Proper Orientation */}
           <div
             style={{
               position: 'absolute',
               left: '50%',
               bottom: '5%',
-              transform: `translate(-50%, 0) rotate(${astrolabeRotationDeg}deg)`,
-              width: 'clamp(190px, 26vw, 360px)',
-              height: 'clamp(190px, 26vw, 360px)',
+              transform: 'translate(-50%, 0)',
+              width: 'clamp(200px, 26vw, 360px)',
+              height: 'clamp(200px, 26vw, 360px)',
               zIndex: 2,
-              filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.18))',
-              transition: 'transform 0.08s ease-out',
-              pointerEvents: 'none'
+              pointerEvents: 'auto'
             }}
           >
-            <svg viewBox="0 0 400 400" width="100%" height="100%">
-              {/* Outer Titanium Ring */}
-              <circle cx="200" cy="200" r="190" fill="#ECE9E2" stroke="#181816" strokeWidth="3" />
-              <circle cx="200" cy="200" r="182" fill="none" stroke="#2D5A43" strokeWidth="1.5" strokeDasharray="3 3" />
-              
-              {/* Radial Degree Markers */}
-              {Array.from({ length: 36 }).map((_, i) => {
-                const angle = (i * 10 * Math.PI) / 180;
-                const x1 = 200 + Math.cos(angle) * 174;
-                const y1 = 200 + Math.sin(angle) * 174;
-                const x2 = 200 + Math.cos(angle) * 182;
-                const y2 = 200 + Math.sin(angle) * 182;
-                return (
-                  <line
-                    key={i}
-                    x1={x1}
-                    y1={y1}
-                    x2={x2}
-                    y2={y2}
-                    stroke={i % 9 === 0 ? '#2D5A43' : '#181816'}
-                    strokeWidth={i % 9 === 0 ? 2 : 1}
-                  />
-                );
-              })}
-
-              {/* Middle Vernier Ring (Tuition / Aptitude scale) */}
-              <circle cx="200" cy="200" r="145" fill="#F6F5F1" stroke="#181816" strokeWidth="1.5" />
-              <circle cx="200" cy="200" r="120" fill="none" stroke="rgba(24,24,22,0.2)" strokeWidth="1" strokeDasharray="4 6" />
-
-              {/* 5-Axis Cross Verniers */}
-              <line x1="200" y1="20" x2="200" y2="380" stroke="#181816" strokeWidth="1" strokeDasharray="6 6" />
-              <line x1="20" y1="200" x2="380" y2="200" stroke="#181816" strokeWidth="1" strokeDasharray="6 6" />
-
-              {/* Inner Sapphire Refractor & Pine Aperture */}
-              <circle cx="200" cy="200" r="75" fill="#ECE9E2" stroke="#2D5A43" strokeWidth="2.5" />
-              <polygon
-                points="200,135 255,170 255,230 200,265 145,230 145,170"
-                fill="none"
-                stroke="#2D5A43"
-                strokeWidth="1.5"
-              />
-              <circle cx="200" cy="200" r="28" fill="#2D5A43" />
-              <circle cx="200" cy="200" r="8" fill="#F6F5F1" />
-
-              {/* Deep Botanical Pine North Indicator */}
-              <polygon points="200,30 206,55 194,55" fill="#2D5A43" />
-            </svg>
+            <AuthenticCompass
+              size="100%"
+              rotationDeg={astrolabeRotationDeg}
+            />
           </div>
 
-          {/* Right Half: "X." (In front of the central instrument) */}
+          {/* Right Half: "X." (Behind the central instrument, snug to the astrolabe) */}
           <div
             style={{
+              position: 'absolute',
+              left: 'calc(50% + clamp(65px, 9.5vw, 145px))',
+              bottom: 0,
               fontFamily: "'Big Shoulders Display', sans-serif",
               fontSize: 'clamp(110px, 24vw, 360px)',
               fontWeight: 900,
@@ -473,7 +381,7 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
               userSelect: 'none',
               transform: `translateX(${wordmarkSpreadVw}vw)`,
               transition: 'transform 0.08s ease-out',
-              zIndex: 3,
+              zIndex: 1,
               display: 'flex'
             }}
           >
@@ -484,30 +392,27 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
       </section>
 
       {/* ========================================================
-          3. PINNED STUDY: 01 — EQUILIBRIUM (The Consensus Arc & Vernier)
+          3. 01 — EQUILIBRIUM: 3D POLYHEDRAL RADAR (Fluid Natural Scroll)
           ======================================================== */}
       <section
         id="section-equilibrium"
-        ref={pinnedSectionRef}
         style={{
-          minHeight: '180vh',
+          padding: '100px 48px 80px',
           backgroundColor: '#F6F5F1',
+          borderBottom: '1px solid rgba(24, 24, 22, 0.12)',
           position: 'relative'
         }}
       >
         <div
           style={{
-            position: 'sticky',
-            top: '60px',
-            height: 'calc(100vh - 60px)',
+            maxWidth: '1320px',
+            margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
-            padding: '50px 60px 40px',
-            borderBottom: '1px solid rgba(24, 24, 22, 0.12)'
+            gap: '40px'
           }}
         >
-          {/* Header */}
+          {/* Section Header */}
           <div>
             <div
               style={{
@@ -535,108 +440,8 @@ export const CinematicFrames: React.FC<CinematicFramesProps> = ({
             </h2>
           </div>
 
-          {/* The Precision SVG Arc Dial */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
-              margin: 'auto 0'
-            }}
-          >
-            <div style={{ width: 'clamp(280px, 48vw, 680px)', maxWidth: '100%' }}>
-              <svg viewBox="0 0 500 290" width="100%" height="100%">
-                {/* Outer Reference Arc */}
-                <path
-                  d="M 50 250 A 200 200 0 0 1 450 250"
-                  fill="none"
-                  stroke="rgba(24, 24, 22, 0.16)"
-                  strokeWidth="1.5"
-                />
-
-                {/* Calibrated Active Arc (Deep Botanical Pine) */}
-                <path
-                  d="M 90 250 A 160 160 0 0 1 410 250"
-                  fill="none"
-                  stroke="#2D5A43"
-                  strokeWidth="3.5"
-                />
-
-                {/* Scale Index Marks */}
-                <line x1="250" y1="75" x2="250" y2="90" stroke="#2D5A43" strokeWidth="2.5" />
-                <text x="250" y="65" textAnchor="middle" fill="#181816" fontFamily="'Martian Mono', monospace" fontSize="10" letterSpacing="0.08em">
-                  0.0° OPTIMAL
-                </text>
-
-                <line x1="90" y1="250" x2="75" y2="250" stroke="#181816" strokeWidth="1.5" />
-                <text x="45" y="272" fill="#6E6A61" fontFamily="'Martian Mono', monospace" fontSize="9.5">
-                  -100% CONSTRAINT
-                </text>
-
-                <line x1="410" y1="250" x2="425" y2="250" stroke="#181816" strokeWidth="1.5" />
-                <text x="365" y="272" fill="#6E6A61" fontFamily="'Martian Mono', monospace" fontSize="9.5">
-                  +100% SPECULATION
-                </text>
-
-                {/* Dynamic Oscillation Needle */}
-                <g transform={`rotate(${needleAngleDeg}, 250, 250)`}>
-                  <line x1="250" y1="250" x2="250" y2="100" stroke="#181816" strokeWidth="2" />
-                  <line x1="250" y1="100" x2="250" y2="88" stroke="#2D5A43" strokeWidth="3.5" />
-                  <circle cx="250" cy="250" r="7" fill="#2D5A43" />
-                  <circle cx="250" cy="250" r="2.5" fill="#F6F5F1" />
-                </g>
-              </svg>
-            </div>
-          </div>
-
-          {/* Bottom Monospaced Dynamic Telemetry Readouts */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: '24px',
-              paddingTop: '24px',
-              borderTop: '1px solid rgba(24, 24, 22, 0.12)'
-            }}
-          >
-            <div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#181816' }}>
-                ₹{tuitionCapLakhs}L
-              </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61', letterSpacing: '0.08em' }}>
-                TUITION CAPITAL LIMIT
-              </div>
-            </div>
-
-            <div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#2D5A43' }}>
-                {consensusPercent}%
-              </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61', letterSpacing: '0.08em' }}>
-                HOUSEHOLD CONSENSUS
-              </div>
-            </div>
-
-            <div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#181816' }}>
-                +{marketAlpha}%
-              </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61', letterSpacing: '0.08em' }}>
-                10-YR MARKET ALPHA
-              </div>
-            </div>
-
-            <div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#181816' }}>
-                {deviationIndex}°
-              </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61', letterSpacing: '0.08em' }}>
-                EQUILIBRIUM SKEW
-              </div>
-            </div>
-          </div>
+          {/* 3D Polyhedral Radar Crystal Visualization with Minimalist Hairline Pointer Callout Lines */}
+          <EquilibriumRadar3D />
         </div>
       </section>
 
