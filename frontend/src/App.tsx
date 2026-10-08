@@ -446,6 +446,7 @@ export function App() {
         {currentView === 'twin' && (
           <CareerTwinModule
             careerId={selectedCareerId || 'ai_ml_engineer'}
+            sessionProgress={sessionProgress}
             onOpenRoadmap={handleOpenRoadmap}
             onBackToDashboard={() => {
               setCurrentView('dashboard');
