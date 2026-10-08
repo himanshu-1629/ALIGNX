@@ -517,25 +517,26 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
           <button
             onClick={() => onStartAssessment('onboarding')}
             style={{
-              height: '38px',
-              padding: '0 20px',
-              backgroundColor: '#181816',
-              color: '#F6F5F1',
+              height: '40px',
+              padding: '0 22px',
+              backgroundColor: '#2D5A43',
+              color: '#FFFFFF',
               border: 'none',
               borderRadius: '0px',
               fontFamily: "'Martian Mono', monospace",
               fontSize: '11px',
-              fontWeight: 600,
+              fontWeight: 700,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              transition: 'background-color 0.2s ease'
+              transition: 'background-color 0.2s ease',
+              boxShadow: '0 2px 8px rgba(45, 90, 67, 0.15)'
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#181816')}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#234735')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
           >
             <span>■</span>
             <span>START CALIBRATED ASSESSMENT</span>
@@ -574,15 +575,15 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
           </p>
         </div>
 
-        {/* Live Talent Demand Radar Telemetry Bar */}
+        {/* Live Talent Demand Radar Telemetry Bar - Refined Light Architectural Theme */}
         <div
           style={{
-            backgroundColor: '#181816',
-            color: '#F6F5F1',
-            padding: '20px 24px',
-            marginBottom: '32px',
-            border: '1px solid rgba(24, 24, 22, 0.25)',
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)'
+            backgroundColor: '#FFFFFF',
+            color: '#181816',
+            padding: '28px 32px',
+            marginBottom: '36px',
+            border: '1px solid rgba(24, 24, 22, 0.12)',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)'
           }}
         >
           {/* Top row of banner: live indicator, mode, and controls */}
@@ -592,10 +593,10 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
               justifyContent: 'space-between',
               alignItems: 'center',
               flexWrap: 'wrap',
-              gap: '12px',
-              borderBottom: '1px solid rgba(246, 245, 241, 0.12)',
-              paddingBottom: '14px',
-              marginBottom: '16px'
+              gap: '14px',
+              borderBottom: '1px solid rgba(24, 24, 22, 0.08)',
+              paddingBottom: '18px',
+              marginBottom: '22px'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
@@ -617,7 +618,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                     fontSize: '11.5px',
                     fontWeight: 700,
                     letterSpacing: '0.12em',
-                    color: '#10B981'
+                    color: '#2D5A43'
                   }}
                 >
                   LIVE TALENT DEMAND RADAR · BHARAT
@@ -627,10 +628,10 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                 style={{
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '10px',
-                  color: 'rgba(246, 245, 241, 0.6)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                  padding: '2px 8px',
-                  borderRadius: '2px'
+                  color: '#6E6A61',
+                  backgroundColor: '#F6F5F1',
+                  border: '1px solid rgba(24, 24, 22, 0.08)',
+                  padding: '3px 8px'
                 }}
               >
                 15s CADENCE · CONTINUOUS TELEMETRY
@@ -638,18 +639,18 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: 'rgba(246, 245, 241, 0.7)' }}>
-                <Clock size={12} style={{ color: '#10B981' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
+                <Clock size={12} style={{ color: '#2D5A43' }} />
                 <span>SYNC: {timeAgo}</span>
               </div>
 
               <button
                 onClick={() => setAutoSync(!autoSync)}
                 style={{
-                  background: 'none',
-                  border: '1px solid rgba(246, 245, 241, 0.2)',
-                  color: autoSync ? '#10B981' : '#9CA3AF',
-                  padding: '4px 10px',
+                  background: '#F6F5F1',
+                  border: '1px solid rgba(24, 24, 22, 0.15)',
+                  color: autoSync ? '#2D5A43' : '#6E6A61',
+                  padding: '5px 12px',
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '10px',
                   fontWeight: 600,
@@ -670,7 +671,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   backgroundColor: '#2D5A43',
                   color: '#FFFFFF',
                   border: 'none',
-                  padding: '6px 14px',
+                  padding: '7px 16px',
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '10.5px',
                   fontWeight: 600,
@@ -678,7 +679,13 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  transition: 'opacity 0.2s'
+                  transition: 'background-color 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSyncing) e.currentTarget.style.backgroundColor = '#234735';
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSyncing) e.currentTarget.style.backgroundColor = '#2D5A43';
                 }}
               >
                 <RefreshCw
@@ -696,67 +703,67 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '16px'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+              gap: '18px'
             }}
           >
-            <div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.6)', letterSpacing: '0.08em' }}>
+            <div style={{ backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)', padding: '20px 22px' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', letterSpacing: '0.08em', fontWeight: 600 }}>
                 VERIFIED STEAM OPENINGS
               </div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '28px', fontWeight: 800, color: '#FFFFFF', margin: '2px 0' }}>
+              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#181816', margin: '3px 0' }}>
                 {(pulseData?.activeOpenings || 285560).toLocaleString()}
               </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#10B981' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#2D5A43', fontWeight: 600 }}>
                 {pulseData?.openingsDelta || '+1,217 verified past 24h'}
               </div>
             </div>
 
-            <div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.6)', letterSpacing: '0.08em' }}>
+            <div style={{ backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)', padding: '20px 22px' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', letterSpacing: '0.08em', fontWeight: 600 }}>
                 NATIONAL HIRING VELOCITY
               </div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '28px', fontWeight: 800, color: '#10B981', margin: '2px 0' }}>
+              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#2D5A43', margin: '3px 0' }}>
                 +{pulseData?.nationalVelocity || 33.7}%
               </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.7)' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                 Annualized talent intake expansion
               </div>
             </div>
 
-            <div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.6)', letterSpacing: '0.08em' }}>
+            <div style={{ backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)', padding: '20px 22px' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', letterSpacing: '0.08em', fontWeight: 600 }}>
                 ACTIVE EPICENTER HUB
               </div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '20px', fontWeight: 800, color: '#FFFFFF', margin: '4px 0', lineHeight: 1.1 }}>
+              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '22px', fontWeight: 800, color: '#181816', margin: '5px 0', lineHeight: 1.15 }}>
                 {pulseData?.hotHub || 'Bengaluru · Hyderabad DeepTech Corridor'}
               </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.7)' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                 Peak quarterly hiring density
               </div>
             </div>
 
-            <div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.6)', letterSpacing: '0.08em' }}>
+            <div style={{ backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)', padding: '20px 22px' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', letterSpacing: '0.08em', fontWeight: 600 }}>
                 DOMINANT SECTOR SHORTAGE
               </div>
-              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '20px', fontWeight: 800, color: '#F59E0B', margin: '4px 0', lineHeight: 1.1 }}>
+              <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '22px', fontWeight: 800, color: '#C05621', margin: '5px 0', lineHeight: 1.15 }}>
                 {pulseData?.dominantSector || 'Generative AI & Semiconductor VLSI'}
               </div>
-              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: 'rgba(246, 245, 241, 0.7)' }}>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                 Deficit Volatility: {pulseData?.volatilityScore || '14.2'} (Severe)
               </div>
             </div>
           </div>
         </div>
 
-        {/* View Switcher Tabs */}
+        {/* View Switcher Tabs - Spacious Light Design */}
         <div
           style={{
             display: 'flex',
             gap: '0px',
-            borderBottom: '1px solid rgba(24, 24, 22, 0.16)',
-            marginBottom: '32px'
+            borderBottom: '1px solid rgba(24, 24, 22, 0.12)',
+            marginBottom: '36px'
           }}
         >
           {[
@@ -770,11 +777,12 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 style={{
-                  padding: '14px 22px',
-                  backgroundColor: isActive ? '#ECE9E2' : 'transparent',
-                  color: isActive ? '#181816' : '#6E6A61',
-                  border: 'none',
-                  borderBottom: isActive ? '2px solid #2D5A43' : '2px solid transparent',
+                  padding: '16px 28px',
+                  backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                  color: isActive ? '#2D5A43' : '#6E6A61',
+                  border: '1px solid',
+                  borderColor: isActive ? 'rgba(24, 24, 22, 0.12) rgba(24, 24, 22, 0.12) transparent' : 'transparent',
+                  borderBottom: isActive ? '2px solid #2D5A43' : 'none',
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '11px',
                   fontWeight: isActive ? 700 : 500,
@@ -783,7 +791,8 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  transition: 'all 0.18s ease'
+                  transition: 'all 0.18s ease',
+                  marginBottom: '-1px'
                 }}
               >
                 <span style={{ color: isActive ? '#2D5A43' : '#6E6A61' }}>{tab.icon}</span>
@@ -799,8 +808,8 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
         {activeTab === 'states' && (
           <div>
             {/* Zone Filter Pill Bar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
-              <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#6E6A61', marginRight: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px', flexWrap: 'wrap' }}>
+              <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#6E6A61', marginRight: '6px', fontWeight: 600 }}>
                 FILTER REGION:
               </span>
               {(['All', 'South', 'West', 'North'] as const).map((zone) => (
@@ -808,15 +817,16 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   key={zone}
                   onClick={() => setZoneFilter(zone)}
                   style={{
-                    padding: '6px 14px',
-                    backgroundColor: zoneFilter === zone ? '#2D5A43' : '#ECE9E2',
+                    padding: '8px 18px',
+                    backgroundColor: zoneFilter === zone ? '#2D5A43' : '#FFFFFF',
                     color: zoneFilter === zone ? '#FFFFFF' : '#181816',
-                    border: '1px solid rgba(24, 24, 22, 0.1)',
+                    border: zoneFilter === zone ? '1px solid #2D5A43' : '1px solid rgba(24, 24, 22, 0.14)',
                     fontFamily: "'Martian Mono', monospace",
                     fontSize: '10.5px',
                     fontWeight: 600,
                     cursor: 'pointer',
-                    transition: 'all 0.15s ease'
+                    transition: 'all 0.15s ease',
+                    boxShadow: zoneFilter === zone ? '0 2px 6px rgba(45, 90, 67, 0.2)' : 'none'
                   }}
                 >
                   {zone.toUpperCase()} HUBS
@@ -828,14 +838,14 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'minmax(280px, 360px) 1fr',
-                gap: '24px',
+                gridTemplateColumns: 'minmax(320px, 380px) 1fr',
+                gap: '32px',
                 alignItems: 'start'
               }}
               className="responsive-stack"
             >
               {/* Left Column: State Cards List */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {filteredStates.map((st) => {
                   const isSelected = selectedStateId === st.id;
                   return (
@@ -843,18 +853,18 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       key={st.id}
                       onClick={() => setSelectedStateId(st.id)}
                       style={{
-                        padding: '18px 20px',
-                        backgroundColor: isSelected ? '#FFFFFF' : '#ECE9E2',
-                        border: isSelected ? '1.5px solid #2D5A43' : '1px solid rgba(24, 24, 22, 0.12)',
+                        padding: '20px 22px',
+                        backgroundColor: isSelected ? '#FFFFFF' : '#F9F8F5',
+                        border: isSelected ? '2px solid #2D5A43' : '1px solid rgba(24, 24, 22, 0.1)',
                         boxShadow: isSelected ? '0 8px 24px rgba(45, 90, 67, 0.08)' : 'none',
                         cursor: 'pointer',
                         transition: 'all 0.18s ease'
                       }}
                       onMouseEnter={(e) => {
-                        if (!isSelected) e.currentTarget.style.backgroundColor = '#F0EEE8';
+                        if (!isSelected) e.currentTarget.style.backgroundColor = '#FFFFFF';
                       }}
                       onMouseLeave={(e) => {
-                        if (!isSelected) e.currentTarget.style.backgroundColor = '#ECE9E2';
+                        if (!isSelected) e.currentTarget.style.backgroundColor = '#F9F8F5';
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
@@ -870,12 +880,12 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                         >
                           {st.name}
                         </span>
-                        <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61' }}>
+                        <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', fontWeight: 600 }}>
                           {st.zone.toUpperCase()}
                         </span>
                       </div>
 
-                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#181816', fontWeight: 600, marginBottom: '6px' }}>
+                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#181816', fontWeight: 600, marginBottom: '8px' }}>
                         {st.capital}
                       </div>
 
@@ -885,7 +895,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       </div>
 
                       {st.activePostings && (
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px', paddingTop: '6px', borderTop: '1px dashed rgba(24, 24, 22, 0.08)', fontFamily: "'Martian Mono', monospace", fontSize: '9.5px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', paddingTop: '8px', borderTop: '1px dashed rgba(24, 24, 22, 0.1)', fontFamily: "'Martian Mono', monospace", fontSize: '9.5px' }}>
                           <span style={{ color: '#2D5A43', fontWeight: 600 }}>● {st.activePostings.toLocaleString()} ROLES</span>
                           <span style={{ color: '#10B981', fontWeight: 700 }}>{st.liveDelta || '+2.4%'}</span>
                         </div>
@@ -899,14 +909,14 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
               <div
                 style={{
                   backgroundColor: '#FFFFFF',
-                  border: '1px solid rgba(24, 24, 22, 0.16)',
-                  padding: '36px',
-                  boxShadow: '0 12px 36px rgba(0, 0, 0, 0.04)'
+                  border: '1px solid rgba(24, 24, 22, 0.12)',
+                  padding: '40px 48px',
+                  boxShadow: '0 6px 28px rgba(0, 0, 0, 0.03)'
                 }}
               >
                 {/* State Title Header */}
-                <div style={{ borderBottom: '1px solid rgba(24, 24, 22, 0.12)', paddingBottom: '22px', marginBottom: '24px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '14px' }}>
+                <div style={{ borderBottom: '1px solid rgba(24, 24, 22, 0.1)', paddingBottom: '24px', marginBottom: '28px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
                     <div>
                       <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#2D5A43', fontWeight: 700, letterSpacing: '0.12em' }}>
                         {selectedState.zone.toUpperCase()} INDIA INNOVATION CORRIDOR
@@ -914,16 +924,16 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       <h2
                         style={{
                           fontFamily: "'Big Shoulders Display', sans-serif",
-                          fontSize: '38px',
+                          fontSize: '40px',
                           fontWeight: 800,
                           textTransform: 'uppercase',
-                          margin: '4px 0 6px 0',
+                          margin: '6px 0 8px 0',
                           lineHeight: 1
                         }}
                       >
                         {selectedState.name} — {selectedState.capital}
                       </h2>
-                      <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '15px', color: '#6E6A61' }}>
+                      <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '15px', color: '#6E6A61', lineHeight: 1.5 }}>
                         {selectedState.tagline}
                       </div>
                     </div>
@@ -931,11 +941,11 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                     {/* Deficit Badge */}
                     <div
                       style={{
-                        padding: '6px 12px',
-                        backgroundColor: 'rgba(239, 68, 68, 0.08)',
-                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                        padding: '8px 14px',
+                        backgroundColor: 'rgba(220, 38, 38, 0.06)',
+                        border: '1px solid rgba(220, 38, 38, 0.25)',
                         fontFamily: "'Martian Mono', monospace",
-                        fontSize: '10px',
+                        fontSize: '10.5px',
                         fontWeight: 700,
                         color: '#DC2626',
                         letterSpacing: '0.06em'
@@ -950,28 +960,28 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-                    gap: '16px',
-                    marginBottom: '28px'
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                    gap: '18px',
+                    marginBottom: '32px'
                   }}
                 >
-                  <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                  <div style={{ padding: '20px 22px', backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)' }}>
                     <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                       STARTING CTC (ENTRY)
                     </div>
-                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '30px', fontWeight: 800, color: '#181816', margin: '4px 0' }}>
+                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#181816', margin: '4px 0' }}>
                       ₹{selectedState.startingCtcLakhs} LPA
                     </div>
-                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#2D5A43' }}>
+                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#2D5A43', fontWeight: 600 }}>
                       Across Seeded STEAM Roles
                     </div>
                   </div>
 
-                  <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                  <div style={{ padding: '20px 22px', backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)' }}>
                     <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                       5-YEAR COMPOUND CTC
                     </div>
-                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '30px', fontWeight: 800, color: '#2D5A43', margin: '4px 0' }}>
+                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#2D5A43', margin: '4px 0' }}>
                       ₹{selectedState.fiveYearCtcLakhs} LPA
                     </div>
                     <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61' }}>
@@ -979,26 +989,26 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                     </div>
                   </div>
 
-                  <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                  <div style={{ padding: '20px 22px', backgroundColor: '#F9F8F5', border: '1px solid rgba(24, 24, 22, 0.08)' }}>
                     <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#6E6A61' }}>
                       HIRING VELOCITY
                     </div>
-                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '30px', fontWeight: 800, color: '#181816', margin: '4px 0' }}>
+                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#181816', margin: '4px 0' }}>
                       +{selectedState.hiringVelocity}%
                     </div>
-                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#2D5A43' }}>
+                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#2D5A43', fontWeight: 600 }}>
                       Annual Talent Intake Surge
                     </div>
                   </div>
 
-                  <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(45, 90, 67, 0.25)', position: 'relative' }}>
+                  <div style={{ padding: '20px 22px', backgroundColor: '#F9F8F5', border: '1px solid rgba(45, 90, 67, 0.25)', position: 'relative' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#2D5A43', fontWeight: 700 }}>
                         ACTIVE POSTINGS
                       </div>
                       <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10B981', boxShadow: '0 0 6px #10B981' }} />
                     </div>
-                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '30px', fontWeight: 800, color: '#2D5A43', margin: '4px 0' }}>
+                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, color: '#2D5A43', margin: '4px 0' }}>
                       {(selectedState.activePostings || 54200).toLocaleString()}
                     </div>
                     <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#10B981', fontWeight: 700 }}>
@@ -1010,16 +1020,16 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                 {/* Official MoSPI PLFS & NASSCOM Macro Benchmark Strip */}
                 <div
                   style={{
-                    backgroundColor: '#F0EEE8',
-                    border: '1px solid rgba(24, 24, 22, 0.12)',
-                    padding: '16px 20px',
-                    marginBottom: '28px'
+                    backgroundColor: '#F5F4EE',
+                    border: '1px solid rgba(24, 24, 22, 0.1)',
+                    padding: '20px 24px',
+                    marginBottom: '32px'
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <ShieldCheck size={14} color="#2D5A43" />
-                      <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', fontWeight: 700, color: '#2D5A43', letterSpacing: '0.08em' }}>
+                      <ShieldCheck size={15} color="#2D5A43" />
+                      <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, color: '#2D5A43', letterSpacing: '0.08em' }}>
                         OFFICIAL MoSPI PLFS 2023-24 & NASSCOM BENCHMARKS
                       </span>
                     </div>
@@ -1030,8 +1040,8 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                         border: 'none',
                         color: '#2D5A43',
                         fontFamily: "'Martian Mono', monospace",
-                        fontSize: '10px',
-                        fontWeight: 600,
+                        fontSize: '10.5px',
+                        fontWeight: 700,
                         cursor: 'pointer',
                         textDecoration: 'underline'
                       }}
@@ -1044,14 +1054,14 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                     style={{
                       display: 'grid',
                       gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                      gap: '14px'
+                      gap: '16px'
                     }}
                   >
                     <div>
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61' }}>
                         MoSPI UNEMPLOYMENT RATE (UR)
                       </div>
-                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '15px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
+                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '16px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
                         {selectedState.plfs?.ur ?? 2.7}%
                         <span style={{ fontSize: '9.5px', color: '#2D5A43', marginLeft: '6px', fontWeight: 600 }}>[LOW UR]</span>
                       </div>
@@ -1064,7 +1074,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61' }}>
                         LABOUR FORCE PARTICIPATION (LFPR)
                       </div>
-                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '15px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
+                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '16px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
                         {selectedState.plfs?.lfpr ?? 45.4}%
                       </div>
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9px', color: '#6E6A61' }}>
@@ -1076,7 +1086,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61' }}>
                         WHEEBOX YOUTH EMPLOYABILITY
                       </div>
-                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '15px', fontWeight: 700, color: '#2D5A43', marginTop: '2px' }}>
+                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '16px', fontWeight: 700, color: '#2D5A43', marginTop: '2px' }}>
                         {selectedState.employability?.rate ?? 77.8}%
                       </div>
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9px', color: '#6E6A61' }}>
@@ -1088,7 +1098,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61' }}>
                         NASSCOM GCC DENSITY
                       </div>
-                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '15px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
+                      <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '16px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
                         {selectedState.gccDensity?.count ?? 680}+ GCCs
                       </div>
                       <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9px', color: '#6E6A61' }}>
@@ -1099,34 +1109,34 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                 </div>
 
                 {/* Top In-Demand Careers in This State */}
-                <div style={{ marginBottom: '28px' }}>
-                  <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', color: '#181816', marginBottom: '14px' }}>
+                <div style={{ marginBottom: '32px' }}>
+                  <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', color: '#181816', marginBottom: '16px' }}>
                     MOST IN-DEMAND CAREER ROLES IN {selectedState.name.toUpperCase()}:
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
                     {selectedState.topCareers.map((c, idx) => (
                       <div
                         key={idx}
                         style={{
-                          padding: '14px 16px',
-                          backgroundColor: '#ECE9E2',
-                          border: '1px solid rgba(24, 24, 22, 0.12)',
+                          padding: '18px 20px',
+                          backgroundColor: '#F9F8F5',
+                          border: '1px solid rgba(24, 24, 22, 0.08)',
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'space-between',
-                          gap: '10px'
+                          gap: '12px'
                         }}
                       >
                         <div>
-                          <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#2D5A43', fontWeight: 600 }}>
+                          <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#2D5A43', fontWeight: 700 }}>
                             {c.domain.toUpperCase()}
                           </div>
-                          <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '14px', fontWeight: 700, color: '#181816', marginTop: '2px' }}>
+                          <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '14.5px', fontWeight: 700, color: '#181816', marginTop: '4px' }}>
                             {c.title}
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(24, 24, 22, 0.08)', paddingTop: '8px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(24, 24, 22, 0.08)', paddingTop: '10px' }}>
                           <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#181816', fontWeight: 700 }}>
                             ₹{c.avgCtc}L Entry
                           </span>
@@ -1144,24 +1154,24 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr',
-                    gap: '20px',
-                    borderTop: '1px solid rgba(24, 24, 22, 0.12)',
-                    paddingTop: '24px',
-                    marginBottom: '28px'
+                    gap: '28px',
+                    borderTop: '1px solid rgba(24, 24, 22, 0.1)',
+                    paddingTop: '28px',
+                    marginBottom: '32px'
                   }}
                   className="responsive-stack"
                 >
                   <div>
-                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, color: '#6E6A61', marginBottom: '8px' }}>
+                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, color: '#6E6A61', marginBottom: '10px' }}>
                       KEY TECH SUB-DISTRICTS:
                     </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {selectedState.keyHubs.map((hub, i) => (
                         <span
                           key={i}
                           style={{
-                            padding: '4px 10px',
-                            backgroundColor: '#F6F5F1',
+                            padding: '6px 12px',
+                            backgroundColor: '#F9F8F5',
                             border: '1px solid rgba(24, 24, 22, 0.1)',
                             fontFamily: "'Martian Mono', monospace",
                             fontSize: '10.5px'
@@ -1174,16 +1184,16 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   </div>
 
                   <div>
-                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, color: '#6E6A61', marginBottom: '8px' }}>
+                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', fontWeight: 700, color: '#6E6A61', marginBottom: '10px' }}>
                       PROMINENT RESEARCH LABS & HIRERS:
                     </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {selectedState.keyEmployers.map((emp, i) => (
                         <span
                           key={i}
                           style={{
-                            padding: '4px 10px',
-                            backgroundColor: '#F6F5F1',
+                            padding: '6px 12px',
+                            backgroundColor: '#F9F8F5',
                             border: '1px solid rgba(24, 24, 22, 0.1)',
                             fontFamily: "'Martian Mono', monospace",
                             fontSize: '10.5px'
@@ -1196,24 +1206,25 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   </div>
                 </div>
 
-                {/* Action Strip on State Board */}
+                {/* Action Strip on State Board - Clean Light Architectural Theme */}
                 <div
                   style={{
-                    backgroundColor: '#181816',
-                    color: '#F6F5F1',
-                    padding: '20px 24px',
+                    backgroundColor: '#F3F6F4',
+                    border: '1px solid rgba(45, 90, 67, 0.25)',
+                    borderLeft: '4px solid #2D5A43',
+                    padding: '26px 30px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     flexWrap: 'wrap',
-                    gap: '14px'
+                    gap: '16px'
                   }}
                 >
                   <div>
-                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '20px', fontWeight: 700, letterSpacing: '0.04em' }}>
+                    <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '22px', fontWeight: 800, letterSpacing: '0.02em', textTransform: 'uppercase', color: '#181816' }}>
                       CURIOUS HOW YOUR APTITUDE MATCHES {selectedState.name.toUpperCase()}’S ROLES?
                     </div>
-                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10.5px', color: '#A7A29A' }}>
+                    <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#6E6A61', marginTop: '4px' }}>
                       Run our 5D mathematical model to calibrate your fit score across 25 career options.
                     </div>
                   </div>
@@ -1221,8 +1232,8 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                   <button
                     onClick={() => onStartAssessment('onboarding')}
                     style={{
-                      height: '38px',
-                      padding: '0 20px',
+                      height: '42px',
+                      padding: '0 24px',
                       backgroundColor: '#2D5A43',
                       color: '#FFFFFF',
                       border: 'none',
@@ -1234,8 +1245,12 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '8px'
+                      gap: '8px',
+                      transition: 'background-color 0.2s',
+                      boxShadow: '0 2px 8px rgba(45, 90, 67, 0.2)'
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#234735')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
                   >
                     <span>TEST MY FIT</span>
                     <ArrowRight size={14} />
@@ -1375,18 +1390,20 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                     <button
                       onClick={() => onStartAssessment('onboarding')}
                       style={{
-                        padding: '8px 14px',
-                        backgroundColor: '#181816',
-                        color: '#F6F5F1',
+                        padding: '10px 18px',
+                        backgroundColor: '#2D5A43',
+                        color: '#FFFFFF',
                         border: 'none',
                         fontFamily: "'Martian Mono', monospace",
-                        fontSize: '10.5px',
-                        fontWeight: 600,
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        letterSpacing: '0.06em',
                         cursor: 'pointer',
-                        transition: 'background-color 0.2s ease'
+                        transition: 'background-color 0.2s ease',
+                        boxShadow: '0 2px 6px rgba(45, 90, 67, 0.2)'
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
-                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#181816')}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#234735')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
                     >
                       CHECK FIT →
                     </button>
@@ -1615,15 +1632,19 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
               <button
                 onClick={() => setIsProvenanceModalOpen(false)}
                 style={{
-                  backgroundColor: '#181816',
+                  backgroundColor: '#2D5A43',
                   color: '#FFFFFF',
                   border: 'none',
-                  padding: '8px 18px',
+                  padding: '9px 22px',
                   fontFamily: "'Martian Mono', monospace",
                   fontSize: '11px',
-                  fontWeight: 600,
-                  cursor: 'pointer'
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s ease',
+                  boxShadow: '0 2px 6px rgba(45, 90, 67, 0.2)'
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#234735')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
               >
                 GOT IT
               </button>
