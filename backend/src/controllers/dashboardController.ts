@@ -63,7 +63,10 @@ export const getStudentDashboard = async (
           parentId: p._id,
           relationship: p.relationship,
           name: p.name,
-          status: p.status
+          status: p.status,
+          financialProfile: p.financialProfile || null,
+          expectations: p.expectations || null,
+          submittedAt: p.submittedAt || null
         })) || [],
         familyAnalysis: family?.alignmentAnalysis || {
           financialFit: 75,

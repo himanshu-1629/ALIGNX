@@ -284,6 +284,35 @@ export const getParentStatus = async (
       return;
     }
 
+    const invitations = await ParentInvitation.find({
+      familyId: family._id,
+      status: 'pending',
+      expiresAt: { $gt: new Date() }
+    });
+    const inviteMap = new Map<string, string>();
+    invitations.forEach((inv) => {
+      inviteMap.set(inv.parentId.toString(), inv.token);
+    });
+
+    // Ensure pending parents have a valid invite token
+    for (const p of family.parents) {
+      if (p.status === 'pending' && !inviteMap.has(p._id!.toString())) {
+        const rawToken = crypto.randomBytes(24).toString('hex');
+        const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+        const expiresAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+        await new ParentInvitation({
+          studentId: student._id,
+          familyId: family._id,
+          parentId: p._id,
+          token: rawToken,
+          tokenHash,
+          expiresAt,
+          status: 'pending'
+        }).save();
+        inviteMap.set(p._id!.toString(), rawToken);
+      }
+    }
+
     sendSuccess({
       res,
       statusCode: 200,
@@ -291,16 +320,149 @@ export const getParentStatus = async (
       data: {
         familyId: family._id,
         totalParents: family.parents.length,
-        parents: family.parents.map((p) => ({
-          parentId: p._id,
-          name: p.name,
-          relationship: p.relationship,
-          status: p.status,
-          submittedAt: p.submittedAt,
-          budgetProvided: p.status === 'completed'
-        })),
+        parents: family.parents.map((p) => {
+          const token = inviteMap.get(p._id?.toString() || '') || null;
+          return {
+            parentId: p._id,
+            name: p.name,
+            relationship: p.relationship,
+            status: p.status,
+            email: p.email,
+            phone: p.phone,
+            submittedAt: p.submittedAt,
+            financialProfile: p.financialProfile || null,
+            expectations: p.expectations || null,
+            budgetProvided: p.status === 'completed',
+            invitationToken: token,
+            invitationUrl: token ? `/parent/invite/${token}` : null
+          };
+        }),
         combinedFinancialContext: family.combinedFinancialContext,
         alignmentAnalysis: family.alignmentAnalysis
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Direct parent submission for authenticated students
+ * POST /api/v1/parents/:parentId/direct-submit
+ */
+export const directSubmitParentForm = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const student = req.student!;
+    const { parentId } = req.params;
+    const {
+      incomeRange,
+      educationBudget,
+      riskAppetite = 'medium',
+      locationPreference,
+      stabilityPreference = 'medium',
+      preferredDomains = [],
+      educationExpectations = [],
+      priorityFactors = [],
+      additionalNotes
+    } = req.body;
+
+    const family = await Family.findOne({ studentId: student._id });
+    if (!family) {
+      throw new AppError('Family record not found', 404, 'FAMILY_NOT_FOUND');
+    }
+
+    const parent = family.parents.find((p) => p._id?.toString() === parentId);
+    if (!parent) {
+      throw new AppError('Parent record not found in family', 404, 'PARENT_NOT_FOUND');
+    }
+
+    parent.status = 'completed';
+    parent.submittedAt = new Date();
+    parent.financialProfile = {
+      incomeRange: incomeRange ? String(incomeRange).trim() : undefined,
+      educationBudget: Number(educationBudget) || 15,
+      riskAppetite,
+      locationPreference: locationPreference ? String(locationPreference).trim() : undefined,
+      stabilityPreference
+    };
+    parent.expectations = {
+      preferredDomains: Array.isArray(preferredDomains) ? preferredDomains : [],
+      educationExpectations: Array.isArray(educationExpectations) ? educationExpectations : [],
+      priorityFactors: Array.isArray(priorityFactors) ? priorityFactors : [],
+      additionalNotes: additionalNotes ? String(additionalNotes).trim() : undefined
+    };
+
+    // Mark any pending invitation as used
+    await ParentInvitation.updateMany(
+      { parentId: parent._id, status: 'pending' },
+      { status: 'used', usedAt: new Date() }
+    );
+
+    // Recalculate combined financials and alignment analysis
+    family.combinedFinancialContext = calculateAggregateFinancials(family);
+    family.alignmentAnalysis = calculateConflictIndexAndAlignment(student, family);
+
+    await family.save();
+
+    sendSuccess({
+      res,
+      statusCode: 200,
+      message: 'Parent profile submitted successfully',
+      data: {
+        parentId: parent._id,
+        parentName: parent.name,
+        relationship: parent.relationship,
+        status: parent.status,
+        financialProfile: parent.financialProfile,
+        combinedFinancialContext: family.combinedFinancialContext,
+        alignmentAnalysis: family.alignmentAnalysis
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Remove / delete a parent from the student's family
+ * DELETE /api/v1/parents/:parentId
+ */
+export const removeParent = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const student = req.student!;
+    const { parentId } = req.params;
+
+    const family = await Family.findOne({ studentId: student._id });
+    if (!family) {
+      throw new AppError('Family record not found', 404, 'FAMILY_NOT_FOUND');
+    }
+
+    family.parents = family.parents.filter(
+      (p) => p._id?.toString() !== parentId
+    );
+
+    await ParentInvitation.deleteMany({ parentId });
+
+    family.combinedFinancialContext = calculateAggregateFinancials(family);
+    family.alignmentAnalysis = calculateConflictIndexAndAlignment(student, family);
+
+    await family.save();
+
+    sendSuccess({
+      res,
+      statusCode: 200,
+      message: 'Parent removed successfully',
+      data: {
+        totalParents: family.parents.length,
+        parents: family.parents
       }
     });
   } catch (error) {

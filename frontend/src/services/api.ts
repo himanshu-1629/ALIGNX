@@ -211,22 +211,139 @@ export class ApiService {
   }
 
   // 7. Parent Module
-  public static async inviteParent(payload: { parentName: string; parentEmail: string; relation?: string }) {
-    return this.request<{ success: boolean; data: { inviteToken: string; inviteLink?: string } }>('/parents/invite', {
+  public static async getParentStatus() {
+    return this.request<{
+      success: boolean;
+      data: {
+        familyId: string;
+        totalParents: number;
+        parents: Array<{
+          parentId: string;
+          name: string;
+          relationship: 'Father' | 'Mother' | 'Guardian' | 'Other';
+          status: 'pending' | 'filling' | 'completed';
+          email?: string;
+          phone?: string;
+          submittedAt?: string;
+          financialProfile?: {
+            educationBudget: number;
+            riskAppetite: 'low' | 'medium' | 'high';
+            locationPreference?: string;
+            stabilityPreference?: 'low' | 'medium' | 'high';
+          };
+          expectations?: {
+            preferredDomains?: string[];
+            educationExpectations?: string[];
+            priorityFactors?: string[];
+            additionalNotes?: string;
+          };
+          budgetProvided: boolean;
+          invitationToken?: string;
+          invitationUrl?: string;
+        }>;
+        combinedFinancialContext?: any;
+        alignmentAnalysis?: any;
+      };
+    }>('/parents/status');
+  }
+
+  public static async inviteParent(payload: {
+    parentName?: string;
+    parentEmail?: string;
+    relation?: string;
+    name?: string;
+    relationship?: string;
+    email?: string;
+    phone?: string;
+  }) {
+    return this.request<{
+      success: boolean;
+      data: {
+        parentId: string;
+        parentName: string;
+        relationship: string;
+        status: string;
+        invitationToken: string;
+        invitationUrl: string;
+        expiresAt: string;
+      };
+    }>('/parents/invite', {
       method: 'POST',
       body: JSON.stringify(payload)
     });
   }
 
+  public static async getInvitationDetails(inviteToken: string) {
+    return this.request<{
+      success: boolean;
+      data: {
+        valid: boolean;
+        studentName: string;
+        studentEducation?: string;
+        studentLocation?: string;
+        parentId: string;
+        parentName: string;
+        relationship: string;
+        status: string;
+        expiresAt: string;
+      };
+    }>(`/parents/invite/${inviteToken}`);
+  }
+
   public static async submitParentFeedback(inviteToken: string, payload: {
-    preferredCareerPaths?: string[];
-    riskTolerance?: string;
-    maxBudget?: number;
-    preferredLocations?: string[];
+    educationBudget: number;
+    riskAppetite?: string;
+    incomeRange?: string;
+    locationPreference?: string;
+    stabilityPreference?: string;
+    preferredDomains?: string[];
+    educationExpectations?: string[];
+    priorityFactors?: string[];
+    additionalNotes?: string;
   }) {
     return this.request<{ success: boolean; data: any }>(`/parents/invite/${inviteToken}/submit`, {
       method: 'POST',
       body: JSON.stringify(payload)
+    });
+  }
+
+  public static async submitParentDirect(parentId: string, payload: {
+    educationBudget: number;
+    riskAppetite?: string;
+    incomeRange?: string;
+    locationPreference?: string;
+    stabilityPreference?: string;
+    preferredDomains?: string[];
+    educationExpectations?: string[];
+    priorityFactors?: string[];
+    additionalNotes?: string;
+  }) {
+    return this.request<{ success: boolean; data: any }>(`/parents/${parentId}/direct-submit`, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+  }
+
+  public static async resendParentInvitation(parentId: string) {
+    return this.request<{
+      success: boolean;
+      data: {
+        parentId: string;
+        invitationToken: string;
+        invitationUrl: string;
+      };
+    }>(`/parents/${parentId}/resend`, {
+      method: 'POST'
+    });
+  }
+
+  public static async removeParent(parentId: string) {
+    return this.request<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>(`/parents/${parentId}`, {
+      method: 'DELETE'
     });
   }
 
@@ -288,4 +405,70 @@ export class ApiService {
   public static async getDashboard() {
     return this.request<{ success: boolean; data: any }>('/dashboard/me');
   }
+
+  // 13. Live Talent Atlas Telemetry & Market Intelligence
+  public static async getTalentAtlasData(): Promise<ApiResponse<TalentAtlasPayload>> {
+    return this.request<ApiResponse<TalentAtlasPayload>>('/market/atlas');
+  }
 }
+
+export interface TalentAtlasPayload {
+  pulse: {
+    activeOpenings: number;
+    openingsDelta: string;
+    nationalVelocity: number;
+    volatilityScore: number;
+    lastUpdated: string;
+    hotHub: string;
+    dominantSector: string;
+  };
+  states: Array<{
+    id: string;
+    name: string;
+    capital: string;
+    zone: 'South' | 'West' | 'North' | 'Central';
+    tagline: string;
+    startingCtcLakhs: number;
+    fiveYearCtcLakhs: number;
+    hiringVelocity: number;
+    arbitrageYield: string;
+    activePostings?: number;
+    liveDelta?: string;
+    topCareers: Array<{
+      title: string;
+      domain: string;
+      surge: string;
+      avgCtc: number;
+    }>;
+    keyHubs: string[];
+    keyEmployers: string[];
+    feederInstitutes: string[];
+    deficitTag: string;
+    plfs?: { lfpr: number; ur: number; source: string };
+    employability?: { rate: number; city: string; source: string };
+    gccDensity?: { count: number; source: string };
+  }>;
+  popularCareers: Array<{
+    id: string;
+    rank: number;
+    title: string;
+    domain: string;
+    nationalSurge: string;
+    startingCtc: string;
+    fiveYearCtc: string;
+    popularityScore: number;
+    topStates: string[];
+    shortageIndex: string;
+    whyPopular: string;
+    activeOpenings?: number;
+  }>;
+  provenanceSources?: Array<{
+    id: string;
+    title: string;
+    authority: string;
+    metrics: string;
+    citation: string;
+    url: string;
+  }>;
+}
+

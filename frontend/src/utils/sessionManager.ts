@@ -1,6 +1,18 @@
 import type { AlignxSessionProgress } from '../types/alignx';
 
-const STORAGE_KEY = 'alignx_active_session_state';
+export function getStorageKey(): string {
+  try {
+    const raw = localStorage.getItem('alignx_current_user');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const uid = parsed.id || parsed._id || parsed.email;
+      if (uid) return `alignx_active_session_state_${uid}`;
+    }
+  } catch {
+    // fallback
+  }
+  return 'alignx_active_session_state_guest';
+}
 
 export const DEFAULT_SESSION_PROGRESS: AlignxSessionProgress = {
   lastActiveView: 'onboarding',
@@ -18,7 +30,8 @@ export const DEFAULT_SESSION_PROGRESS: AlignxSessionProgress = {
 
 export function getSessionProgress(): AlignxSessionProgress {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const key = getStorageKey();
+    const raw = localStorage.getItem(key);
     if (!raw) return DEFAULT_SESSION_PROGRESS;
     const parsed = JSON.parse(raw);
     return {
@@ -36,6 +49,7 @@ export function getSessionProgress(): AlignxSessionProgress {
 
 export function saveSessionProgress(updates: Partial<AlignxSessionProgress>): AlignxSessionProgress {
   try {
+    const key = getStorageKey();
     const current = getSessionProgress();
     const updated: AlignxSessionProgress = {
       ...current,
@@ -46,7 +60,7 @@ export function saveSessionProgress(updates: Partial<AlignxSessionProgress>): Al
       },
       updatedAt: new Date().toISOString()
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    localStorage.setItem(key, JSON.stringify(updated));
     return updated;
   } catch {
     return DEFAULT_SESSION_PROGRESS;
@@ -55,7 +69,10 @@ export function saveSessionProgress(updates: Partial<AlignxSessionProgress>): Al
 
 export function clearSessionProgress(): AlignxSessionProgress {
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    const key = getStorageKey();
+    localStorage.removeItem(key);
+    localStorage.removeItem('alignx_active_session_state');
+    localStorage.removeItem('alignx_active_session_state_guest');
   } catch {
     // Ignore storage errors
   }

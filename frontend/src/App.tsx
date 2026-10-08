@@ -16,9 +16,28 @@ import { RoadmapModule } from './components/modules/RoadmapModule';
 import { TalentAtlasModule } from './components/modules/TalentAtlasModule';
 import { AssessmentGateModal } from './components/AssessmentGateModal';
 import type { StudentProfile, AlignxSessionProgress } from './types/alignx';
-import { getSessionProgress, saveSessionProgress, clearSessionProgress } from './utils/sessionManager';
+import { getSessionProgress, saveSessionProgress, clearSessionProgress, DEFAULT_SESSION_PROGRESS } from './utils/sessionManager';
 import { AuthModal } from './components/auth/AuthModal';
+import { ParentInvitePortal } from './components/portal/ParentInvitePortal';
 import { ApiService } from './services/api';
+
+function extractInviteToken(): string | null {
+  try {
+    const path = window.location.pathname;
+    if (path.includes('/parent/invite/')) {
+      const parts = path.split('/parent/invite/');
+      if (parts[1]) return parts[1].split('/')[0].split('?')[0];
+    }
+    const hash = window.location.hash;
+    if (hash.includes('/parent/invite/')) {
+      const parts = hash.split('/parent/invite/');
+      if (parts[1]) return parts[1].split('/')[0].split('?')[0];
+    }
+  } catch {
+    // fallback
+  }
+  return null;
+}
 
 export function App() {
   const [currentView, setCurrentView] = useState<AppView>('home');
@@ -26,6 +45,22 @@ export function App() {
   const [, setStudentProfile] = useState<StudentProfile | null>(null);
   const [sessionProgress, setSessionProgress] = useState<AlignxSessionProgress>(getSessionProgress());
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [inviteToken, setInviteToken] = useState<string | null>(extractInviteToken);
+
+  // Listen to popstate and hashchange for invite URLs
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setInviteToken(extractInviteToken());
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
+  }, []);
+
   const [isAssessmentGateOpen, setIsAssessmentGateOpen] = useState(false);
   const [gateTargetView, setGateTargetView] = useState<AppView>('dashboard');
 
@@ -69,8 +104,9 @@ export function App() {
   }, [currentView, hasAssessmentCompleted]);
 
   const handleAuthSuccess = (user: { id: string; name: string; email: string }) => {
-    setCurrentUser(user);
     localStorage.setItem('alignx_current_user', JSON.stringify(user));
+    setCurrentUser(user);
+    setSessionProgress(getSessionProgress());
     setIsAuthModalOpen(false);
     if (currentView === 'home') {
       setCurrentView('onboarding');
@@ -81,7 +117,12 @@ export function App() {
   const handleSignOut = () => {
     ApiService.clearToken();
     localStorage.removeItem('alignx_current_user');
+    clearSessionProgress();
     setCurrentUser(null);
+    setSessionProgress(DEFAULT_SESSION_PROGRESS);
+    setStudentProfile(null);
+    setCurrentView('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleEnterApp = (view: AppView = 'onboarding') => {
@@ -221,6 +262,10 @@ export function App() {
     { id: 'roadmap', num: '4', label: 'Roadmap Blueprint' },
   ];
 
+  if (inviteToken) {
+    return <ParentInvitePortal token={inviteToken} />;
+  }
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-deep)', display: 'flex', flexDirection: 'column' }}>
       {/* Persistent Architectural Header */}
@@ -333,6 +378,7 @@ export function App() {
 
         {currentView === 'parent' && (
           <ParentModule
+            currentUser={currentUser}
             onContinue={handleParentContinue}
             onBack={() => {
               setCurrentView('dna');
