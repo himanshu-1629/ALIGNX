@@ -180,5 +180,6 @@ export interface AlignxSessionProgress {
     riskAppetite: 'low' | 'moderate' | 'high';
     maxRelocationKm: number;
   };
+  parentList?: ParentInput[];
   updatedAt: string;
 }

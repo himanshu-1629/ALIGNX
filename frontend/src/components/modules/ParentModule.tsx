@@ -29,7 +29,29 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [activeParentToFill, setActiveParentToFill] = useState<ParentInput | null>(null);
-  const [parents, setParents] = useState<ParentInput[]>([]);
+  const [parents, setParents] = useState<ParentInput[]>(() => {
+    const session = getSessionProgress();
+    if (session.parentList && session.parentList.length > 0) {
+      return session.parentList;
+    }
+    if (session.parentData?.name) {
+      return [
+        {
+          id: 'p_initial',
+          parentId: 'p_initial',
+          name: session.parentData.name,
+          relation: session.parentData.relation || 'Father',
+          maxBudgetAnnualLakhs: session.parentData.maxBudgetAnnualLakhs || 16,
+          preferredLocations: session.parentData.preferredLocations || ['Domestic Tier-1 Tech Hubs'],
+          riskAppetite: session.parentData.riskAppetite || 'moderate',
+          priorityFocus: (session.parentData.priorityFocus as any) || 'Stability',
+          conflictPoints: ['Budget ceiling defined at ₹' + (session.parentData.maxBudgetAnnualLakhs || 16) + 'L/yr'],
+          status: session.parentInputDone ? 'COMPLETED' : 'PENDING'
+        }
+      ];
+    }
+    return [];
+  });
   const [conflictIndex, setConflictIndex] = useState<number>(24);
   const [conflictReasons, setConflictReasons] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -99,28 +121,48 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
             };
           });
 
-          setParents(mapped);
+          // Merge backend records with any local records that might still be syncing
+          setParents((prev) => {
+            const backendIds = new Set(mapped.map((p) => p.parentId || p.id));
+            const backendNames = new Set(mapped.map((p) => p.name.trim().toLowerCase()));
 
-          // Sync with local session progress
-          const completed = mapped.find((m) => m.status === 'COMPLETED') || mapped[0];
-          if (completed && completed.status === 'COMPLETED') {
-            saveSessionProgress({
-              parentData: {
-                name: completed.name,
-                relation: completed.relation,
-                maxBudgetAnnualLakhs: completed.maxBudgetAnnualLakhs,
-                preferredLocations: completed.preferredLocations,
-                priorityFocus: completed.priorityFocus,
-                riskAppetite: completed.riskAppetite,
-                maxRelocationKm: 500
-              },
-              parentInputDone: true
-            });
-          }
+            const unSyncedLocal = prev.filter(
+              (p) => !backendIds.has(p.parentId || p.id) && !backendNames.has(p.name.trim().toLowerCase())
+            );
+
+            const merged = [...mapped, ...unSyncedLocal];
+
+            // Sync with local session progress
+            const completed = merged.find((m) => m.status === 'COMPLETED');
+            if (completed) {
+              saveSessionProgress({
+                parentData: {
+                  name: completed.name,
+                  relation: completed.relation,
+                  maxBudgetAnnualLakhs: completed.maxBudgetAnnualLakhs,
+                  preferredLocations: completed.preferredLocations,
+                  priorityFocus: completed.priorityFocus,
+                  riskAppetite: completed.riskAppetite,
+                  maxRelocationKm: 500
+                },
+                parentInputDone: true,
+                parentList: merged
+              });
+            } else {
+              saveSessionProgress({ parentList: merged });
+            }
+
+            return merged;
+          });
           return;
         } else {
-          // Authentic response: This specific student has 0 parents in database
-          setParents([]);
+          // If backend returns empty array, check if we have local parents before clearing
+          setParents((prev) => {
+            if (prev.length > 0) return prev;
+            const session = getSessionProgress();
+            if (session.parentList && session.parentList.length > 0) return session.parentList;
+            return [];
+          });
           return;
         }
       }
@@ -131,23 +173,28 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
     }
 
     // Fallback only if network error / offline mock
-    const session = getSessionProgress();
-    if (session.parentData?.name) {
-      setParents([
-        {
-          name: session.parentData.name,
-          relation: session.parentData.relation || 'Father',
-          maxBudgetAnnualLakhs: session.parentData.maxBudgetAnnualLakhs || 16,
-          preferredLocations: session.parentData.preferredLocations || ['Bangalore', 'Chennai'],
-          riskAppetite: session.parentData.riskAppetite || 'moderate',
-          priorityFocus: (session.parentData.priorityFocus as any) || 'Stability',
-          conflictPoints: ['Budget ceiling defined at ₹' + (session.parentData.maxBudgetAnnualLakhs || 16) + 'L/yr'],
-          status: 'COMPLETED'
-        }
-      ]);
-    } else {
-      setParents([]);
-    }
+    setParents((prev) => {
+      if (prev.length > 0) return prev;
+      const session = getSessionProgress();
+      if (session.parentList && session.parentList.length > 0) {
+        return session.parentList;
+      }
+      if (session.parentData?.name) {
+        return [
+          {
+            name: session.parentData.name,
+            relation: session.parentData.relation || 'Father',
+            maxBudgetAnnualLakhs: session.parentData.maxBudgetAnnualLakhs || 16,
+            preferredLocations: session.parentData.preferredLocations || ['Bangalore', 'Chennai'],
+            riskAppetite: session.parentData.riskAppetite || 'moderate',
+            priorityFocus: (session.parentData.priorityFocus as any) || 'Stability',
+            conflictPoints: ['Budget ceiling defined at ₹' + (session.parentData.maxBudgetAnnualLakhs || 16) + 'L/yr'],
+            status: 'COMPLETED'
+          }
+        ];
+      }
+      return [];
+    });
   }, []);
 
   useEffect(() => {
@@ -162,10 +209,10 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
     window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibility);
 
-    // Periodic 3-second background polling to catch parent submissions live
+    // Periodic 4-second background polling to catch parent submissions live
     const interval = setInterval(() => {
       loadStudentParents(true);
-    }, 3000);
+    }, 4000);
 
     return () => {
       window.removeEventListener('focus', handleFocus);
@@ -176,13 +223,57 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
 
   const hasCompletedParent = parents.some((p) => p.status === 'COMPLETED');
 
-  // Copy invitation link for parent
-  const handleCopyLink = (index: number, parent: ParentInput) => {
+  // Copy invitation link for parent with universal fallback
+  const handleCopyLink = async (index: number, parent: ParentInput) => {
     const token = parent.invitationToken || `invite_${index}_${Date.now()}`;
-    const url = `${window.location.origin}/parent/invite/${token}`;
-    navigator.clipboard.writeText(url);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
+    let url = '';
+    if (parent.invitationUrl && parent.invitationUrl.startsWith('http')) {
+      url = parent.invitationUrl;
+    } else if (parent.invitationUrl) {
+      url = `${window.location.origin}${parent.invitationUrl.startsWith('/') ? '' : '/'}${parent.invitationUrl}`;
+    } else {
+      url = `${window.location.origin}/parent/invite/${token}`;
+    }
+
+    let copied = false;
+    if (navigator?.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(url);
+        copied = true;
+      } catch (err) {
+        console.warn('Clipboard writeText failed, trying execCommand fallback:', err);
+      }
+    }
+
+    if (!copied) {
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        textArea.setAttribute('readonly', '');
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const success = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        if (success) copied = true;
+      } catch (e) {
+        console.warn('Fallback execCommand failed:', e);
+      }
+    }
+
+    if (!copied) {
+      // User prompt as last resort so link is never lost
+      window.prompt('Copy invitation link below:', url);
+      copied = true;
+    }
+
+    if (copied) {
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 2500);
+    }
   };
 
   // Add Parent: saves to MongoDB under this student's family
@@ -218,7 +309,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
       relation: newRelation,
       email: newEmail.trim() || undefined,
       maxBudgetAnnualLakhs: newBudget,
-      preferredLocations: ['Domestic Hubs'],
+      preferredLocations: ['Domestic Tier-1 Tech Hubs'],
       riskAppetite: 'low',
       priorityFocus: 'Stability',
       conflictPoints: [],
@@ -227,7 +318,24 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
       invitationUrl: url
     };
 
-    setParents((prev) => [...prev, newRecord]);
+    setParents((prev) => {
+      const next = [...prev, newRecord];
+      // Immediately persist to session so polling can never wipe this record
+      saveSessionProgress({
+        parentList: next,
+        parentData: {
+          name: newRecord.name,
+          relation: newRecord.relation,
+          maxBudgetAnnualLakhs: newRecord.maxBudgetAnnualLakhs,
+          preferredLocations: newRecord.preferredLocations,
+          priorityFocus: newRecord.priorityFocus,
+          riskAppetite: newRecord.riskAppetite,
+          maxRelocationKm: 500
+        }
+      });
+      return next;
+    });
+
     setNewName('');
     setNewEmail('');
     setShowAddModal(false);
@@ -268,12 +376,14 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
             riskAppetite: remainingCompleted.riskAppetite,
             maxRelocationKm: 500
           },
-          parentInputDone: true
+          parentInputDone: true,
+          parentList: updated
         });
       } else {
         saveSessionProgress({
           parentData: null as any,
-          parentInputDone: false
+          parentInputDone: false,
+          parentList: updated
         });
       }
 
@@ -288,53 +398,20 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
     setFillRisk(parent.riskAppetite || 'low');
   };
 
-  // Submit Parent Perspective (direct sync to MongoDB)
+  // Submit Parent Perspective (direct sync to MongoDB & local state)
   const handleSubmitParentResponse = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeParentToFill) return;
 
+    const targetParent = activeParentToFill;
     const budgetBytes = fillBudget * 100000;
 
-    try {
-      if (activeParentToFill.parentId) {
-        const res = await ApiService.submitParentDirect(activeParentToFill.parentId, {
-          educationBudget: budgetBytes,
-          riskAppetite: fillRisk,
-          priorityFactors: [fillPriority],
-          locationPreference: fillLocation,
-          additionalNotes: fillConcerns
-        });
-        if (res?.data?.alignmentAnalysis?.conflictIndex !== undefined) {
-          setConflictIndex(res.data.alignmentAnalysis.conflictIndex);
-        }
-        if (res?.data?.alignmentAnalysis?.conflictReasons) {
-          setConflictReasons(res.data.alignmentAnalysis.conflictReasons);
-        }
-      } else if (activeParentToFill.invitationToken) {
-        const res = await ApiService.submitParentFeedback(activeParentToFill.invitationToken, {
-          educationBudget: budgetBytes,
-          riskAppetite: fillRisk,
-          priorityFactors: [fillPriority],
-          locationPreference: fillLocation,
-          additionalNotes: fillConcerns
-        });
-        if (res?.data?.alignmentAnalysis?.conflictIndex !== undefined) {
-          setConflictIndex(res.data.alignmentAnalysis.conflictIndex);
-        }
-        if (res?.data?.alignmentAnalysis?.conflictReasons) {
-          setConflictReasons(res.data.alignmentAnalysis.conflictReasons);
-        }
-      }
-      // Re-sync with backend directly
-      await loadStudentParents(true);
-    } catch (err) {
-      console.warn('[ALIGNX Parent] Response submission note:', err);
-    }
-
+    // 1. Immediately update local state & session progress so UI transitions seamlessly
     const updatedParents = parents.map((p) => {
       if (
-        (p.parentId && p.parentId === activeParentToFill.parentId) ||
-        (p.name === activeParentToFill.name && p.relation === activeParentToFill.relation)
+        (p.parentId && p.parentId === targetParent.parentId) ||
+        (p.id && p.id === targetParent.id) ||
+        (p.name === targetParent.name && p.relation === targetParent.relation)
       ) {
         return {
           ...p,
@@ -355,20 +432,57 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
     setParents(updatedParents);
     setActiveParentToFill(null);
 
-    // Persist to session
+    // Persist to session immediately
     const primary = updatedParents.find((p) => p.status === 'COMPLETED') || updatedParents[0];
     saveSessionProgress({
       parentData: {
         name: primary.name,
         relation: primary.relation,
         maxBudgetAnnualLakhs: primary.maxBudgetAnnualLakhs,
-        preferredLocations: primary.preferredLocations || ['Bangalore', 'Chennai'],
+        preferredLocations: primary.preferredLocations || ['Domestic Tier-1 Tech Hubs'],
         priorityFocus: primary.priorityFocus || 'Stability',
         riskAppetite: primary.riskAppetite || 'low',
         maxRelocationKm: 500
       },
-      parentInputDone: true
+      parentInputDone: true,
+      parentList: updatedParents
     });
+
+    // 2. Sync to MongoDB asynchronously in background
+    try {
+      if (targetParent.parentId) {
+        const res = await ApiService.submitParentDirect(targetParent.parentId, {
+          educationBudget: budgetBytes,
+          riskAppetite: fillRisk,
+          priorityFactors: [fillPriority],
+          locationPreference: fillLocation,
+          additionalNotes: fillConcerns
+        });
+        if (res?.data?.alignmentAnalysis?.conflictIndex !== undefined) {
+          setConflictIndex(res.data.alignmentAnalysis.conflictIndex);
+        }
+        if (res?.data?.alignmentAnalysis?.conflictReasons) {
+          setConflictReasons(res.data.alignmentAnalysis.conflictReasons);
+        }
+      } else if (targetParent.invitationToken) {
+        const res = await ApiService.submitParentFeedback(targetParent.invitationToken, {
+          educationBudget: budgetBytes,
+          riskAppetite: fillRisk,
+          priorityFactors: [fillPriority],
+          locationPreference: fillLocation,
+          additionalNotes: fillConcerns
+        });
+        if (res?.data?.alignmentAnalysis?.conflictIndex !== undefined) {
+          setConflictIndex(res.data.alignmentAnalysis.conflictIndex);
+        }
+        if (res?.data?.alignmentAnalysis?.conflictReasons) {
+          setConflictReasons(res.data.alignmentAnalysis.conflictReasons);
+        }
+      }
+      await loadStudentParents(true);
+    } catch (err) {
+      console.warn('[ALIGNX Parent] Response submission note:', err);
+    }
   };
 
   const handleSaveAndContinue = async () => {
