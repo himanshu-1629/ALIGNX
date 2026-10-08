@@ -3,6 +3,7 @@
 [![DataQuest 3.0](https://img.shields.io/badge/Hackathon-DataQuest%203.0-blue.svg)](https://github.com/himanshu-1629/ALIGNX)
 [![Challenge](https://img.shields.io/badge/Challenge-PRISM%20Engine-purple.svg)](https://github.com/himanshu-1629/ALIGNX)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PPT](https://docs.google.com/presentation/d/1dWUnx_up_YXxmj7wloj-4Z_OMFGZoAhl/edit?usp=drive_link&ouid=102706534764800955072&rtpof=true&sd=true)
 
 > **ALIGNX** is an AI-powered, multi-dimensional career decision and discovery platform designed for students navigating critical career choices. Instead of generic quizzes or open-ended chatbots, ALIGNX calculates career alignment across three real-world pillars: **Student Aptitude & Aspirations**, **Family Financial Realities**, and **Market & Geographic Demands**.
 
