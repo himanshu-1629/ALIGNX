@@ -68,12 +68,12 @@ export function saveSessionProgress(updates: Partial<AlignxSessionProgress>): Al
 }
 
 export const DEFAULT_STUDENT_PROFILE: StudentProfile = {
-  name: 'Daksh',
+  name: '',
   stage: 'ug',
   currentField: 'Computer Science & Engineering',
-  location: 'Chennai / Vellore',
-  preferredLocations: ['Bangalore', 'Chennai', 'Singapore'],
-  budgetAnnualLakhs: 12,
+  location: 'Domestic Tech Hub',
+  preferredLocations: ['Bangalore', 'Hyderabad', 'Pune'],
+  budgetAnnualLakhs: 15,
   riskTolerance: 'moderate',
   interests: [
     'Artificial Intelligence',

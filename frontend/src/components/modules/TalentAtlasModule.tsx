@@ -223,7 +223,7 @@ export interface ProvenanceSource {
   url: string;
 }
 
-export const FALLBACK_PROVENANCE_SOURCES: ProvenanceSource[] = [
+const FALLBACK_PROVENANCE_SOURCES: ProvenanceSource[] = [
   {
     id: 'mospi-plfs',
     title: 'MoSPI Periodic Labour Force Survey (PLFS) 2023–24',

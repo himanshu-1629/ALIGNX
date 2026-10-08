@@ -20,11 +20,11 @@ export const OnboardingModule: React.FC<OnboardingModuleProps> = ({
   draftProfile,
   onUpdateDraft
 }) => {
-  const [name, setName] = useState(draftProfile?.name || currentUser?.name || 'Daksh');
+  const [name, setName] = useState(draftProfile?.name || currentUser?.name || '');
   const [stage, setStage] = useState<LifeStage>(draftProfile?.stage || 'ug');
   const [currentField, setCurrentField] = useState(draftProfile?.currentField || 'Computer Science & Engineering');
-  const [location, setLocation] = useState(draftProfile?.location || 'Chennai / Vellore');
-  const [budgetAnnualLakhs, setBudgetAnnualLakhs] = useState<number>(draftProfile?.budgetAnnualLakhs ?? 12);
+  const [location, setLocation] = useState(draftProfile?.location || '');
+  const [budgetAnnualLakhs, setBudgetAnnualLakhs] = useState<number>(draftProfile?.budgetAnnualLakhs ?? 15);
   const [riskTolerance, setRiskTolerance] = useState<'low' | 'moderate' | 'high'>(draftProfile?.riskTolerance || 'moderate');
   const [selectedInterests, setSelectedInterests] = useState<string[]>(
     draftProfile?.interests && draftProfile.interests.length > 0

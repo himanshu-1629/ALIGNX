@@ -27,6 +27,42 @@ interface ParentModuleProps {
   currentUser?: { id?: string; name?: string; email?: string } | null;
 }
 
+function computeDynamicConflict(
+  studentBudget: number,
+  parentBudget: number,
+  studentRisk: string = 'moderate',
+  parentRisk: string = 'low'
+): { index: number; reasons: string[] } {
+  const diff = Math.abs(studentBudget - parentBudget);
+  let conflict = Math.min(85, Math.max(5, Math.round((diff / Math.max(1, studentBudget)) * 40)));
+  const reasons: string[] = [];
+
+  if (parentBudget < studentBudget) {
+    conflict += 15;
+    reasons.push(
+      `Household tuition ceiling of ₹${parentBudget}L/yr requires reliance on scholarships or loans for student target (₹${studentBudget}L/yr).`
+    );
+  } else if (parentBudget >= studentBudget + 4) {
+    conflict = Math.max(5, conflict - 12);
+    reasons.push(
+      `Strong household financial runway (₹${parentBudget}L/yr) provides comfortable backing for student target (₹${studentBudget}L/yr).`
+    );
+  } else {
+    reasons.push(
+      `Strong structural harmony: parental capacity (₹${parentBudget}L/yr) closely aligns with student target (₹${studentBudget}L/yr).`
+    );
+  }
+
+  if (parentRisk === 'low' && studentRisk === 'high') {
+    conflict += 12;
+    reasons.push(
+      'Parental perspective prioritizes placement certainty and corporate pathways over entrepreneurial ventures.'
+    );
+  }
+
+  return { index: Math.min(95, Math.max(5, conflict)), reasons };
+}
+
 export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, currentUser }) => {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -43,19 +79,32 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
           parentId: 'p_initial',
           name: session.parentData.name,
           relation: session.parentData.relation || 'Father',
-          maxBudgetAnnualLakhs: session.parentData.maxBudgetAnnualLakhs || 16,
-          preferredLocations: session.parentData.preferredLocations || ['Domestic Tier-1 Tech Hubs'],
+          maxBudgetAnnualLakhs: session.parentData.maxBudgetAnnualLakhs || session.studentProfile?.budgetAnnualLakhs || 15,
+          preferredLocations: session.parentData.preferredLocations || [session.studentProfile?.location || 'Domestic Hubs'],
           riskAppetite: session.parentData.riskAppetite || 'moderate',
           priorityFocus: (session.parentData.priorityFocus as any) || 'Stability',
-          conflictPoints: ['Budget ceiling defined at ₹' + (session.parentData.maxBudgetAnnualLakhs || 16) + 'L/yr'],
+          conflictPoints: ['Budget ceiling defined at ₹' + (session.parentData.maxBudgetAnnualLakhs || session.studentProfile?.budgetAnnualLakhs || 15) + 'L/yr'],
           status: session.parentInputDone ? 'COMPLETED' : 'PENDING'
         }
       ];
     }
     return [];
   });
-  const [conflictIndex, setConflictIndex] = useState<number>(24);
-  const [conflictReasons, setConflictReasons] = useState<string[]>([]);
+
+  const [conflictIndex, setConflictIndex] = useState<number>(() => {
+    const session = getSessionProgress();
+    const sB = session.studentProfile?.budgetAnnualLakhs || 15;
+    const pB = session.parentData?.maxBudgetAnnualLakhs || sB;
+    return computeDynamicConflict(sB, pB).index;
+  });
+
+  const [conflictReasons, setConflictReasons] = useState<string[]>(() => {
+    const session = getSessionProgress();
+    const sB = session.studentProfile?.budgetAnnualLakhs || 15;
+    const pB = session.parentData?.maxBudgetAnnualLakhs || sB;
+    return computeDynamicConflict(sB, pB).reasons;
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -63,13 +112,13 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
   const [newName, setNewName] = useState('');
   const [newRelation, setNewRelation] = useState<'Father' | 'Mother' | 'Guardian'>('Father');
   const [newEmail, setNewEmail] = useState('');
-  const [newBudget, setNewBudget] = useState(15);
+  const [newBudget, setNewBudget] = useState(() => getSessionProgress().studentProfile?.budgetAnnualLakhs || 15);
 
   // Form states for Parent Response simulation modal
-  const [fillBudget, setFillBudget] = useState(15);
+  const [fillBudget, setFillBudget] = useState(() => getSessionProgress().studentProfile?.budgetAnnualLakhs || 15);
   const [fillPriority, setFillPriority] = useState<'Stability' | 'High Growth' | 'Immediate ROI' | 'Work-Life Balance'>('Stability');
   const [fillRisk, setFillRisk] = useState<'low' | 'moderate' | 'high'>('low');
-  const [fillLocation, setFillLocation] = useState('Domestic Tier-1 Tech Hubs');
+  const [fillLocation, setFillLocation] = useState(() => getSessionProgress().studentProfile?.location || 'Domestic Tech Hubs');
   const [fillConcerns, setFillConcerns] = useState('Prefers domestic Tier-1 institute over high educational debt; requires placement certainty');
 
   // Display name for the student
@@ -187,11 +236,11 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
           {
             name: session.parentData.name,
             relation: session.parentData.relation || 'Father',
-            maxBudgetAnnualLakhs: session.parentData.maxBudgetAnnualLakhs || 16,
-            preferredLocations: session.parentData.preferredLocations || ['Bangalore', 'Chennai'],
+            maxBudgetAnnualLakhs: session.parentData.maxBudgetAnnualLakhs || session.studentProfile?.budgetAnnualLakhs || 15,
+            preferredLocations: session.parentData.preferredLocations || [session.studentProfile?.location || 'Domestic Tier-1 Tech Hubs'],
             riskAppetite: session.parentData.riskAppetite || 'moderate',
             priorityFocus: (session.parentData.priorityFocus as any) || 'Stability',
-            conflictPoints: ['Budget ceiling defined at ₹' + (session.parentData.maxBudgetAnnualLakhs || 16) + 'L/yr'],
+            conflictPoints: ['Budget ceiling defined at ₹' + (session.parentData.maxBudgetAnnualLakhs || session.studentProfile?.budgetAnnualLakhs || 15) + 'L/yr'],
             status: 'COMPLETED'
           }
         ];
@@ -203,7 +252,91 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
   useEffect(() => {
     loadStudentParents(false);
 
-    // Auto-refresh when tab regains focus or visibility
+    // 1. BroadcastChannel for instant 0ms multi-tab sync when parent submits in another tab
+    let channel: BroadcastChannel | null = null;
+    try {
+      channel = new BroadcastChannel('alignx_family_channel');
+      channel.onmessage = (event) => {
+        if (event.data?.type === 'PARENT_SUBMISSION_COMPLETED') {
+          const { token, parentName, relationship, budgetLakhs, priority, riskAppetite, locationPreference, notes } = event.data;
+
+          setParents((prev) => {
+            let matched = false;
+            const updated = prev.map((p) => {
+              if (
+                (token && p.invitationToken === token) ||
+                (p.name && p.name.trim().toLowerCase() === parentName.trim().toLowerCase())
+              ) {
+                matched = true;
+                return {
+                  ...p,
+                  maxBudgetAnnualLakhs: budgetLakhs,
+                  priorityFocus: priority,
+                  riskAppetite,
+                  preferredLocations: [locationPreference],
+                  conflictPoints: [
+                    notes || 'Tuition ceiling defined',
+                    `Budget ceiling defined at ₹${budgetLakhs}L/yr with ${riskAppetite} risk appetite`
+                  ],
+                  status: 'COMPLETED' as const
+                };
+              }
+              return p;
+            });
+
+            if (!matched) {
+              updated.push({
+                id: `p_synced_${Date.now()}`,
+                parentId: `p_synced_${Date.now()}`,
+                name: parentName,
+                relation: relationship,
+                maxBudgetAnnualLakhs: budgetLakhs,
+                preferredLocations: [locationPreference],
+                priorityFocus: priority,
+                riskAppetite,
+                conflictPoints: [`Annual budget ceiling defined at ₹${budgetLakhs}L/yr`],
+                status: 'COMPLETED'
+              });
+            }
+
+            return updated;
+          });
+
+          // Dynamic calculation of conflict index
+          const session = getSessionProgress();
+          const sB = session.studentProfile?.budgetAnnualLakhs || 15;
+          const sRisk = session.studentProfile?.riskTolerance || 'moderate';
+          const { index, reasons } = computeDynamicConflict(sB, budgetLakhs, sRisk, riskAppetite);
+          setConflictIndex(index);
+          setConflictReasons(reasons);
+
+          loadStudentParents(true);
+        }
+      };
+    } catch (e) {
+      console.warn('BroadcastChannel not supported:', e);
+    }
+
+    // 2. Storage event listener for cross-tab localStorage updates
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'alignx_session_progress') {
+        const session = getSessionProgress();
+        if (session.parentList && session.parentList.length > 0) {
+          setParents(session.parentList);
+          const completed = session.parentList.find((p) => p.status === 'COMPLETED');
+          if (completed) {
+            const sB = session.studentProfile?.budgetAnnualLakhs || 15;
+            const sRisk = session.studentProfile?.riskTolerance || 'moderate';
+            const { index, reasons } = computeDynamicConflict(sB, completed.maxBudgetAnnualLakhs, sRisk, completed.riskAppetite);
+            setConflictIndex(index);
+            setConflictReasons(reasons);
+          }
+        }
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+
+    // 3. Auto-refresh when tab regains focus or visibility
     const handleFocus = () => loadStudentParents(true);
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') loadStudentParents(true);
@@ -212,12 +345,14 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
     window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibility);
 
-    // Periodic 4-second background polling to catch parent submissions live
+    // 4. Periodic background polling
     const interval = setInterval(() => {
       loadStudentParents(true);
     }, 4000);
 
     return () => {
+      channel?.close();
+      window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibility);
       clearInterval(interval);
@@ -228,10 +363,16 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
 
   const generateInviteUrl = (index: number, parent: ParentInput): string => {
     const token = parent.invitationToken || `invite_${index}_${Date.now()}`;
+    const session = getSessionProgress();
+    const sId = ApiService.getStudentId() || currentUser?.id || '';
+    const pId = parent.parentId || parent.id || '';
     const sName = encodeURIComponent(studentDisplayName || 'Student');
     const pName = encodeURIComponent(parent.name || 'Parent');
     const pRel = encodeURIComponent(parent.relation || 'Father');
-    const query = `student=${sName}&parent=${pName}&relation=${pRel}`;
+    const sStage = encodeURIComponent(session.studentProfile?.currentField || session.studentProfile?.stage || 'Undergraduate');
+    const sLoc = encodeURIComponent(session.studentProfile?.location || 'India');
+    const sBudget = session.studentProfile?.budgetAnnualLakhs || 16;
+    const query = `student=${sName}&parent=${pName}&relation=${pRel}&stage=${sStage}&loc=${sLoc}&budget=${sBudget}&studentId=${encodeURIComponent(sId)}&parentId=${encodeURIComponent(pId)}`;
 
     if (parent.invitationUrl && parent.invitationUrl.startsWith('http')) {
       return `${parent.invitationUrl}${parent.invitationUrl.includes('?') ? '&' : '?'}${query}`;
@@ -448,6 +589,14 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
     setParents(updatedParents);
     setActiveParentToFill(null);
 
+    // Compute dynamic conflict index immediately
+    const session = getSessionProgress();
+    const sB = session.studentProfile?.budgetAnnualLakhs || 15;
+    const sRisk = session.studentProfile?.riskTolerance || 'moderate';
+    const { index, reasons } = computeDynamicConflict(sB, fillBudget, sRisk, fillRisk);
+    setConflictIndex(index);
+    setConflictReasons(reasons);
+
     // Persist to session immediately
     const primary = updatedParents.find((p) => p.status === 'COMPLETED') || updatedParents[0];
     saveSessionProgress({
@@ -504,7 +653,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
   // Quick-link primary guardian using onboarded student financial bounds
   const handleQuickLinkGuardian = async () => {
     const session = getSessionProgress();
-    const onboardBudget = session.studentProfile?.budgetAnnualLakhs || 16;
+    const onboardBudget = session.studentProfile?.budgetAnnualLakhs || 15;
     const onboardRisk = session.studentProfile?.riskTolerance || 'moderate';
 
     setIsSubmitting(true);
@@ -561,7 +710,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
 
   const handleAutoConfirmConsensus = () => {
     const session = getSessionProgress();
-    const onboardBudget = session.studentProfile?.budgetAnnualLakhs || 16;
+    const onboardBudget = session.studentProfile?.budgetAnnualLakhs || 15;
     const onboardRisk = session.studentProfile?.riskTolerance || 'moderate';
     const primary = parents[0] || {
       id: 'p_confirmed',
@@ -613,7 +762,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
         name: primary.name,
         relation: primary.relation,
         maxBudgetAnnualLakhs: primary.maxBudgetAnnualLakhs,
-        preferredLocations: primary.preferredLocations || ['Bangalore', 'Chennai'],
+        preferredLocations: primary.preferredLocations || [getSessionProgress().studentProfile?.location || 'Domestic Tier-1 Tech Hubs'],
         priorityFocus: primary.priorityFocus || 'Stability',
         riskAppetite: primary.riskAppetite || 'low',
         maxRelocationKm: 500

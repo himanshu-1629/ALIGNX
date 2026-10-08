@@ -62,6 +62,11 @@ export class ApiService {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
+    const studentId = this.getStudentId();
+    if (studentId) {
+      headers['x-student-id'] = studentId;
+    }
+
     try {
       const response = await fetch(url, {
         ...options,
@@ -278,13 +283,17 @@ export class ApiService {
       success: boolean;
       data: {
         valid: boolean;
+        studentId?: string;
         studentName: string;
         studentEducation?: string;
         studentLocation?: string;
+        studentBudgetAnnualLakhs?: number;
         parentId: string;
         parentName: string;
         relationship: string;
         status: string;
+        financialProfile?: any;
+        expectations?: any;
         expiresAt: string;
       };
     }>(`/parents/invite/${inviteToken}`);
@@ -300,6 +309,10 @@ export class ApiService {
     educationExpectations?: string[];
     priorityFactors?: string[];
     additionalNotes?: string;
+    studentId?: string;
+    parentId?: string;
+    parentName?: string;
+    relationship?: string;
   }) {
     return this.request<{ success: boolean; data: any }>(`/parents/invite/${inviteToken}/submit`, {
       method: 'POST',

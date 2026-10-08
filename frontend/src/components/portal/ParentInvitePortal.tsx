@@ -18,6 +18,7 @@ interface ParentInvitePortalProps {
 
 interface InvitationData {
   valid: boolean;
+  studentId?: string;
   studentName: string;
   studentEducation?: string;
   studentLocation?: string;
@@ -50,8 +51,31 @@ export const ParentInvitePortal: React.FC<ParentInvitePortalProps> = ({ token })
         setError(null);
         const res = await ApiService.getInvitationDetails(token);
         if (res.success && res.data && isMounted) {
-          setInviteData(res.data);
-          if (res.data.status === 'completed') {
+          const d = res.data;
+          setInviteData({
+            ...d,
+            studentId: (d as any).studentId || undefined
+          });
+          if (d.studentBudgetAnnualLakhs) {
+            setBudgetLakhs(d.studentBudgetAnnualLakhs);
+          }
+          if (d.financialProfile) {
+            const rawB = d.financialProfile.educationBudget;
+            if (rawB) setBudgetLakhs(rawB >= 100000 ? Math.round(rawB / 100000) : rawB);
+            if (d.financialProfile.riskAppetite) {
+              setRiskAppetite(d.financialProfile.riskAppetite === 'high' ? 'high' : d.financialProfile.riskAppetite === 'low' ? 'low' : 'moderate');
+            }
+            if (d.financialProfile.locationPreference) {
+              setLocationPreference(d.financialProfile.locationPreference);
+            }
+          }
+          if (d.expectations?.priorityFactors?.[0]) {
+            setPriority(d.expectations.priorityFactors[0]);
+          }
+          if (d.expectations?.additionalNotes) {
+            setNotes(d.expectations.additionalNotes);
+          }
+          if (d.status === 'completed') {
             setSubmitted(true);
           }
           return;
@@ -67,18 +91,41 @@ export const ParentInvitePortal: React.FC<ParentInvitePortalProps> = ({ token })
         const queryStudent = searchParams.get('student');
         const queryParent = searchParams.get('parent');
         const queryRelation = searchParams.get('relation');
+        const queryStage = searchParams.get('stage');
+        const queryLoc = searchParams.get('loc');
+        const queryBudget = searchParams.get('budget');
+        const queryStudentId = searchParams.get('studentId') || undefined;
+        const queryParentId = searchParams.get('parentId') || undefined;
 
         const localParent = session.parentList?.find((p) => p.invitationToken === token);
-        const resolvedStudentName = queryStudent || session.studentProfile?.name || 'Daksh';
+        const resolvedStudentName = queryStudent || session.studentProfile?.name || 'Student';
         const resolvedParentName = queryParent || localParent?.name || session.parentData?.name || 'Parent / Guardian';
-        const resolvedRelation = queryRelation || localParent?.relation || session.parentData?.relation || 'Father';
+        const resolvedRelation = queryRelation || localParent?.relation || session.parentData?.relation || 'Guardian';
+        const resolvedEducation = queryStage || session.studentProfile?.currentField || (session.studentProfile?.stage ? String(session.studentProfile.stage).toUpperCase() : 'Higher Education');
+        const resolvedLocation = queryLoc || session.studentProfile?.location || 'Domestic Hubs';
+
+        if (queryBudget) {
+          setBudgetLakhs(Number(queryBudget));
+        } else if (session.studentProfile?.budgetAnnualLakhs) {
+          setBudgetLakhs(session.studentProfile.budgetAnnualLakhs);
+        } else if (localParent?.maxBudgetAnnualLakhs) {
+          setBudgetLakhs(localParent.maxBudgetAnnualLakhs);
+        }
+
+        if (localParent?.riskAppetite) {
+          setRiskAppetite(localParent.riskAppetite);
+        }
+        if (localParent?.priorityFocus) {
+          setPriority(localParent.priorityFocus);
+        }
 
         setInviteData({
           valid: true,
+          studentId: queryStudentId,
           studentName: resolvedStudentName,
-          studentEducation: session.studentProfile?.currentField || (session.studentProfile?.stage ? String(session.studentProfile.stage).toUpperCase() : 'Class 12 / Higher Ed Aspirant'),
-          studentLocation: session.studentProfile?.location || 'Domestic Tier-1 Tech Hubs',
-          parentId: localParent?.parentId || localParent?.id || `p_${token.slice(0, 8)}`,
+          studentEducation: resolvedEducation,
+          studentLocation: resolvedLocation,
+          parentId: queryParentId || localParent?.parentId || localParent?.id || `p_${token.slice(0, 8)}`,
           parentName: resolvedParentName,
           relationship: resolvedRelation,
           status: localParent?.status === 'COMPLETED' ? 'completed' : 'pending',
@@ -113,7 +160,11 @@ export const ParentInvitePortal: React.FC<ParentInvitePortalProps> = ({ token })
           riskAppetite: riskAppetite,
           priorityFactors: [priority],
           locationPreference: locationPreference,
-          additionalNotes: notes.trim() || undefined
+          additionalNotes: notes.trim() || undefined,
+          studentId: inviteData.studentId,
+          parentId: inviteData.parentId,
+          parentName: inviteData.parentName,
+          relationship: inviteData.relationship
         });
       } catch (backendErr) {
         console.warn('[ParentPortal] Backend feedback submit notice:', backendErr);
@@ -121,8 +172,15 @@ export const ParentInvitePortal: React.FC<ParentInvitePortalProps> = ({ token })
 
       // Sync local session so student portal immediately reflects the submitted perspective
       const session = getSessionProgress();
-      const updatedList = (session.parentList || []).map((p) => {
-        if (p.invitationToken === token || p.parentId === inviteData.parentId) {
+      const existingList = session.parentList || [];
+      let found = false;
+      const updatedList = existingList.map((p) => {
+        if (
+          (token && p.invitationToken === token) ||
+          (inviteData.parentId && (p.parentId === inviteData.parentId || p.id === inviteData.parentId)) ||
+          (p.name && inviteData.parentName && p.name.trim().toLowerCase() === inviteData.parentName.trim().toLowerCase())
+        ) {
+          found = true;
           return {
             ...p,
             maxBudgetAnnualLakhs: budgetLakhs,
@@ -139,6 +197,25 @@ export const ParentInvitePortal: React.FC<ParentInvitePortalProps> = ({ token })
         return p;
       });
 
+      if (!found) {
+        updatedList.push({
+          id: inviteData.parentId || `p_${Date.now()}`,
+          parentId: inviteData.parentId || `p_${Date.now()}`,
+          name: inviteData.parentName,
+          relation: (inviteData.relationship as any) || 'Father',
+          maxBudgetAnnualLakhs: budgetLakhs,
+          preferredLocations: [locationPreference],
+          priorityFocus: priority,
+          riskAppetite: riskAppetite,
+          conflictPoints: [
+            notes || 'Tuition ceiling and location preference defined',
+            `Budget ceiling defined at ₹${budgetLakhs}L/yr with ${riskAppetite} risk appetite`
+          ],
+          status: 'COMPLETED' as const,
+          invitationToken: token
+        });
+      }
+
       saveSessionProgress({
         parentData: {
           name: inviteData.parentName,
@@ -150,8 +227,34 @@ export const ParentInvitePortal: React.FC<ParentInvitePortalProps> = ({ token })
           maxRelocationKm: 500
         },
         parentInputDone: true,
-        parentList: updatedList.length > 0 ? updatedList : undefined
+        parentList: updatedList,
+        completedStages: {
+          ...session.completedStages,
+          parent: true,
+          dashboard: true
+        }
       });
+
+      // Broadcast event across browser tabs for 0-latency live synchronization
+      try {
+        const channel = new BroadcastChannel('alignx_family_channel');
+        channel.postMessage({
+          type: 'PARENT_SUBMISSION_COMPLETED',
+          token,
+          parentId: inviteData.parentId,
+          parentName: inviteData.parentName,
+          relationship: inviteData.relationship,
+          budgetLakhs,
+          priority,
+          riskAppetite,
+          locationPreference,
+          notes,
+          timestamp: Date.now()
+        });
+        channel.close();
+      } catch (bcErr) {
+        console.warn('[ParentPortal] BroadcastChannel note:', bcErr);
+      }
 
       setSubmitted(true);
     } catch (err: any) {

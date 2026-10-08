@@ -66,7 +66,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         const student = res.data?.student || {
           _id: 'local_user_' + Date.now(),
-          name: 'Daksh',
+          name: email.split('@')[0] || 'Student',
           email: email.trim()
         };
 
@@ -309,7 +309,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Daksh Sharma"
+                  placeholder="e.g. Rahul Sharma"
                   required
                   style={{
                     width: '100%',
