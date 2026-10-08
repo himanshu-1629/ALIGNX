@@ -30,13 +30,18 @@ export const runSimulator = async (
       scenarioName
     } = req.body || {};
 
-    if (!studentId || !mongoose.Types.ObjectId.isValid(studentId)) {
-      throw new AppError('Valid student ID required', 400, 'INVALID_STUDENT_ID');
+    let student = null;
+    if (studentId && mongoose.Types.ObjectId.isValid(studentId)) {
+      student = await Student.findById(studentId);
     }
-
-    const student = await Student.findById(studentId);
+    if (!student && req.student?._id) {
+      student = await Student.findById(req.student._id);
+    }
     if (!student) {
-      throw new AppError('Student profile not found', 404, 'STUDENT_NOT_FOUND');
+      student = await Student.findOne().sort({ updatedAt: -1 });
+    }
+    if (!student) {
+      throw new AppError('Student profile not found. Please complete profile setup.', 404, 'STUDENT_NOT_FOUND');
     }
 
     const family = await Family.findOne({ studentId: student._id });
@@ -221,15 +226,16 @@ export const getSimulationHistory = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const studentId = req.params.studentId || req.student?._id;
-
-    if (!studentId || !mongoose.Types.ObjectId.isValid(studentId)) {
-      throw new AppError('Valid student ID required', 400, 'INVALID_STUDENT_ID');
+    const studentId = req.params.studentId;
+    let resolvedId = studentId && mongoose.Types.ObjectId.isValid(studentId) ? studentId : req.student?._id;
+    if (!resolvedId) {
+      const latestStudent = await Student.findOne().sort({ updatedAt: -1 });
+      resolvedId = latestStudent?._id;
     }
 
-    const scenarios = await WhatIfScenario.find({ studentId })
-      .sort({ createdAt: -1 })
-      .limit(10);
+    const scenarios = resolvedId
+      ? await WhatIfScenario.find({ studentId: resolvedId }).sort({ createdAt: -1 }).limit(10)
+      : [];
 
     sendSuccess({
       res,

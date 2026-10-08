@@ -463,6 +463,8 @@ export function App() {
         {currentView === 'whatif' && (
           <WhatIfModule
             careerId={selectedCareerId || 'ai_ml_engineer'}
+            sessionProgress={sessionProgress}
+            onSelectCareer={(cId) => setSelectedCareerId(cId)}
             onContinueToRoadmap={handleOpenRoadmap}
             onBackToDashboard={() => {
               setCurrentView('dashboard');

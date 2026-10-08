@@ -373,6 +373,8 @@ export class ApiService {
     additionalSkills?: string[];
     scenarioName?: string;
   }) {
+    const sId = this.getStudentId();
+    const endpoint = sId ? `/simulator/${sId}` : '/simulator/run';
     return this.request<{
       success: boolean;
       data: {
@@ -385,7 +387,7 @@ export class ApiService {
         simulatedRankings?: any[];
         rankChanges?: any[];
       };
-    }>('/simulator/run', {
+    }>(endpoint, {
       method: 'POST',
       body: JSON.stringify(scenario)
     });

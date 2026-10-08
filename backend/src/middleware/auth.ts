@@ -48,4 +48,28 @@ export const authenticate = async (
   }
 };
 
+export const optionalAuthenticate = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      if (token) {
+        const decoded = verifyToken(token);
+        const student = await Student.findById(decoded.id);
+        if (student) {
+          req.student = student;
+          req.userId = student._id.toString();
+        }
+      }
+    }
+    next();
+  } catch {
+    next();
+  }
+};
+
 export default authenticate;
