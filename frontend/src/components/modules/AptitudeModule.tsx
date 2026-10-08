@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { APTITUDE_QUESTIONS } from '../../data/mockAlignxData';
 import { RollButton } from '../RollButton';
 import { saveSessionProgress } from '../../utils/sessionManager';
 import { ApiService } from '../../services/api';
-import { ArrowRight, ChevronLeft, Activity, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronLeft, Activity, Sparkles, Brain, ShieldCheck } from 'lucide-react';
 
 interface AptitudeModuleProps {
   onComplete: (score: number, dimensionScores: Record<string, number>) => void;
@@ -22,6 +22,37 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
   const handleSelectOption = (qId: number, optionIndex: number) => {
     setSelectedAnswers(prev => ({ ...prev, [qId]: optionIndex }));
   };
+
+  // Keyboard navigation support: 1-4 / A-D to select, Enter to advance
+  useEffect(() => {
+    if (showResults || isCalculating) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
+
+      const key = e.key.toLowerCase();
+      let optIdx = -1;
+      if (['1', '2', '3', '4'].includes(key)) {
+        optIdx = parseInt(key, 10) - 1;
+      } else if (key === 'a') optIdx = 0;
+      else if (key === 'b') optIdx = 1;
+      else if (key === 'c') optIdx = 2;
+      else if (key === 'd') optIdx = 3;
+
+      if (optIdx >= 0 && question?.options[optIdx]) {
+        handleSelectOption(question.id, optIdx);
+      } else if (e.key === 'Enter') {
+        if (selectedAnswers[question?.id] !== undefined) {
+          handleNext();
+        }
+      } else if (e.key === 'ArrowLeft' && currentIdx > 0) {
+        handlePrev();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentIdx, selectedAnswers, question, showResults, isCalculating]);
 
   const calculateRawSum = () => {
     return Object.entries(selectedAnswers).reduce((sum, [qId, optIdx]) => {
@@ -92,13 +123,25 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
     <div style={{ maxWidth: '960px', margin: '40px auto', padding: '0 24px' }}>
       {/* Module Title */}
       <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '20px', marginBottom: '36px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.18em', color: 'var(--accent)' }}>
-            PHASE 03 / COGNITIVE APTITUDE EVALUATION [LLM SCHEMA]
-          </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-            VECTOR {currentIdx + 1} OF {totalQuestions}
-          </span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.18em', color: 'var(--accent)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Brain size={14} color="var(--accent)" />
+              PHASE 03 // GENERAL COGNITIVE & REASONING (IQ) EVALUATION
+            </span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.64rem', padding: '2px 6px', backgroundColor: 'rgba(45, 90, 67, 0.1)', border: '1px solid rgba(45, 90, 67, 0.2)', color: 'var(--accent)', fontWeight: 600 }}>
+              UNIVERSAL
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+              VECTOR {currentIdx + 1} OF {totalQuestions}
+            </span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-muted)', backgroundColor: 'var(--bg-deep)', padding: '2px 8px', border: '1px solid var(--border-subtle)' }}>
+              KEYS 1-4 / ENTER
+            </span>
+          </div>
         </div>
 
         <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%', borderRadius: '0px', overflow: 'hidden' }}>
