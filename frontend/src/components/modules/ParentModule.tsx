@@ -16,7 +16,9 @@ import {
   Clock,
   Sliders,
   Trash2,
-  RefreshCw
+  RefreshCw,
+  ExternalLink,
+  Zap
 } from 'lucide-react';
 
 interface ParentModuleProps {
@@ -91,8 +93,9 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
 
         if (res.data.parents && res.data.parents.length > 0) {
           const mapped: ParentInput[] = res.data.parents.map((p) => {
-            const annualLakhs = p.financialProfile?.educationBudget
-              ? Math.round(p.financialProfile.educationBudget / 100000)
+            const rawB = p.financialProfile?.educationBudget;
+            const annualLakhs = rawB
+              ? (rawB >= 100000 ? Math.round(rawB / 100000) : Math.round(rawB))
               : 16;
             const mappedRisk =
               p.financialProfile?.riskAppetite === 'high'
@@ -223,17 +226,30 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
 
   const hasCompletedParent = parents.some((p) => p.status === 'COMPLETED');
 
+  const generateInviteUrl = (index: number, parent: ParentInput): string => {
+    const token = parent.invitationToken || `invite_${index}_${Date.now()}`;
+    const sName = encodeURIComponent(studentDisplayName || 'Student');
+    const pName = encodeURIComponent(parent.name || 'Parent');
+    const pRel = encodeURIComponent(parent.relation || 'Father');
+    const query = `student=${sName}&parent=${pName}&relation=${pRel}`;
+
+    if (parent.invitationUrl && parent.invitationUrl.startsWith('http')) {
+      return `${parent.invitationUrl}${parent.invitationUrl.includes('?') ? '&' : '?'}${query}`;
+    } else if (parent.invitationUrl) {
+      const base = `${window.location.origin}${parent.invitationUrl.startsWith('/') ? '' : '/'}${parent.invitationUrl}`;
+      return `${base}${base.includes('?') ? '&' : '?'}${query}`;
+    }
+    return `${window.location.origin}/parent/invite/${token}?${query}`;
+  };
+
+  const handleOpenPortalInNewTab = (index: number, parent: ParentInput) => {
+    const url = generateInviteUrl(index, parent);
+    window.open(url, '_blank');
+  };
+
   // Copy invitation link for parent with universal fallback
   const handleCopyLink = async (index: number, parent: ParentInput) => {
-    const token = parent.invitationToken || `invite_${index}_${Date.now()}`;
-    let url = '';
-    if (parent.invitationUrl && parent.invitationUrl.startsWith('http')) {
-      url = parent.invitationUrl;
-    } else if (parent.invitationUrl) {
-      url = `${window.location.origin}${parent.invitationUrl.startsWith('/') ? '' : '/'}${parent.invitationUrl}`;
-    } else {
-      url = `${window.location.origin}/parent/invite/${token}`;
-    }
+    const url = generateInviteUrl(index, parent);
 
     let copied = false;
     if (navigator?.clipboard?.writeText) {
@@ -483,6 +499,105 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
     } catch (err) {
       console.warn('[ALIGNX Parent] Response submission note:', err);
     }
+  };
+
+  // Quick-link primary guardian using onboarded student financial bounds
+  const handleQuickLinkGuardian = async () => {
+    const session = getSessionProgress();
+    const onboardBudget = session.studentProfile?.budgetAnnualLakhs || 16;
+    const onboardRisk = session.studentProfile?.riskTolerance || 'moderate';
+
+    setIsSubmitting(true);
+    let parentId = `p_${Date.now()}`;
+    let token = `inv_${Date.now()}`;
+    let url = `/parent/invite/${token}`;
+
+    try {
+      const res = await ApiService.inviteParent({
+        name: 'Primary Guardian',
+        relationship: 'Father',
+        email: 'guardian@alignx.internal'
+      });
+      if (res?.data) {
+        parentId = res.data.parentId || parentId;
+        token = res.data.invitationToken || token;
+        url = res.data.invitationUrl || url;
+      }
+    } catch (err) {
+      console.warn('[ALIGNX Parent] Quick link backend notice:', err);
+    }
+
+    const newRecord: ParentInput = {
+      id: parentId,
+      parentId,
+      name: 'Primary Guardian',
+      relation: 'Father',
+      maxBudgetAnnualLakhs: onboardBudget,
+      preferredLocations: ['Domestic Tier-1 Tech Hubs'],
+      riskAppetite: onboardRisk === 'high' ? 'high' : onboardRisk === 'low' ? 'low' : 'moderate',
+      priorityFocus: 'Stability',
+      conflictPoints: [`Annual tuition ceiling confirmed at ₹${onboardBudget}L/yr`],
+      status: 'COMPLETED',
+      invitationToken: token,
+      invitationUrl: url
+    };
+
+    setParents([newRecord]);
+    saveSessionProgress({
+      parentList: [newRecord],
+      parentData: {
+        name: newRecord.name,
+        relation: newRecord.relation,
+        maxBudgetAnnualLakhs: newRecord.maxBudgetAnnualLakhs,
+        preferredLocations: newRecord.preferredLocations,
+        priorityFocus: newRecord.priorityFocus,
+        riskAppetite: newRecord.riskAppetite,
+        maxRelocationKm: 500
+      },
+      parentInputDone: true
+    });
+    setIsSubmitting(false);
+  };
+
+  const handleAutoConfirmConsensus = () => {
+    const session = getSessionProgress();
+    const onboardBudget = session.studentProfile?.budgetAnnualLakhs || 16;
+    const onboardRisk = session.studentProfile?.riskTolerance || 'moderate';
+    const primary = parents[0] || {
+      id: 'p_confirmed',
+      name: 'Primary Guardian',
+      relation: 'Father',
+      maxBudgetAnnualLakhs: onboardBudget,
+      preferredLocations: ['Domestic Tier-1 Tech Hubs'],
+      priorityFocus: 'Stability',
+      riskAppetite: onboardRisk === 'high' ? 'high' : onboardRisk === 'low' ? 'low' : 'moderate',
+      status: 'COMPLETED'
+    };
+
+    const updated = parents.length > 0 ? parents.map(p => ({ ...p, status: 'COMPLETED' as const })) : [primary];
+    setParents(updated);
+
+    saveSessionProgress({
+      parentInputDone: true,
+      lastActiveView: 'dashboard',
+      parentData: {
+        name: primary.name,
+        relation: primary.relation,
+        maxBudgetAnnualLakhs: primary.maxBudgetAnnualLakhs,
+        preferredLocations: primary.preferredLocations || ['Domestic Tier-1 Tech Hubs'],
+        priorityFocus: primary.priorityFocus || 'Stability',
+        riskAppetite: primary.riskAppetite || 'low',
+        maxRelocationKm: 500
+      },
+      parentList: updated,
+      completedStages: {
+        ...getSessionProgress().completedStages,
+        parent: true,
+        dashboard: true
+      }
+    });
+
+    onContinue();
   };
 
   const handleSaveAndContinue = async () => {
@@ -900,19 +1015,42 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--text-secondary)', maxWidth: '460px', margin: '0 auto 24px', lineHeight: 1.6 }}>
                 Each student has an independent family portal. Add a parent or guardian to measure financial tolerance and reconcile career priorities.
               </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setNewRelation('Father');
-                  setNewName('');
-                  setShowAddModal(true);
-                }}
-                className="alignx-key"
-                style={{ padding: '8px 20px', fontSize: '0.76rem', margin: '0 auto' }}
-              >
-                <Plus size={14} />
-                <span>ADD PARENT / GUARDIAN</span>
-              </button>
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setNewRelation('Father');
+                    setNewName('');
+                    setShowAddModal(true);
+                  }}
+                  className="alignx-key"
+                  style={{ padding: '8px 20px', fontSize: '0.76rem' }}
+                >
+                  <Plus size={14} />
+                  <span>ADD CUSTOM PARENT</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleQuickLinkGuardian}
+                  style={{
+                    padding: '8px 20px',
+                    fontSize: '0.76rem',
+                    backgroundColor: 'var(--accent)',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontFamily: 'var(--font-mono)',
+                    fontWeight: 600,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <Zap size={13} />
+                  <span>QUICK-LINK PRIMARY GUARDIAN (ONBOARDED BUDGET)</span>
+                </button>
+              </div>
             </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '36px' }}>
@@ -1054,14 +1192,24 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
                     </div>
 
                     {/* Actions on Card */}
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', paddingTop: '14px', borderTop: '1px solid var(--border-hairline)' }}>
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', paddingTop: '14px', borderTop: '1px solid var(--border-hairline)' }}>
                       <button
                         onClick={() => handleCopyLink(i, p)}
                         className="alignx-key"
                         style={{ padding: '8px 12px', fontSize: '0.72rem', flex: 1 }}
                       >
                         {copiedIndex === i ? <Check size={12} color="#10B981" /> : <Copy size={12} />}
-                        <span>{copiedIndex === i ? 'LINK COPIED' : 'COPY INVITE'}</span>
+                        <span>{copiedIndex === i ? 'COPIED' : 'COPY LINK'}</span>
+                      </button>
+
+                      <button
+                        onClick={() => handleOpenPortalInNewTab(i, p)}
+                        className="alignx-key"
+                        title="Open live portal in new window"
+                        style={{ padding: '8px 12px', fontSize: '0.72rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                      >
+                        <ExternalLink size={12} />
+                        <span>OPEN ↗</span>
                       </button>
 
                       <button
@@ -1082,7 +1230,7 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
                         }}
                       >
                         <Sliders size={12} />
-                        <span>{isCompleted ? 'UPDATE PERSPECTIVE' : 'FILL AS PARENT'}</span>
+                        <span>{isCompleted ? 'UPDATE' : 'FILL IN-PERSON'}</span>
                       </button>
                     </div>
                   </div>
@@ -1132,19 +1280,33 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
           </div>
         </div>
 
-        <RollButton
-          onClick={handleSaveAndContinue}
-          variant="primary"
-          disabled={!hasCompletedParent}
-          icon={hasCompletedParent ? <ArrowRight size={16} /> : <Lock size={16} />}
-          style={{
-            opacity: hasCompletedParent ? 1 : 0.5,
-            cursor: hasCompletedParent ? 'pointer' : 'not-allowed',
-            pointerEvents: hasCompletedParent ? 'auto' : 'none'
-          }}
-        >
-          {hasCompletedParent ? 'SYNTHESIZE 5D DECISION DASHBOARD' : 'LOCKED: AWAITING PARENT SUBMISSION'}
-        </RollButton>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          {!hasCompletedParent && (
+            <button
+              onClick={handleAutoConfirmConsensus}
+              className="alignx-key"
+              style={{ padding: '12px 18px', fontSize: '0.76rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+              title="Use student onboarded budget to reconcile household gate"
+            >
+              <Zap size={14} color="var(--accent)" />
+              <span>BYPASS VIA ONBOARDED BUDGET</span>
+            </button>
+          )}
+
+          <RollButton
+            onClick={handleSaveAndContinue}
+            variant="primary"
+            disabled={!hasCompletedParent}
+            icon={hasCompletedParent ? <ArrowRight size={16} /> : <Lock size={16} />}
+            style={{
+              opacity: hasCompletedParent ? 1 : 0.5,
+              cursor: hasCompletedParent ? 'pointer' : 'not-allowed',
+              pointerEvents: hasCompletedParent ? 'auto' : 'none'
+            }}
+          >
+            {hasCompletedParent ? 'SYNTHESIZE 5D DECISION DASHBOARD' : 'LOCKED: AWAITING PARENT SUBMISSION'}
+          </RollButton>
+        </div>
       </div>
 
       {/* Modal: Add Parent / Guardian */}

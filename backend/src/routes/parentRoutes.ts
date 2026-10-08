@@ -39,7 +39,8 @@ router.post('/invite', authenticate, validateAddParent, addParentAndInvite);
 // Generate invitation for specific parent ID
 router.post('/:parentId/invitation', generateParentInvitation);
 
-// Live status of all parents & family alignment
+// Live status of all parents & family alignment (supports / and /status)
+router.get('/', authenticate, getParentStatus);
 router.get('/status', authenticate, getParentStatus);
 
 // Resend / regenerate invitation link for an existing parent

@@ -33,7 +33,7 @@ import { ApiService } from './services/api';
 function extractInviteToken(): string | null {
   try {
     const searchParams = new URLSearchParams(window.location.search);
-    const queryToken = searchParams.get('token') || searchParams.get('invite');
+    const queryToken = searchParams.get('token') || searchParams.get('invite') || searchParams.get('inviteToken') || searchParams.get('parentToken');
     if (queryToken && queryToken.trim()) return queryToken.trim();
 
     const path = window.location.pathname;
