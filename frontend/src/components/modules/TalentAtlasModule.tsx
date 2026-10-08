@@ -46,20 +46,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Bengaluru Corridor',
     zone: 'South',
     tagline: 'DeepTech, AI Infrastructure & Global Innovation Alliances',
-    startingCtcLakhs: 18.5,
-    fiveYearCtcLakhs: 38.0,
+    startingCtcLakhs: 11.9,
+    fiveYearCtcLakhs: 28.3,
     hiringVelocity: 38,
     arbitrageYield: '1.85x Tech Alpha (High Urban Capex)',
     topCareers: [
-      { title: 'AI & Machine Learning Engineer', domain: 'AI & Data Science', surge: '+42%', avgCtc: 21.5 },
-      { title: 'Autonomous Robotics & Drone Architect', domain: 'Robotics & Hardware', surge: '+34%', avgCtc: 18.0 },
-      { title: 'Cloud & Distributed Systems Architect', domain: 'Software & Cloud', surge: '+29%', avgCtc: 19.5 },
-      { title: 'Semiconductor VLSI Physical Design', domain: 'Hardware Systems', surge: '+36%', avgCtc: 17.0 }
+      { title: 'AI & Machine Learning Engineer', domain: 'AI & Data Science', surge: '+42%', avgCtc: 12.8 },
+      { title: 'VLSI & Semiconductor Design Engineer', domain: 'Hardware Systems', surge: '+36%', avgCtc: 12.8 },
+      { title: 'Technical Product Manager (AI & STEAM)', domain: 'Product Management', surge: '+32%', avgCtc: 11.5 },
+      { title: 'Satellite Communications & Space Tech Engineer', domain: 'SpaceTech & Defense', surge: '+30%', avgCtc: 10.3 }
     ],
     keyHubs: ['Whitefield', 'Electronic City', 'Outer Ring Road', 'Koramangala'],
     keyEmployers: ['Google DeepMind Lab', 'NVIDIA Research', 'Infosys Center of AI', 'ISRO Tech Base', 'Flipkart'],
     feederInstitutes: ['IISc Bengaluru', 'IIIT-Bangalore', 'RV College of Engineering', 'BMS College'],
-    deficitTag: 'CRITICAL: GPU Kernel Developers & Distributed ML Engineers'
+    deficitTag: 'CRITICAL: GPU Kernel Developers & Distributed ML Engineers',
+    plfs: { lfpr: 45.4, ur: 2.7, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 77.84, city: 'Bengaluru (77.8%)', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 680, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'maharashtra',
@@ -67,20 +70,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Mumbai · Pune Twin Cluster',
     zone: 'West',
     tagline: 'Capital Markets, Quantitative Finance & Mechatronic EV R&D',
-    startingCtcLakhs: 17.2,
-    fiveYearCtcLakhs: 35.5,
+    startingCtcLakhs: 11.3,
+    fiveYearCtcLakhs: 25.9,
     hiringVelocity: 29,
     arbitrageYield: '1.70x Capital Alpha (Tier-1 Financial Nexus)',
     topCareers: [
-      { title: 'Quantitative Algorithm Strategist', domain: 'Quantitative Finance', surge: '+44%', avgCtc: 24.0 },
-      { title: 'Electric Vehicle & Battery Mechatronics', domain: 'Hardware Systems', surge: '+31%', avgCtc: 16.5 },
-      { title: 'Cyber Defense & Cryptographic Security', domain: 'Cybersecurity', surge: '+28%', avgCtc: 17.8 },
-      { title: 'FinTech Distributed Systems Architect', domain: 'Software & Cloud', surge: '+26%', avgCtc: 18.2 }
+      { title: 'Fintech Quantitative & Algorithmic Analyst', domain: 'Quantitative Finance', surge: '+44%', avgCtc: 18.0 },
+      { title: 'Electric Vehicle & Battery Systems Engineer', domain: 'Automotive & CleanTech', surge: '+31%', avgCtc: 8.8 },
+      { title: 'Robotics & Autonomous Systems Engineer', domain: 'Hardware Systems', surge: '+29%', avgCtc: 9.0 },
+      { title: 'Cybersecurity & Cryptographic Analyst', domain: 'Cybersecurity', surge: '+28%', avgCtc: 9.5 }
     ],
     keyHubs: ['BKC Mumbai', 'Hinjawadi Pune', 'Powai Tech Cluster', 'Chakan Auto Hub'],
     keyEmployers: ['Tower Research', 'Goldman Sachs Tech', 'Tata Motors EV Lab', 'Morgan Stanley', 'NPCI'],
     feederInstitutes: ['IIT Bombay', 'COEP Technological University', 'VJTI Mumbai', 'SPIT Mumbai'],
-    deficitTag: 'CRITICAL: High-Frequency Trading Systems & Battery Chemistry'
+    deficitTag: 'CRITICAL: High-Frequency Trading Systems & Battery Chemistry',
+    plfs: { lfpr: 46.8, ur: 3.3, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 78.92, city: 'Pune (78.9%) · Mumbai (75.1%)', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 390, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'telangana',
@@ -88,20 +94,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Hyderabad Cyber-Corridor',
     zone: 'South',
     tagline: 'Bio-Computing, Cloud Hyperscalers & Semiconductor Packaging',
-    startingCtcLakhs: 15.8,
-    fiveYearCtcLakhs: 32.0,
+    startingCtcLakhs: 9.5,
+    fiveYearCtcLakhs: 22.5,
     hiringVelocity: 33,
     arbitrageYield: '2.15x CoL Arbitrage (Optimized Living Yield)',
     topCareers: [
-      { title: 'Computational Biologist & Genomic Analyst', domain: 'Biotech & Health', surge: '+37%', avgCtc: 16.0 },
-      { title: 'Cloud Infrastructure & DevOps Engineer', domain: 'Software & Cloud', surge: '+31%', avgCtc: 17.0 },
-      { title: 'Advanced Semiconductor Verification', domain: 'Hardware Systems', surge: '+35%', avgCtc: 15.5 },
-      { title: 'Enterprise Generative AI Integrator', domain: 'AI & Data Science', surge: '+39%', avgCtc: 18.5 }
+      { title: 'Bioinformatics & Genomic Data Scientist', domain: 'Biotech & Health', surge: '+37%', avgCtc: 8.0 },
+      { title: 'Computational Biologist & Drug Discovery Specialist', domain: 'Biotech & Health', surge: '+35%', avgCtc: 8.5 },
+      { title: 'Data Platform & Cloud Engineer', domain: 'Software & Cloud', surge: '+33%', avgCtc: 11.3 },
+      { title: 'Satellite Communications & Space Tech Engineer', domain: 'SpaceTech & Defense', surge: '+31%', avgCtc: 10.3 }
     ],
     keyHubs: ['HITEC City', 'Financial District', 'Genome Valley', 'Gachibowli'],
     keyEmployers: ['Microsoft IDC', 'Amazon Web Services', 'Dr. Reddy’s Digital Lab', 'Qualcomm', 'Novartis'],
     feederInstitutes: ['IIT Hyderabad', 'IIIT-Hyderabad', 'BITS Pilani Hyderabad', 'JNTU'],
-    deficitTag: 'CRITICAL: Bioinformaticians & ASIC Verification Leads'
+    deficitTag: 'CRITICAL: Bioinformaticians & ASIC Verification Leads',
+    plfs: { lfpr: 48.0, ur: 4.8, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 76.20, city: 'Hyderabad (76.2%)', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 420, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'delhi_ncr',
@@ -109,20 +118,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Gurugram · Noida Metro Area',
     zone: 'North',
     tagline: 'Consumer Scale Platforms, GovTech & AI Product Management',
-    startingCtcLakhs: 16.4,
-    fiveYearCtcLakhs: 33.5,
+    startingCtcLakhs: 10.0,
+    fiveYearCtcLakhs: 23.5,
     hiringVelocity: 27,
     arbitrageYield: '1.75x Scale Alpha (National Capital Ecosystem)',
     topCareers: [
-      { title: 'Product Management Systems Architect', domain: 'Design & Product', surge: '+30%', avgCtc: 19.0 },
-      { title: 'Data Platform & Analytics Engineer', domain: 'AI & Data Science', surge: '+28%', avgCtc: 17.5 },
-      { title: 'Zero-Trust Cyber Defense Specialist', domain: 'Cybersecurity', surge: '+33%', avgCtc: 16.8 },
-      { title: 'Supply Chain AI & Logistics Optimizer', domain: 'Enterprise Tech', surge: '+25%', avgCtc: 15.5 }
+      { title: 'Technical Product Manager (AI & STEAM)', domain: 'Product Management', surge: '+32%', avgCtc: 11.5 },
+      { title: 'Data Platform & Cloud Engineer', domain: 'AI & Data Science', surge: '+28%', avgCtc: 11.3 },
+      { title: 'Cybersecurity & Cryptographic Analyst', domain: 'Cybersecurity', surge: '+33%', avgCtc: 9.5 },
+      { title: 'Climate Tech & Carbon Systems Engineer', domain: 'CleanTech & Climate', surge: '+25%', avgCtc: 7.5 }
     ],
     keyHubs: ['Cyber City Gurugram', 'Golf Course Ext.', 'Sector 62 Noida', 'Aerocity'],
     keyEmployers: ['Zomato Tech', 'Paytm Core', 'Airtel Digital', 'Adobe India', 'Samsung R&D'],
     feederInstitutes: ['IIT Delhi', 'DTU', 'NSUT Delhi', 'IIIT-Delhi'],
-    deficitTag: 'CRITICAL: High-Concurrency Backend & Cyber Forensics'
+    deficitTag: 'CRITICAL: High-Concurrency Backend & Cyber Forensics',
+    plfs: { lfpr: 36.0, ur: 2.1, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 76.80, city: 'Gurugram · Noida', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 310, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'tamil_nadu',
@@ -130,20 +142,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Chennai · Coimbatore Belt',
     zone: 'South',
     tagline: 'SaaS Powerhouse, Industrial IoT & Renewable Mobility Hub',
-    startingCtcLakhs: 14.2,
-    fiveYearCtcLakhs: 29.5,
+    startingCtcLakhs: 10.5,
+    fiveYearCtcLakhs: 23.8,
     hiringVelocity: 25,
     arbitrageYield: '2.20x Stability Yield (Low Attrition Cluster)',
     topCareers: [
-      { title: 'Enterprise SaaS Full-Stack Architect', domain: 'Software & Cloud', surge: '+28%', avgCtc: 16.0 },
-      { title: 'Embedded Systems & Firmware Engineer', domain: 'Hardware & Robotics', surge: '+32%', avgCtc: 15.0 },
-      { title: 'Renewable Power Grid Systems Architect', domain: 'CleanTech & Energy', surge: '+35%', avgCtc: 14.5 },
-      { title: 'Industrial Robotics Automation Engineer', domain: 'Hardware Systems', surge: '+27%', avgCtc: 14.0 }
+      { title: 'Electric Vehicle & Battery Systems Engineer', domain: 'CleanTech & EV', surge: '+35%', avgCtc: 8.8 },
+      { title: 'Robotics & Autonomous Systems Engineer', domain: 'Hardware Systems', surge: '+28%', avgCtc: 9.0 },
+      { title: 'Satellite Communications & Space Tech Engineer', domain: 'SpaceTech & Defense', surge: '+32%', avgCtc: 10.3 },
+      { title: 'Quantum Computing & Algorithms Researcher', domain: 'DeepTech & Quantum', surge: '+27%', avgCtc: 14.0 }
     ],
     keyHubs: ['OMR Tech Corridor', 'Sriperumbudur Industrial SEZ', 'Taramani', 'Coimbatore IT Hub'],
     keyEmployers: ['Zoho Corporation', 'Freshworks', 'Ather Energy R&D', 'Ford Global Tech', 'Hyundai R&D'],
     feederInstitutes: ['IIT Madras', 'Anna University', 'PSG College of Technology', 'NIT Trichy'],
-    deficitTag: 'CRITICAL: Embedded Real-Time Firmware & EV Powertrain'
+    deficitTag: 'CRITICAL: Embedded Real-Time Firmware & EV Powertrain',
+    plfs: { lfpr: 47.2, ur: 3.5, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 73.80, city: 'Chennai · Coimbatore', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 290, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'gujarat',
@@ -151,20 +166,23 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'GIFT City · Ahmedabad · Sanand',
     zone: 'West',
     tagline: 'International FinTech SEZ, Green Hydrogen & Silicon Fabs',
-    startingCtcLakhs: 14.8,
-    fiveYearCtcLakhs: 31.0,
+    startingCtcLakhs: 10.6,
+    fiveYearCtcLakhs: 24.2,
     hiringVelocity: 41,
     arbitrageYield: '2.35x High Growth Yield (Fastest Expanding Hub)',
     topCareers: [
-      { title: 'GIFT City Cross-Border Quant Analyst', domain: 'Quantitative Finance', surge: '+48%', avgCtc: 21.0 },
-      { title: 'Semiconductor Fabrication Operations', domain: 'Hardware Systems', surge: '+45%', avgCtc: 16.5 },
-      { title: 'Clean Hydrogen & Energy Systems Lead', domain: 'CleanTech & Energy', surge: '+38%', avgCtc: 15.0 },
-      { title: 'Chemical Data & Materials Modeler', domain: 'Biotech & Health', surge: '+29%', avgCtc: 13.5 }
+      { title: 'Renewable Energy & Smart Grid Engineer', domain: 'CleanTech & Energy', surge: '+45%', avgCtc: 8.3 },
+      { title: 'Fintech Quantitative & Algorithmic Analyst', domain: 'Quantitative Finance', surge: '+48%', avgCtc: 18.0 },
+      { title: 'Electric Vehicle & Battery Systems Engineer', domain: 'Hardware & EV', surge: '+38%', avgCtc: 8.8 },
+      { title: 'Climate Tech & Carbon Systems Engineer', domain: 'Climate Tech', surge: '+29%', avgCtc: 7.5 }
     ],
     keyHubs: ['GIFT City SEZ Gandhinagar', 'Sanand Industrial Cluster', 'Dholera Special Region'],
     keyEmployers: ['Tata Semiconductor Fab', 'NSE International Exchange', 'Adani Clean Energy', 'Micron Assembly'],
     feederInstitutes: ['IIT Gandhinagar', 'SVNIT Surat', 'DA-IICT Gandhinagar', 'Nirma University'],
-    deficitTag: 'CRITICAL: Clean Hydrogen Process Engineers & Fab Yield Leads'
+    deficitTag: 'CRITICAL: Clean Hydrogen Process Engineers & Fab Yield Leads',
+    plfs: { lfpr: 49.6, ur: 1.1, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
+    employability: { rate: 72.40, city: 'GIFT City · Ahmedabad', source: 'Wheebox India Skills Report 2026' },
+    gccDensity: { count: 85, source: 'NASSCOM GCC Review 2026' }
   },
   {
     id: 'kerala',
@@ -172,21 +190,21 @@ const INDIAN_STATES_DATA: StateData[] = [
     capital: 'Kochi · Thiruvananthapuram',
     zone: 'South',
     tagline: 'SpaceTech Ecosystem, Marine Robotics & Digital Health',
-    startingCtcLakhs: 12.8,
-    fiveYearCtcLakhs: 26.0,
+    startingCtcLakhs: 9.1,
+    fiveYearCtcLakhs: 20.8,
     hiringVelocity: 23,
     arbitrageYield: '2.50x Quality-of-Life CoL Arbitrage',
     topCareers: [
-      { title: 'Aerospace & Spacecraft Telemetry Engineer', domain: 'Hardware & Robotics', surge: '+34%', avgCtc: 15.0 },
-      { title: 'Spatial Computing & AR/VR Systems Lead', domain: 'Design & Product', surge: '+28%', avgCtc: 13.5 },
-      { title: 'Marine Autonomous Vehicle Engineer', domain: 'Robotics & Hardware', surge: '+30%', avgCtc: 14.0 },
-      { title: 'Digital Health AI Informatics Specialist', domain: 'Biotech & Health', surge: '+26%', avgCtc: 13.0 }
+      { title: 'Aerospace & Avionics Systems Engineer', domain: 'Hardware & SpaceTech', surge: '+34%', avgCtc: 9.5 },
+      { title: 'Satellite Communications & Space Tech Engineer', domain: 'SpaceTech & Defense', surge: '+30%', avgCtc: 10.3 },
+      { title: 'Biomedical & MedTech Device Engineer', domain: 'Biotech & Health', surge: '+28%', avgCtc: 7.5 },
+      { title: 'AR/VR & Spatial Computing Engineer', domain: 'Design & Product', surge: '+26%', avgCtc: 9.0 }
     ],
     keyHubs: ['Technopark Trivandrum', 'Infopark Kochi', 'ISRO Propulsion Cluster'],
     keyEmployers: ['VSSC / ISRO Hub', 'Tata Elxsi Innovation', 'NeST Digital', 'Maker Village Kochi'],
     feederInstitutes: ['IIST Thiruvananthapuram', 'NIT Calicut', 'CET Trivandrum', 'CUSAT'],
     deficitTag: 'CRITICAL: Satellite Avionics & Autonomous Subsea Control',
-    plfs: { lfpr: 39.2, ur: 7.0, source: 'MoSPI PLFS 2023-24' },
+    plfs: { lfpr: 45.4, ur: 7.2, source: 'MoSPI Periodic Labour Force Survey 2023-24 (Table 1: Usual Status ps+ss)' },
     employability: { rate: 76.56, city: 'Kochi (76.6%) · Trivandrum', source: 'Wheebox India Skills Report 2026' },
     gccDensity: { count: 55, source: 'NASSCOM GCC Review 2026' }
   }
@@ -269,82 +287,82 @@ interface PopularCareer {
 
 const NATIONAL_POPULAR_CAREERS: PopularCareer[] = [
   {
-    id: 'ai-ml',
+    id: 'ai_ml_engineer',
     rank: 1,
     title: 'AI & Machine Learning Engineer',
     domain: 'AI & Data Science',
-    nationalSurge: '+41.8%',
-    startingCtc: '₹18 - ₹24 LPA',
-    fiveYearCtc: '₹38 - ₹65 LPA',
-    popularityScore: 98,
-    topStates: ['Karnataka', 'Telangana', 'Delhi-NCR'],
-    shortageIndex: 'SEVERELY DEFICIENT (-46% Talent Gap)',
-    whyPopular: 'Explosion of Generative AI foundational model training, enterprise automation, and sovereign GPU cloud installations across India.'
+    nationalSurge: '+97.0% Surge',
+    startingCtc: '₹9.5 - ₹16.0 LPA',
+    fiveYearCtc: '₹24.0 - ₹38.0 LPA',
+    popularityScore: 97,
+    topStates: ['Bangalore', 'Hyderabad', 'Pune'],
+    shortageIndex: 'CRITICAL DEFICIT (Risk: MEDIUM)',
+    whyPopular: 'Designs, builds, and deploys scalable machine learning models, neural networks, and generative AI systems into production architectures. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   },
   {
-    id: 'quant-finance',
+    id: 'vlsi_semiconductor_design_engineer',
     rank: 2,
-    title: 'Quantitative Algorithm Strategist',
-    domain: 'Quantitative Finance',
-    nationalSurge: '+38.5%',
-    startingCtc: '₹22 - ₹36 LPA',
-    fiveYearCtc: '₹55 - ₹1.2 Cr LPA',
-    popularityScore: 95,
-    topStates: ['Maharashtra', 'Gujarat (GIFT)', 'Karnataka'],
-    shortageIndex: 'CRITICAL DEFICIT (-52% Talent Gap)',
-    whyPopular: 'Algorithmic trading desks, high-frequency market makers, and GIFT City tax incentives driving record compensation premiums.'
+    title: 'VLSI & Semiconductor Design Engineer',
+    domain: 'Hardware & Semiconductor Systems',
+    nationalSurge: '+96.0% Surge',
+    startingCtc: '₹9.0 - ₹16.5 LPA',
+    fiveYearCtc: '₹22.0 - ₹36.0 LPA',
+    popularityScore: 98,
+    topStates: ['Bangalore', 'Hyderabad', 'Noida / Delhi NCR'],
+    shortageIndex: 'CRITICAL DEFICIT (Risk: LOW)',
+    whyPopular: 'Designs microchips, ASIC architectures, FPGA synthesis blocks, and system-on-chips (SoC) for modern computing and India Semiconductor Mission. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   },
   {
-    id: 'autonomous-robotics',
+    id: 'cybersecurity_analyst',
     rank: 3,
-    title: 'Autonomous Robotics & Drone Architect',
-    domain: 'Hardware & Robotics',
-    nationalSurge: '+34.2%',
-    startingCtc: '₹15 - ₹20 LPA',
-    fiveYearCtc: '₹32 - ₹48 LPA',
-    popularityScore: 92,
-    topStates: ['Karnataka', 'Tamil Nadu', 'Maharashtra'],
-    shortageIndex: 'HIGH DEFICIT (-38% Talent Gap)',
-    whyPopular: 'Defense modernization, precision agricultural drones, and automated warehouse logistics scaling under Make-in-India mandates.'
+    title: 'Cybersecurity & Cryptographic Analyst',
+    domain: 'Software & Cloud Systems',
+    nationalSurge: '+94.0% Surge',
+    startingCtc: '₹7.0 - ₹12.0 LPA',
+    fiveYearCtc: '₹17.0 - ₹27.0 LPA',
+    popularityScore: 94,
+    topStates: ['Bangalore', 'Delhi NCR', 'Hyderabad'],
+    shortageIndex: 'CRITICAL DEFICIT (Risk: LOW)',
+    whyPopular: 'Protects enterprise systems against cyber warfare, vulnerability exploits, and data breaches using zero-trust architecture and cryptographic protocols. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   },
   {
-    id: 'semiconductor-vlsi',
+    id: 'fintech_quantitative_analyst',
     rank: 4,
-    title: 'Semiconductor VLSI & Chip Architect',
-    domain: 'Hardware Systems',
-    nationalSurge: '+39.4%',
-    startingCtc: '₹16 - ₹22 LPA',
-    fiveYearCtc: '₹35 - ₹55 LPA',
-    popularityScore: 90,
-    topStates: ['Karnataka', 'Gujarat', 'Telangana'],
-    shortageIndex: 'CRITICAL DEFICIT (-58% Talent Gap)',
-    whyPopular: 'India Semiconductor Mission (ISM) driving multi-billion dollar fab and ATMP assembly operations across Gujarat, Bengaluru, and Noida.'
+    title: 'Fintech Quantitative & Algorithmic Analyst',
+    domain: 'Quantitative Finance & FinTech',
+    nationalSurge: '+94.0% Surge',
+    startingCtc: '₹12.0 - ₹24.0 LPA',
+    fiveYearCtc: '₹28.0 - ₹50.0 LPA',
+    popularityScore: 95,
+    topStates: ['Mumbai', 'Bangalore', 'Delhi NCR (Gurugram)'],
+    shortageIndex: 'CRITICAL DEFICIT (Risk: HIGH)',
+    whyPopular: 'Constructs high-frequency algorithmic trading strategies, risk variance models, automated market-making algorithms, and quantitative portfolio optimization. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   },
   {
-    id: 'cleantech-energy',
+    id: 'data_platform_engineer',
     rank: 5,
-    title: 'CleanTech & Green Hydrogen Systems Lead',
-    domain: 'CleanTech & Energy',
-    nationalSurge: '+33.0%',
-    startingCtc: '₹14 - ₹19 LPA',
-    fiveYearCtc: '₹28 - ₹42 LPA',
-    popularityScore: 88,
-    topStates: ['Gujarat', 'Tamil Nadu', 'Maharashtra'],
-    shortageIndex: 'MODERATE DEFICIT (-30% Talent Gap)',
-    whyPopular: 'National Green Hydrogen Mission and massive solar-wind grid storage investments creating brand-new engineering disciplines.'
+    title: 'Data Platform & Cloud Engineer',
+    domain: 'AI & Data Science',
+    nationalSurge: '+93.0% Surge',
+    startingCtc: '₹8.5 - ₹14.0 LPA',
+    fiveYearCtc: '₹20.0 - ₹32.0 LPA',
+    popularityScore: 93,
+    topStates: ['Bangalore', 'Hyderabad', 'Pune'],
+    shortageIndex: 'HIGH DEFICIT (Risk: LOW)',
+    whyPopular: 'Constructs high-throughput distributed data pipelines, lakehouses, and stream-processing infrastructure for enterprise analytics. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   },
   {
-    id: 'computational-biology',
+    id: 'electric_vehicle_powertrain_engineer',
     rank: 6,
-    title: 'Computational Biologist & Drug Designer',
-    domain: 'Biotech & Health',
-    nationalSurge: '+31.8%',
-    startingCtc: '₹13 - ₹18 LPA',
-    fiveYearCtc: '₹28 - ₹40 LPA',
-    popularityScore: 85,
-    topStates: ['Telangana', 'Karnataka', 'Maharashtra'],
-    shortageIndex: 'HIGH DEFICIT (-36% Talent Gap)',
-    whyPopular: 'Shift towards AI-driven molecular synthesis and custom genomic medicine, transforming India into a drug discovery capital.'
+    title: 'Electric Vehicle & Battery Systems Engineer',
+    domain: 'CleanTech & Automotive Mobility',
+    nationalSurge: '+92.0% Surge',
+    startingCtc: '₹6.5 - ₹11.0 LPA',
+    fiveYearCtc: '₹16.0 - ₹27.0 LPA',
+    popularityScore: 94,
+    topStates: ['Pune', 'Chennai', 'Bangalore'],
+    shortageIndex: 'CRITICAL DEFICIT (Risk: LOW)',
+    whyPopular: 'Develops EV traction motor controllers, high-voltage battery management systems (BMS), regenerative braking, and thermal runaway prevention. Verified via NASSCOM Strategic Review & TeamLease FY27 Quarterly Refresh.'
   }
 ];
 
