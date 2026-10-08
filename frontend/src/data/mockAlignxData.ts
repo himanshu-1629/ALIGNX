@@ -95,15 +95,15 @@ export const APTITUDE_QUESTIONS = [
       },
       {
         "text": "Charlie",
-        "score": 5
+        "score": 14
       },
       {
         "text": "Blake",
-        "score": 5
+        "score": 10
       },
       {
         "text": "Alex",
-        "score": 5
+        "score": 6
       }
     ],
     "rationale": "Correct answer is Dana. Based on the finishes: Alex > Blake > Charlie > Dana. Dana finished in the last position."
@@ -117,7 +117,7 @@ export const APTITUDE_QUESTIONS = [
     "options": [
       {
         "text": "95",
-        "score": 5
+        "score": 7
       },
       {
         "text": "127",
@@ -125,11 +125,11 @@ export const APTITUDE_QUESTIONS = [
       },
       {
         "text": "126",
-        "score": 5
+        "score": 14
       },
       {
         "text": "129",
-        "score": 5
+        "score": 10
       }
     ],
     "rationale": "Correct answer is 127. Each subsequent number doubles the previous and adds 1: (63 * 2) + 1 = 127."
@@ -143,7 +143,7 @@ export const APTITUDE_QUESTIONS = [
     "options": [
       {
         "text": "1 Apple",
-        "score": 5
+        "score": 10
       },
       {
         "text": "2 Apples",
@@ -151,11 +151,11 @@ export const APTITUDE_QUESTIONS = [
       },
       {
         "text": "3 Apples",
-        "score": 5
+        "score": 13
       },
       {
         "text": "4 Apples",
-        "score": 5
+        "score": 6
       }
     ],
     "rationale": "Correct answer is 2 Apples. Substituting 1 Pineapple = 4 Apples into scale 1 gives 2 Apples + 1 Orange = 4 Apples => 1 Orange = 2 Apples."
@@ -169,7 +169,7 @@ export const APTITUDE_QUESTIONS = [
     "options": [
       {
         "text": "North",
-        "score": 5
+        "score": 6
       },
       {
         "text": "West",
@@ -177,11 +177,11 @@ export const APTITUDE_QUESTIONS = [
       },
       {
         "text": "East",
-        "score": 5
+        "score": 14
       },
       {
         "text": "South",
-        "score": 5
+        "score": 9
       }
     ],
     "rationale": "Correct answer is West. Starting North and turning 90° clockwise faces East. A 180° turn reverses heading directly to West."
@@ -195,7 +195,7 @@ export const APTITUDE_QUESTIONS = [
     "options": [
       {
         "text": "MERCURY",
-        "score": 5
+        "score": 7
       },
       {
         "text": "TEMPERATURE",
@@ -203,11 +203,11 @@ export const APTITUDE_QUESTIONS = [
       },
       {
         "text": "WEATHER",
-        "score": 5
+        "score": 10
       },
       {
         "text": "HEAT",
-        "score": 5
+        "score": 14
       }
     ],
     "rationale": "Correct answer is TEMPERATURE. A compass measures direction for navigation; a thermometer measures temperature."

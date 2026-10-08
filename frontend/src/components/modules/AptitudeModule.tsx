@@ -1,23 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import { APTITUDE_QUESTIONS } from '../../data/mockAlignxData';
+import React, { useState, useEffect, useMemo } from 'react';
+import type { LifeStage, AptitudeQuestion } from '../../types/alignx';
+import { getAptitudeQuestionsForStage } from '../../data/stageQuestionsData';
 import { RollButton } from '../RollButton';
-import { saveSessionProgress } from '../../utils/sessionManager';
+import { saveSessionProgress, getSessionProgress } from '../../utils/sessionManager';
 import { ApiService } from '../../services/api';
-import { ArrowRight, ChevronLeft, Activity, Sparkles, Brain, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ChevronLeft, Activity, Sparkles, Brain, ShieldCheck, SlidersHorizontal } from 'lucide-react';
 
 interface AptitudeModuleProps {
   onComplete: (score: number, dimensionScores: Record<string, number>) => void;
   onSkipToDna?: () => void;
 }
 
+const STAGE_LABELS: Record<LifeStage, { name: string; tag: string; description: string }> = {
+  class10: { name: 'Class 10', tag: 'FOUNDATION STEM', description: 'Elementary logic, algebra patterns & spatial reasoning' },
+  class12: { name: 'Class 12', tag: 'ENTRANCE RIGOR', description: 'Competitive reasoning, rates, series & coordinate projections' },
+  ug: { name: 'Undergraduate', tag: 'ANALYTICAL LOGIC', description: 'Algorithmic state transitions, scale & systemic bottlenecks' },
+  pg: { name: 'Postgraduate', tag: 'RESEARCH & ADVANCED', description: 'Stochastic probability, non-linear dynamics & epistemic logic' },
+  professional: { name: 'Working Pro', tag: 'EXECUTIVE & TECH', description: 'Strategic trade-offs, unit economics & distributed throughput' }
+};
+
 export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSkipToDna }) => {
+  const sessionData = useMemo(() => getSessionProgress(), []);
+  const initialStage: LifeStage = sessionData.studentProfile?.stage || 'ug';
+
+  const [currentStage, setCurrentStage] = useState<LifeStage>(initialStage);
+  const [showStageSelector, setShowStageSelector] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [isCalculating, setIsCalculating] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
-  const question = APTITUDE_QUESTIONS[currentIdx];
-  const totalQuestions = APTITUDE_QUESTIONS.length;
+  // Load questions tailored for the active life stage
+  const questions: AptitudeQuestion[] = useMemo(() => {
+    return getAptitudeQuestionsForStage(currentStage);
+  }, [currentStage]);
+
+  const question = questions[currentIdx] || questions[0];
+  const totalQuestions = questions.length;
+
+  const handleStageChange = (newStage: LifeStage) => {
+    setCurrentStage(newStage);
+    setCurrentIdx(0);
+    setSelectedAnswers({});
+    setShowResults(false);
+    setShowStageSelector(false);
+
+    const curr = getSessionProgress();
+    if (curr.studentProfile) {
+      saveSessionProgress({
+        studentProfile: {
+          ...curr.studentProfile,
+          stage: newStage
+        }
+      });
+    }
+  };
 
   const handleSelectOption = (qId: number, optionIndex: number) => {
     setSelectedAnswers(prev => ({ ...prev, [qId]: optionIndex }));
@@ -42,7 +79,7 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
       if (optIdx >= 0 && question?.options[optIdx]) {
         handleSelectOption(question.id, optIdx);
       } else if (e.key === 'Enter') {
-        if (selectedAnswers[question?.id] !== undefined) {
+        if (question && selectedAnswers[question.id] !== undefined) {
           handleNext();
         }
       } else if (e.key === 'ArrowLeft' && currentIdx > 0) {
@@ -54,12 +91,15 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentIdx, selectedAnswers, question, showResults, isCalculating]);
 
-  const calculateRawSum = () => {
-    return Object.entries(selectedAnswers).reduce((sum, [qId, optIdx]) => {
-      const q = APTITUDE_QUESTIONS.find(item => item.id === Number(qId));
-      return sum + (q?.options[optIdx]?.score || 16);
-    }, 0);
-  };
+
+  const [calculatedMetrics, setCalculatedMetrics] = useState({
+    logical: 85,
+    numerical: 85,
+    analytical: 85,
+    spatial: 85,
+    verbal: 85
+  });
+  const [overallCalculatedScore, setOverallCalculatedScore] = useState(85);
 
   const handleNext = () => {
     if (currentIdx < totalQuestions - 1) {
@@ -70,23 +110,55 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
         setIsCalculating(false);
         setShowResults(true);
 
-        // Compute dimension scores from actual selected option scores
-        const rawSum = calculateRawSum();
-        const finalScore = Math.max(76, Math.min(100, Math.round((rawSum / (totalQuestions * 20)) * 100)));
-
-        const metrics = {
-          abstractLogic: Math.min(99, Math.round(finalScore * 1.04)),
-          systemsThinking: Math.min(96, Math.round(finalScore * 0.98)),
-          quantitativeEstimation: Math.min(95, Math.round(finalScore * 0.96)),
-          spatialArchitecture: Math.min(92, Math.round(finalScore * 0.92)),
-          riskTolerance: Math.min(94, Math.round(finalScore * 0.95))
+        // Dynamic psychometric calibration across the 5 evaluated cognitive dimensions
+        const computedMetrics = {
+          logical: 75,
+          numerical: 75,
+          analytical: 75,
+          spatial: 75,
+          verbal: 75
         };
+
+        questions.forEach((q) => {
+          const optIdx = selectedAnswers[q.id];
+          const rawScore = optIdx !== undefined ? (q.options[optIdx]?.score ?? 8) : 10;
+          // Calibrated psychometric curve:
+          // Mastery (score 20) -> 96%
+          // Near-miss (score 14) -> 73%
+          // Heuristic (score 10) -> 58%
+          // Divergent (score 6-7) -> 43-47%
+          const calibrated = Math.min(98, Math.max(35, Math.round(20 + (rawScore / 20) * 76)));
+
+          if (q.llmTag.includes('logical')) computedMetrics.logical = calibrated;
+          else if (q.llmTag.includes('numerical')) computedMetrics.numerical = calibrated;
+          else if (q.llmTag.includes('analytical')) computedMetrics.analytical = calibrated;
+          else if (q.llmTag.includes('spatial')) computedMetrics.spatial = calibrated;
+          else if (q.llmTag.includes('verbal')) computedMetrics.verbal = calibrated;
+        });
+
+        const finalScore = Math.round(
+          (computedMetrics.logical +
+            computedMetrics.numerical +
+            computedMetrics.analytical +
+            computedMetrics.spatial +
+            computedMetrics.verbal) /
+            5
+        );
+
+        setCalculatedMetrics(computedMetrics);
+        setOverallCalculatedScore(finalScore);
 
         // Persist to session
         saveSessionProgress({
           lastActiveView: 'dna',
           aptitudeScore: finalScore,
-          aptitudeMetrics: metrics,
+          aptitudeMetrics: {
+            abstractLogic: computedMetrics.logical,
+            systemsThinking: computedMetrics.analytical,
+            quantitativeEstimation: computedMetrics.numerical,
+            spatialArchitecture: computedMetrics.spatial,
+            riskTolerance: computedMetrics.verbal
+          },
           completedStages: {
             onboarding: true,
             discovery: true,
@@ -102,13 +174,13 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
           .then(res => {
             if (res?.data?.assessmentId) {
               return ApiService.completeAssessment(res.data.assessmentId, 'aptitude', {
-                aptitudeScores: metrics,
+                aptitudeScores: computedMetrics,
                 responses: Object.entries(selectedAnswers).map(([qId, val]) => ({ questionId: Number(qId), value: val }))
               });
             }
           })
           .catch(err => console.warn('[ALIGNX Aptitude] Assessment submit note:', err));
-      }, 1000);
+      }, 900);
     }
   };
 
@@ -116,26 +188,97 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
     if (currentIdx > 0) setCurrentIdx(currentIdx - 1);
   };
 
-  const rawSum = calculateRawSum();
-  const calculatedPercent = Math.max(76, Math.min(98, Math.round((rawSum / (totalQuestions * 20)) * 100) || 88));
 
   return (
-    <div style={{ maxWidth: '960px', margin: '40px auto', padding: '0 24px' }}>
-      {/* Module Title */}
-      <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '20px', marginBottom: '36px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.18em', color: 'var(--accent)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-              <Brain size={14} color="var(--accent)" />
-              PHASE 03 // GENERAL COGNITIVE & REASONING (IQ) EVALUATION
-            </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.64rem', padding: '2px 6px', backgroundColor: 'rgba(45, 90, 67, 0.1)', border: '1px solid rgba(45, 90, 67, 0.2)', color: 'var(--accent)', fontWeight: 600 }}>
-              UNIVERSAL
-            </span>
+    <div style={{ maxWidth: '980px', margin: '40px auto 70px', padding: '0 24px' }}>
+      {/* Module Title & Life Stage Stepper */}
+      <div style={{ borderBottom: '1px solid var(--border-hairline)', paddingBottom: '22px', marginBottom: '36px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.18em', color: 'var(--accent)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                <Brain size={14} color="var(--accent)" />
+                PHASE 04 // 5D COGNITIVE APTITUDE EVALUATION
+              </span>
+
+              {/* Stage calibration tag with interactive switch */}
+              <div style={{ position: 'relative' }}>
+                <button
+                  onClick={() => setShowStageSelector(!showStageSelector)}
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.66rem',
+                    padding: '3px 10px',
+                    backgroundColor: 'rgba(45, 90, 67, 0.08)',
+                    border: '1px solid rgba(45, 90, 67, 0.3)',
+                    color: 'var(--accent)',
+                    fontWeight: 700,
+                    letterSpacing: '0.06em',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    cursor: 'pointer'
+                  }}
+                  title="Click to switch calibration stage"
+                >
+                  <SlidersHorizontal size={11} />
+                  CALIBRATED: {STAGE_LABELS[currentStage]?.name.toUpperCase()} ▾
+                </button>
+
+                {showStageSelector && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: '6px',
+                      backgroundColor: 'var(--bg-surface)',
+                      border: '1px solid var(--border-subtle)',
+                      boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+                      zIndex: 30,
+                      minWidth: '240px',
+                      padding: '6px 0'
+                    }}
+                  >
+                    <div style={{ padding: '6px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-hairline)' }}>
+                      SELECT CALIBRATION STAGE:
+                    </div>
+                    {(Object.keys(STAGE_LABELS) as LifeStage[]).map(stg => (
+                      <button
+                        key={stg}
+                        onClick={() => handleStageChange(stg)}
+                        style={{
+                          width: '100%',
+                          textAlign: 'left',
+                          padding: '8px 12px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          background: currentStage === stg ? 'rgba(45, 90, 67, 0.08)' : 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          color: currentStage === stg ? 'var(--accent)' : 'var(--text-primary)'
+                        }}
+                      >
+                        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.95rem' }}>
+                          {STAGE_LABELS[stg].name}
+                        </div>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)' }}>
+                          {STAGE_LABELS[stg].description}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+              {STAGE_LABELS[currentStage]?.description}
+            </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
               VECTOR {currentIdx + 1} OF {totalQuestions}
             </span>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-muted)', backgroundColor: 'var(--bg-deep)', padding: '2px 8px', border: '1px solid var(--border-subtle)' }}>
@@ -144,13 +287,13 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
           </div>
         </div>
 
-        <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%', borderRadius: '0px', overflow: 'hidden' }}>
+        <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%', overflow: 'hidden' }}>
           <div
             style={{
               height: '100%',
               backgroundColor: 'var(--accent)',
               width: `${((currentIdx + 1) / totalQuestions) * 100}%`,
-              transition: 'width 0.4s var(--ease-apple)'
+              transition: 'width 0.35s ease'
             }}
           />
         </div>
@@ -169,17 +312,17 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
             <Activity size={40} color="var(--accent)" className="animate-spin-slow" />
           </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: 'var(--accent)', letterSpacing: '0.18em', marginBottom: '12px' }}>
-            CALIBRATING 5 COGNITIVE VECTORS ACCORDING TO LLM SCHEMA...
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: 'var(--accent)', letterSpacing: '0.18em', marginBottom: '12px', fontWeight: 800 }}>
+            CALIBRATING 5 COGNITIVE VECTORS ACCORDING TO STAGE TELEMETRY...
           </div>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2.2rem', fontWeight: 700, letterSpacing: '-0.03em' }}>
             SYNTHESIZING PSYCHOMETRIC MATRIX
           </h2>
           <p style={{ fontFamily: 'var(--font-body)', color: 'var(--text-secondary)', marginTop: '12px', maxWidth: '520px', margin: '12px auto 0' }}>
-            Benchmarking abstract logic, systems decomposition, quantitative estimation, and risk appetite against cohort telemetry.
+            Benchmarking abstract logic, systems decomposition, quantitative facility, and spatial architecture for {STAGE_LABELS[currentStage]?.name}.
           </p>
         </div>
-      ) : !showResults ? (
+      ) : !showResults && question ? (
         /* Assessment Question Interface */
         <div
           className="titanium-card"
@@ -189,24 +332,35 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
           }}
         >
           {/* Metadata pill */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-            <span className="titanium-badge" style={{ borderColor: 'var(--accent-border)', color: 'var(--accent-light)' }}>
-              {question.dimension.toUpperCase()}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                color: 'var(--accent)',
+                backgroundColor: 'rgba(45, 90, 67, 0.08)',
+                padding: '3px 10px',
+                border: '1px solid rgba(45, 90, 67, 0.25)',
+                letterSpacing: '0.08em'
+              }}
+            >
+              0{currentIdx + 1} // {question.dimension.toUpperCase()}
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-              LLM_TAG: {question.llmTag}
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-muted)' }}>
+              VECTOR_TAG: {question.llmTag}
             </span>
           </div>
 
           <h2
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: '1.28rem',
-              fontWeight: 600,
-              lineHeight: 1.5,
+              fontSize: 'clamp(1.3rem, 2.4vw, 1.7rem)',
+              fontWeight: 700,
+              lineHeight: 1.45,
               color: 'var(--text-primary)',
               marginBottom: '32px',
-              letterSpacing: '-0.02em'
+              letterSpacing: '-0.015em'
             }}
           >
             {question.prompt}
@@ -225,17 +379,17 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '18px 24px',
+                    padding: '20px 24px',
                     textAlign: 'left',
                     borderRadius: '0px',
-                    backgroundColor: isSelected ? 'rgba(45, 90, 67, 0.09)' : 'var(--bg-deep)',
-                    border: isSelected ? '1.5px solid var(--accent)' : '1px solid var(--border-hairline)',
+                    backgroundColor: isSelected ? 'rgba(45, 90, 67, 0.08)' : 'var(--bg-deep)',
+                    border: isSelected ? '2px solid var(--accent)' : '1px solid var(--border-hairline)',
                     color: 'var(--text-primary)',
                     fontFamily: 'var(--font-body)',
                     fontSize: '0.96rem',
                     cursor: 'pointer',
-                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                    boxShadow: isSelected ? '0 4px 16px rgba(45, 90, 67, 0.15)' : 'none',
+                    transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow: isSelected ? '0 4px 16px rgba(45, 90, 67, 0.12)' : 'none',
                     transform: isSelected ? 'translateY(-1px)' : 'none',
                     gap: '16px'
                   }}
@@ -243,14 +397,14 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <span
                       style={{
-                        width: '28px',
-                        height: '28px',
+                        width: '30px',
+                        height: '30px',
                         borderRadius: '0px',
                         backgroundColor: isSelected ? 'var(--accent)' : 'rgba(0, 0, 0, 0.05)',
                         color: isSelected ? '#FFFFFF' : 'var(--text-secondary)',
                         fontFamily: 'var(--font-mono)',
                         fontSize: '0.8rem',
-                        fontWeight: 700,
+                        fontWeight: 800,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -293,8 +447,8 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
             })}
           </div>
 
-          {/* Singular, Necessary Navigation Controls */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '36px', paddingTop: '24px', borderTop: '1px solid var(--border-hairline)' }}>
+          {/* Navigation Controls */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '36px', paddingTop: '24px', borderTop: '1px solid var(--border-hairline)', flexWrap: 'wrap', gap: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <button
                 onClick={handlePrev}
@@ -338,12 +492,12 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
                 pointerEvents: selectedAnswers[question.id] === undefined ? 'none' : 'auto'
               }}
             >
-              {currentIdx === totalQuestions - 1 ? 'CALCULATE 5D SCORES' : 'NEXT DIMENSION'}
+              {currentIdx < totalQuestions - 1 ? 'NEXT VECTOR (ENTER) →' : 'FINALIZE APTITUDE MATRIX →'}
             </RollButton>
           </div>
         </div>
       ) : (
-        /* Normalized Results Summary */
+        /* Results Screen */
         <div
           className="titanium-card"
           style={{
@@ -355,15 +509,15 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                 <Sparkles size={14} color="var(--accent)" />
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)', letterSpacing: '0.18em' }}>
-                  EVALUATION COMPLETE • NORMALIZED TO COHORT
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)', letterSpacing: '0.18em', fontWeight: 800 }}>
+                  EVALUATION COMPLETE • CALIBRATED FOR {STAGE_LABELS[currentStage]?.name.toUpperCase()}
                 </span>
               </div>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 700, margin: '8px 0', letterSpacing: '-0.035em' }}>
-                COGNITIVE APTITUDE: {calculatedPercent} / 100
+                COGNITIVE APTITUDE: {overallCalculatedScore} / 100
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', color: 'var(--text-secondary)', fontSize: '1rem' }}>
-                Top 8th percentile in abstract structural logic and deterministic problem decomposition.
+                Calibrated across 5 cognitive vectors for {STAGE_LABELS[currentStage]?.name}.
               </p>
             </div>
 
@@ -375,19 +529,21 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
                 backgroundColor: 'rgba(45, 90, 67, 0.09)'
               }}
             >
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--accent)', letterSpacing: '0.14em' }}>DECISION STATUS</div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, marginTop: '2px' }}>QUALIFIED FOR TIER-1 DEEPTECH</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--accent)', letterSpacing: '0.14em', fontWeight: 800 }}>DECISION STATUS</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, marginTop: '2px' }}>
+                {overallCalculatedScore >= 80 ? 'QUALIFIED FOR TIER-1 DEEPTECH' : 'SOLID FOUNDATION FOR SPECIALIZATION'}
+              </div>
             </div>
           </div>
 
-          {/* 5 Dimension Visualizations Configured to LLM Schema */}
+          {/* 5 Dimension Visualizations (Clean Monospace Numbers from Actual Answers) */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '40px' }}>
             {[
-              { dim: 'Abstract Logic', tag: 'logic', score: 92 },
-              { dim: 'Systems Thinking', tag: 'systems', score: 88 },
-              { dim: 'Quantitative Est.', tag: 'quant', score: 85 },
-              { dim: 'Spatial Topology', tag: 'spatial', score: 81 },
-              { dim: 'Risk Tolerance', tag: 'risk', score: 86 }
+              { num: '01', dim: 'Abstract Logic', tag: 'logic', score: calculatedMetrics.logical },
+              { num: '02', dim: 'Systems Thinking', tag: 'systems', score: calculatedMetrics.analytical },
+              { num: '03', dim: 'Quantitative Facility', tag: 'quant', score: calculatedMetrics.numerical },
+              { num: '04', dim: 'Spatial Topology', tag: 'spatial', score: calculatedMetrics.spatial },
+              { num: '05', dim: 'Verbal & Relational', tag: 'verbal', score: calculatedMetrics.verbal }
             ].map((d, i) => (
               <div
                 key={i}
@@ -399,8 +555,8 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', marginBottom: '8px' }}>
-                  <span>{d.dim}</span>
-                  <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{d.score}%</span>
+                  <span style={{ color: 'var(--text-muted)' }}>{d.num} · {d.dim}</span>
+                  <span style={{ color: 'var(--accent)', fontWeight: 800 }}>{d.score}%</span>
                 </div>
                 <div style={{ height: '3px', backgroundColor: 'var(--border-hairline)', width: '100%', borderRadius: '0px', overflow: 'hidden' }}>
                   <div style={{ height: '100%', width: `${d.score}%`, backgroundColor: 'var(--accent)' }} />
@@ -409,18 +565,24 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
             ))}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-hairline)', paddingTop: '28px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-hairline)', paddingTop: '28px', flexWrap: 'wrap', gap: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}>
               <ShieldCheck size={14} color="var(--accent)" />
-              <span>SAVED TO SESSION MEMORY</span>
+              <span>SAVED TO ALIGNX SESSION MEMORY</span>
             </div>
 
             <RollButton
-              onClick={() => onComplete(calculatedPercent, { logic: 92, systems: 88, quant: 85, spatial: 81, risk: 86 })}
+              onClick={() => onComplete(overallCalculatedScore, {
+                logic: calculatedMetrics.logical,
+                systems: calculatedMetrics.analytical,
+                quant: calculatedMetrics.numerical,
+                spatial: calculatedMetrics.spatial,
+                verbal: calculatedMetrics.verbal
+              })}
               variant="primary"
               icon={<ArrowRight size={15} />}
             >
-              UNLOCK CAREER DNA REVEAL
+              UNLOCK CAREER DNA REVEAL →
             </RollButton>
           </div>
         </div>
