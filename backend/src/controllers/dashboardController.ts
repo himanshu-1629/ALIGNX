@@ -73,7 +73,20 @@ export const getStudentDashboard = async (
           familyAlignment: 75,
           conflictIndex: 0
         },
-        recommendations: latestRec?.rankedCareers?.slice(0, 5) || [],
+        recommendations: (latestRec?.rankedCareers?.slice(0, 6) || []).map((r: any) => ({
+          careerId: r.careerId,
+          careerSlug: r.careerSlug,
+          careerName: r.careerName,
+          rank: r.rank,
+          overallScore: r.overallScore,
+          studentFit: r.components?.studentFit ?? r.studentFit ?? 80,
+          financialFit: r.components?.financialFit ?? r.financialFit ?? 80,
+          familyAlignment: r.components?.familyAlignment ?? r.familyAlignment ?? 75,
+          marketFit: r.components?.marketFit ?? r.marketFit ?? 85,
+          locationFit: r.components?.locationFit ?? r.locationFit ?? 80,
+          affordabilityStatus: r.affordabilityStatus,
+          explanation: r.explanationData
+        })),
         skillGaps: skillGaps || [],
         roadmap: roadmaps && roadmaps.length > 0 ? roadmaps[0] : null
       }

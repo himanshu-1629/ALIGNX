@@ -50,7 +50,7 @@ function extractInviteToken(): string | null {
 
 export function App() {
   const [currentView, setCurrentView] = useState<AppView>('home');
-  const [selectedCareerId, setSelectedCareerId] = useState<string>('ai-engineer');
+  const [selectedCareerId, setSelectedCareerId] = useState<string>('');
   const [, setStudentProfile] = useState<StudentProfile | null>(null);
   const [sessionProgress, setSessionProgress] = useState<AlignxSessionProgress>(getSessionProgress());
   const [assessmentDraft, setAssessmentDraft] = useState<AssessmentDraftState>(() => getAssessmentDraft());
@@ -445,7 +445,7 @@ export function App() {
 
         {currentView === 'twin' && (
           <CareerTwinModule
-            careerId={selectedCareerId}
+            careerId={selectedCareerId || 'ai_ml_engineer'}
             onOpenRoadmap={handleOpenRoadmap}
             onBackToDashboard={() => {
               setCurrentView('dashboard');
@@ -461,7 +461,7 @@ export function App() {
 
         {currentView === 'whatif' && (
           <WhatIfModule
-            careerId={selectedCareerId}
+            careerId={selectedCareerId || 'ai_ml_engineer'}
             onContinueToRoadmap={handleOpenRoadmap}
             onBackToDashboard={() => {
               setCurrentView('dashboard');
@@ -476,7 +476,7 @@ export function App() {
 
         {currentView === 'roadmap' && (
           <RoadmapModule
-            careerId={selectedCareerId}
+            careerId={selectedCareerId || 'ai_ml_engineer'}
             onBackToDashboard={() => {
               setCurrentView('dashboard');
               window.scrollTo({ top: 0, behavior: 'smooth' });

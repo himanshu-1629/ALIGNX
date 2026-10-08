@@ -8,15 +8,15 @@ export const ALL_AUTHENTIC_CAREERS: CareerRecommendation[] = [
     "domain": "AI Systems & Neural Computing",
     "tagline": "Designs, builds, and deploys scalable machine learning models, neural networks, and generative AI systems into production architectures.",
     "scores": {
-      "studentFit": 44,
-      "financialFit": 100,
-      "familyAlignment": 100,
-      "marketFit": 88,
+      "studentFit": 88,
+      "financialFit": 84,
+      "familyAlignment": 86,
+      "marketFit": 95,
       "locationFit": 92,
-      "overallScore": 77
+      "overallScore": 89
     },
     "growthRate": "+31% CAGR",
-    "salaryRange": "\u20b99.5L \u2014 \u20b980L CTC",
+    "salaryRange": "₹9.5L — ₹80L CTC",
     "riskLevel": "Moderate",
     "topLocations": [
       "Bangalore",
@@ -47,7 +47,7 @@ export const ALL_AUTHENTIC_CAREERS: CareerRecommendation[] = [
     "whyRecommended": [
       "Strong alignment with AI Systems & Neural Computing requirements.",
       "Hiring velocity index of 95.0/100 across major tech hubs.",
-      "Entry compensation up to \u20b916.0L with accelerated 5-year growth."
+      "Entry compensation up to ₹16.0L with accelerated 5-year growth."
     ],
     "educationPath": "B.Tech Computer Science / AI / Data Science",
     "entranceExams": [
@@ -66,15 +66,15 @@ export const ALL_AUTHENTIC_CAREERS: CareerRecommendation[] = [
     "domain": "Robotics Hardware",
     "tagline": "Designs microchips, ASIC architectures, FPGA synthesis blocks, and system-on-chips (SoC) for modern computing and India Semiconductor Mission.",
     "scores": {
-      "studentFit": 43,
-      "financialFit": 100,
-      "familyAlignment": 100,
-      "marketFit": 87,
-      "locationFit": 92,
-      "overallScore": 77
+      "studentFit": 85,
+      "financialFit": 88,
+      "familyAlignment": 89,
+      "marketFit": 93,
+      "locationFit": 89,
+      "overallScore": 88
     },
     "growthRate": "+31% CAGR",
-    "salaryRange": "\u20b99L \u2014 \u20b975L CTC",
+    "salaryRange": "₹9L — ₹75L CTC",
     "riskLevel": "Low",
     "topLocations": [
       "Bangalore",
@@ -101,7 +101,7 @@ export const ALL_AUTHENTIC_CAREERS: CareerRecommendation[] = [
     "whyRecommended": [
       "Strong alignment with robotics_hardware requirements.",
       "Hiring velocity index of 94.0/100 across major tech hubs.",
-      "Entry compensation up to \u20b916.5L with accelerated 5-year growth."
+      "Entry compensation up to ₹16.5L with accelerated 5-year growth."
     ],
     "educationPath": "B.Tech / M.Tech in Microelectronics / VLSI / ECE / Electrical Engineering",
     "entranceExams": [
@@ -118,15 +118,15 @@ export const ALL_AUTHENTIC_CAREERS: CareerRecommendation[] = [
     "domain": "AI Systems & Neural Computing",
     "tagline": "Constructs high-throughput distributed data pipelines, lakehouses, and stream-processing infrastructure for enterprise analytics.",
     "scores": {
-      "studentFit": 46,
-      "financialFit": 100,
-      "familyAlignment": 100,
-      "marketFit": 83,
-      "locationFit": 91,
-      "overallScore": 77
+      "studentFit": 82,
+      "financialFit": 89,
+      "familyAlignment": 85,
+      "marketFit": 89,
+      "locationFit": 90,
+      "overallScore": 86
     },
     "growthRate": "+29% CAGR",
-    "salaryRange": "\u20b98.5L \u2014 \u20b965L CTC",
+    "salaryRange": "₹8.5L — ₹65L CTC",
     "riskLevel": "Low",
     "topLocations": [
       "Bangalore",
@@ -156,7 +156,7 @@ export const ALL_AUTHENTIC_CAREERS: CareerRecommendation[] = [
     "whyRecommended": [
       "Strong alignment with AI Systems & Neural Computing requirements.",
       "Hiring velocity index of 91.0/100 across major tech hubs.",
-      "Entry compensation up to \u20b914.0L with accelerated 5-year growth."
+      "Entry compensation up to ₹14.0L with accelerated 5-year growth."
     ],
     "educationPath": "B.Tech Computer Science / Information Technology / Data Engineering",
     "entranceExams": [
@@ -173,15 +173,15 @@ export const ALL_AUTHENTIC_CAREERS: CareerRecommendation[] = [
     "domain": "Software Cloud",
     "tagline": "Protects enterprise systems against cyber warfare, vulnerability exploits, and data breaches using zero-trust architecture and cryptographic protocols.",
     "scores": {
-      "studentFit": 45,
-      "financialFit": 100,
-      "familyAlignment": 100,
-      "marketFit": 82,
-      "locationFit": 89,
-      "overallScore": 76
+      "studentFit": 80,
+      "financialFit": 92,
+      "familyAlignment": 86,
+      "marketFit": 88,
+      "locationFit": 86,
+      "overallScore": 84
     },
     "growthRate": "+30% CAGR",
-    "salaryRange": "\u20b97L \u2014 \u20b952L CTC",
+    "salaryRange": "₹7L — ₹52L CTC",
     "riskLevel": "Low",
     "topLocations": [
       "Bangalore",
@@ -209,7 +209,7 @@ export const ALL_AUTHENTIC_CAREERS: CareerRecommendation[] = [
     "whyRecommended": [
       "Strong alignment with software_cloud requirements.",
       "Hiring velocity index of 93.0/100 across major tech hubs.",
-      "Entry compensation up to \u20b912.0L with accelerated 5-year growth."
+      "Entry compensation up to ₹12.0L with accelerated 5-year growth."
     ],
     "educationPath": "B.Tech in Cybersecurity / Computer Science / Information Security",
     "entranceExams": [
@@ -226,12 +226,12 @@ export const ALL_AUTHENTIC_CAREERS: CareerRecommendation[] = [
     "domain": "UI/UX & Product Design",
     "tagline": "Defines product vision, feature requirements, user conversion metrics, and cross-functional engineering execution for AI-first products.",
     "scores": {
-      "studentFit": 43,
-      "financialFit": 100,
-      "familyAlignment": 100,
-      "marketFit": 83,
-      "locationFit": 92,
-      "overallScore": 76
+      "studentFit": 78,
+      "financialFit": 86,
+      "familyAlignment": 81,
+      "marketFit": 86,
+      "locationFit": 88,
+      "overallScore": 82
     },
     "growthRate": "+29% CAGR",
     "salaryRange": "\u20b98L \u2014 \u20b975L CTC",

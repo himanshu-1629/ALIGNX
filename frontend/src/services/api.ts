@@ -352,7 +352,9 @@ export class ApiService {
     location?: string;
     weights?: { interest: number; aptitude: number; financial: number; market: number; parent: number };
   }) {
-    return this.request<{ success: boolean; data: { total: number; recommendations: any[] } }>('/recommendations/generate', {
+    const sId = this.getStudentId();
+    const endpoint = sId ? `/recommendations/${sId}/generate` : '/recommendations/generate';
+    return this.request<{ success: boolean; data: { total: number; recommendations: any[] } }>(endpoint, {
       method: 'POST',
       body: JSON.stringify(options || {})
     });

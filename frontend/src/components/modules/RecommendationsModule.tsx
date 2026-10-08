@@ -37,10 +37,12 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
   selectedCareerId,
   onSelectCareerId
 }) => {
+  const normalizeSlug = (slug?: string) => (slug || '').toLowerCase().replace(/[-_]/g, '');
+
   const [careers, setCareers] = useState<CareerRecommendation[]>(INITIAL_CAREERS);
   const [selectedCareer, setSelectedCareer] = useState<CareerRecommendation>(() => {
     if (selectedCareerId) {
-      const match = INITIAL_CAREERS.find(c => c.id === selectedCareerId);
+      const match = INITIAL_CAREERS.find(c => normalizeSlug(c.id) === normalizeSlug(selectedCareerId));
       if (match) return match;
     }
     return INITIAL_CAREERS[0];
@@ -50,10 +52,154 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
   const [selectedDomain, setSelectedDomain] = useState<string>('all');
   const [isBackendLive, setIsBackendLive] = useState(false);
 
-  // Fetch live recommendations from backend ALIGNX Decision Engine
+  // Calibrate career catalog scores based on live psychometric and session telemetry
+  const calibrateCareersFromSession = (
+    catalog: CareerRecommendation[],
+    progress: AlignxSessionProgress
+  ): CareerRecommendation[] => {
+    const rawMetrics: any = progress.aptitudeMetrics || {};
+    const baseAptitude = progress.aptitudeScore || 80;
+
+    // Extract individual cognitive metrics (fallback to overall aptitude score or 75)
+    const logic = rawMetrics.abstractLogic ?? rawMetrics.logical ?? baseAptitude;
+    const quant = rawMetrics.quantitativeEstimation ?? rawMetrics.numerical ?? Math.max(60, baseAptitude - 2);
+    const systems = rawMetrics.systemsThinking ?? rawMetrics.analytical ?? Math.min(98, baseAptitude + 1);
+    const spatial = rawMetrics.spatialArchitecture ?? rawMetrics.spatial ?? Math.max(60, baseAptitude - 3);
+    const verbal = rawMetrics.riskTolerance ?? rawMetrics.verbal ?? Math.max(60, baseAptitude - 4);
+
+    const branch = ((progress.studentProfile as any)?.branch || progress.studentProfile?.currentField || '').toLowerCase();
+    const parentBudget = progress.parentData?.maxBudgetAnnualLakhs || progress.studentProfile?.budgetAnnualLakhs || 16;
+    const parentRisk = progress.parentData?.riskAppetite || 'moderate';
+    const preferredLocs = (progress.parentData?.preferredLocations || []).map(l => l.toLowerCase());
+
+    const scored = catalog.map((c, index) => {
+      const text = `${c.title} ${c.domain} ${c.requiredSkills.join(' ')}`.toLowerCase();
+
+      // 1. Differentiated Student Fit (Cognitive Vector + Domain Affinity)
+      let cognitiveFit = 75;
+      if (text.includes('ai') || text.includes('machine learning') || text.includes('neural') || text.includes('deep learning')) {
+        cognitiveFit = Math.round(0.40 * logic + 0.35 * quant + 0.25 * systems);
+      } else if (text.includes('vlsi') || text.includes('semiconductor') || text.includes('chip') || text.includes('hardware')) {
+        cognitiveFit = Math.round(0.40 * spatial + 0.35 * systems + 0.25 * logic);
+      } else if (text.includes('robot') || text.includes('autonomous') || text.includes('kinetic') || text.includes('mechatron')) {
+        cognitiveFit = Math.round(0.38 * spatial + 0.32 * systems + 0.30 * logic);
+      } else if (text.includes('data platform') || text.includes('cloud') || text.includes('distributed')) {
+        cognitiveFit = Math.round(0.40 * systems + 0.35 * logic + 0.25 * quant);
+      } else if (text.includes('cyber') || text.includes('crypto') || text.includes('security')) {
+        cognitiveFit = Math.round(0.42 * systems + 0.38 * logic + 0.20 * quant);
+      } else if (text.includes('product') || text.includes('ui') || text.includes('ux') || text.includes('design')) {
+        cognitiveFit = Math.round(0.42 * verbal + 0.33 * systems + 0.25 * spatial);
+      } else if (text.includes('quantum') || text.includes('fintech') || text.includes('quant')) {
+        cognitiveFit = Math.round(0.45 * quant + 0.35 * logic + 0.20 * systems);
+      } else if (text.includes('clean') || text.includes('energy') || text.includes('battery') || text.includes('climate')) {
+        cognitiveFit = Math.round(0.35 * systems + 0.35 * spatial + 0.30 * quant);
+      } else if (text.includes('bio') || text.includes('neuro') || text.includes('genom')) {
+        cognitiveFit = Math.round(0.40 * systems + 0.35 * quant + 0.25 * logic);
+      } else {
+        cognitiveFit = Math.round(0.35 * logic + 0.35 * systems + 0.30 * quant);
+      }
+
+      // Branch match bonus
+      let branchBonus = 0;
+      if (branch) {
+        if ((branch.includes('comp') || branch.includes('it') || branch.includes('data')) && (text.includes('software') || text.includes('ai') || text.includes('cloud') || text.includes('data'))) branchBonus = 5;
+        else if ((branch.includes('elect') || branch.includes('ece')) && (text.includes('vlsi') || text.includes('hardware') || text.includes('embedded') || text.includes('circuit'))) branchBonus = 5;
+        else if (branch.includes('mech') && (text.includes('robot') || text.includes('aerospace') || text.includes('powertrain'))) branchBonus = 5;
+        else if (branch.includes('design') && (text.includes('product') || text.includes('ux'))) branchBonus = 5;
+      }
+
+      const sFit = Math.min(99, Math.max(45, cognitiveFit + branchBonus));
+
+      // 2. Financial Feasibility Fit
+      let fFit = 85;
+      if (text.includes('quantum') || text.includes('aerospace') || text.includes('neuroscience')) {
+        fFit = parentBudget >= 22 ? 96 : parentBudget >= 15 ? 88 : 70;
+      } else if (text.includes('product') || text.includes('ai & machine') || text.includes('robotics')) {
+        fFit = parentBudget >= 18 ? 97 : parentBudget >= 12 ? 90 : 76;
+      } else {
+        fFit = parentBudget >= 14 ? 98 : parentBudget >= 10 ? 92 : 82;
+      }
+
+      // 3. Family Alignment Fit
+      let faFit = 82;
+      const isFrontier = text.includes('quantum') || text.includes('neuro') || text.includes('ar/vr') || text.includes('spatial');
+      const isConservative = text.includes('vlsi') || text.includes('cloud') || text.includes('cyber') || text.includes('data platform');
+      if (parentRisk === 'low') {
+        faFit = isConservative ? 94 : isFrontier ? 72 : 85;
+      } else if (parentRisk === 'high') {
+        faFit = isFrontier ? 95 : 86;
+      } else {
+        faFit = isConservative ? 90 : isFrontier ? 82 : 88;
+      }
+
+      // 4. Market & Hiring Velocity Fit
+      let mFit = 85;
+      if (text.includes('ai & machine') || text.includes('deep learning')) mFit = 95;
+      else if (text.includes('vlsi') || text.includes('semiconductor')) mFit = 93;
+      else if (text.includes('cybersecurity')) mFit = 91;
+      else if (text.includes('data platform') || text.includes('cloud')) mFit = 89;
+      else if (text.includes('robotics') || text.includes('autonomous')) mFit = 88;
+      else if (text.includes('clean') || text.includes('energy') || text.includes('battery')) mFit = 87;
+      else if (text.includes('product') || text.includes('design')) mFit = 86;
+      else if (text.includes('quantum')) mFit = 84;
+      else mFit = 83;
+
+      // 5. Geographic Alignment Fit
+      let lFit = 80;
+      if (preferredLocs.length > 0 && c.topLocations?.some(loc => preferredLocs.some(pl => loc.toLowerCase().includes(pl) || pl.includes(loc.toLowerCase())))) {
+        lFit = 95;
+      } else {
+        lFit = 84;
+      }
+
+      // High precision composite calculation
+      const rawComposite = 0.35 * sFit + 0.20 * fFit + 0.15 * faFit + 0.20 * mFit + 0.10 * lFit;
+      // Micro offset to resolve mathematical ties cleanly across diverse specializations
+      const microOffset = ((sFit * 0.05 + mFit * 0.03 + index * 0.01) % 1.6) - 0.8;
+      const overall = Math.min(99, Math.max(50, Math.round(rawComposite + (microOffset * 0.2))));
+
+      return {
+        ...c,
+        scores: {
+          studentFit: sFit,
+          financialFit: fFit,
+          familyAlignment: faFit,
+          marketFit: mFit,
+          locationFit: lFit,
+          overallScore: overall
+        },
+        _rawComposite: rawComposite + (sFit * 0.02)
+      };
+    });
+
+    // Sort descending with deterministic floating-point tie-breaking
+    scored.sort((a, b) => {
+      if (Math.abs(b._rawComposite - a._rawComposite) > 0.08) {
+        return b._rawComposite - a._rawComposite;
+      }
+      if (b.scores.overallScore !== a.scores.overallScore) {
+        return b.scores.overallScore - a.scores.overallScore;
+      }
+      if (b.scores.studentFit !== a.scores.studentFit) {
+        return b.scores.studentFit - a.scores.studentFit;
+      }
+      return b.scores.marketFit - a.scores.marketFit;
+    });
+
+    return scored.map(({ _rawComposite, ...rest }) => rest);
+  };
+
+  // Verify whether student has completed assessment calibration
+  const isCalibrated =
+    Boolean(sessionProgress?.completedStages?.onboarding) &&
+    (Boolean(sessionProgress?.completedStages?.aptitude) || Boolean(sessionProgress?.completedStages?.dashboard));
+
+  // Unified recommendation loading and deterministic ranking
   useEffect(() => {
     let isMounted = true;
-    const loadLiveRecommendations = async () => {
+
+    const loadRecommendations = async () => {
+      // 1. Attempt live recommendation generation from backend ALIGNX Decision Engine
       try {
         const res = await ApiService.generateRecommendations();
         if (res?.data?.recommendations && res.data.recommendations.length > 0 && isMounted) {
@@ -68,8 +214,11 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
           };
 
           const mapped: CareerRecommendation[] = res.data.recommendations.map((rec: any) => {
-            const matchedStatic = INITIAL_CAREERS.find(c => c.id === rec.careerSlug || c.title.toLowerCase() === rec.careerName?.toLowerCase());
-            
+            const matchedStatic = INITIAL_CAREERS.find(c =>
+              normalizeSlug(c.id) === normalizeSlug(rec.careerSlug) ||
+              c.title.toLowerCase() === rec.careerName?.toLowerCase()
+            );
+
             const salaryFormatted = rec.salaryRange?.entryLevel
               ? `₹${Math.round(rec.salaryRange.entryLevel / 100000)} - ${Math.round(rec.salaryRange.seniorLevel / 100000)} LPA`
               : matchedStatic?.salaryRange || '₹8 - 25 LPA';
@@ -78,18 +227,25 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
               ? (rec.riskLevel.charAt(0).toUpperCase() + rec.riskLevel.slice(1))
               : (matchedStatic?.riskLevel as any) || 'Medium';
 
+            const sFit = rec.studentFit ?? rec.components?.studentFit ?? matchedStatic?.scores.studentFit ?? 78;
+            const fFit = rec.financialFit ?? rec.components?.financialFit ?? matchedStatic?.scores.financialFit ?? 82;
+            const faFit = rec.familyAlignment ?? rec.components?.familyAlignment ?? matchedStatic?.scores.familyAlignment ?? 76;
+            const mFit = rec.marketFit ?? rec.components?.marketFit ?? matchedStatic?.scores.marketFit ?? 85;
+            const lFit = rec.locationFit ?? rec.components?.locationFit ?? matchedStatic?.scores.locationFit ?? 78;
+            const overall = rec.overallScore ?? Math.round(0.35 * sFit + 0.20 * fFit + 0.15 * faFit + 0.20 * mFit + 0.10 * lFit);
+
             return {
               id: rec.careerSlug || matchedStatic?.id || rec.careerId,
               title: rec.careerName || matchedStatic?.title || 'Career Path',
               domain: mapDomain(rec.category || rec.domain, matchedStatic?.domain),
               tagline: rec.explanation?.summary || matchedStatic?.tagline || 'Frontier STEAM pathway',
               scores: {
-                studentFit: rec.studentFit || 65,
-                financialFit: rec.financialFit || 75,
-                familyAlignment: rec.familyAlignment || 75,
-                marketFit: rec.marketFit || 85,
-                locationFit: rec.locationFit || 65,
-                overallScore: rec.overallScore || 70
+                studentFit: sFit,
+                financialFit: fFit,
+                familyAlignment: faFit,
+                marketFit: mFit,
+                locationFit: lFit,
+                overallScore: overall
               },
               growthRate: matchedStatic?.growthRate || '+28% (5-yr CAGR)',
               salaryRange: salaryFormatted,
@@ -105,103 +261,56 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
             };
           });
 
+          // Sort descending
+          mapped.sort((a, b) => b.scores.overallScore - a.scores.overallScore);
+
           setCareers(mapped);
-          setSelectedCareer(mapped[0]);
           setIsBackendLive(true);
+
+          // Update selection: Select rank #1 unless student specifically selected a candidate in the active list
+          const existingSelection = selectedCareerId
+            ? mapped.find(c => normalizeSlug(c.id) === normalizeSlug(selectedCareerId))
+            : null;
+          const topCareer = existingSelection || mapped[0];
+          setSelectedCareer(topCareer);
+          if (!existingSelection) {
+            onSelectCareerId?.(topCareer.id);
+          }
+          return;
         }
       } catch (err) {
-        console.warn('[ALIGNX Recommendations] Using resilient initial career catalog:', err);
+        console.warn('[ALIGNX Recommendations] Using live session calibration:', err);
+      }
+
+      // 2. High-precision local calibrated scoring based on actual session inputs
+      if (isMounted) {
+        const calibrated = calibrateCareersFromSession(INITIAL_CAREERS, sessionProgress);
+        setCareers(calibrated);
+
+        const existingSelection = selectedCareerId
+          ? calibrated.find(c => normalizeSlug(c.id) === normalizeSlug(selectedCareerId))
+          : null;
+        const topCareer = existingSelection || calibrated[0];
+        setSelectedCareer(topCareer);
+        if (!existingSelection) {
+          onSelectCareerId?.(topCareer.id);
+        }
       }
     };
 
-    loadLiveRecommendations();
+    loadRecommendations();
     return () => { isMounted = false; };
-  }, []);
+  }, [isCalibrated, sessionProgress]);
 
+  // Synchronize when parent explicitly selects a career
   useEffect(() => {
     if (selectedCareerId) {
-      const match = careers.find(c => c.id === selectedCareerId);
+      const match = careers.find(c => normalizeSlug(c.id) === normalizeSlug(selectedCareerId));
       if (match && match.id !== selectedCareer.id) {
         setSelectedCareer(match);
       }
     }
   }, [selectedCareerId, careers]);
-
-  // Verify whether student has completed assessment calibration
-  const isCalibrated =
-    Boolean(sessionProgress?.completedStages?.onboarding) &&
-    (Boolean(sessionProgress?.completedStages?.aptitude) || Boolean(sessionProgress?.completedStages?.dashboard));
-
-  // Sync with live backend database and personalized parameters
-  useEffect(() => {
-    if (!isCalibrated) return;
-    let isMounted = true;
-
-    const syncLiveProfile = async () => {
-      try {
-        const res = await ApiService.getDashboard();
-        if (res.data?.recommendations && res.data.recommendations.length > 0 && isMounted) {
-          const mapped = res.data.recommendations.map((rec: any, index: number) => {
-            const matchInitial = INITIAL_CAREERS.find(c => c.id === rec.careerSlug || c.title.toLowerCase().includes((rec.careerName || '').toLowerCase()));
-            return {
-              id: rec.careerSlug || matchInitial?.id || `career-${index}`,
-              title: rec.careerName || matchInitial?.title || 'Specialist',
-              domain: matchInitial?.domain || 'Technology & Engineering',
-              tagline: matchInitial?.tagline || 'Calibrated through 5D Decision Protocol',
-              scores: {
-                studentFit: rec.studentFit || matchInitial?.scores.studentFit || 85,
-                financialFit: rec.financialFit || matchInitial?.scores.financialFit || 80,
-                familyAlignment: rec.familyAlignment || matchInitial?.scores.familyAlignment || 75,
-                marketFit: rec.marketFit || matchInitial?.scores.marketFit || 88,
-                locationFit: rec.locationFit || matchInitial?.scores.locationFit || 82,
-                overallScore: rec.overallScore || matchInitial?.scores.overallScore || 84
-              },
-              growthRate: matchInitial?.growthRate || '+32% YoY',
-              salaryRange: matchInitial?.salaryRange || '₹18L - ₹45L',
-              riskLevel: matchInitial?.riskLevel || 'Moderate',
-              topLocations: matchInitial?.topLocations || ['Bangalore', 'Hyderabad', 'Singapore'],
-              requiredSkills: matchInitial?.requiredSkills || ['Analytical Thinking', 'Systems Decomposition'],
-              studentSkillGaps: matchInitial?.studentSkillGaps || ['Advanced Specialization Frameworks'],
-              strengthsMatch: rec.explanationData?.whyItMatches || matchInitial?.strengthsMatch || ['High abstract problem solving'],
-              whyRecommended: rec.explanationData?.summary ? [rec.explanationData.summary] : matchInitial?.whyRecommended || ['Top alignment across aptitude and market telemetry'],
-              educationPath: matchInitial?.educationPath || 'Undergraduate STEM Foundation',
-              entranceExams: matchInitial?.entranceExams || ['Tier-1 Entrance Standards'],
-              scholarships: matchInitial?.scholarships || ['Merit-Based Research Grant']
-            };
-          });
-          setCareers(mapped);
-          setSelectedCareer(mapped[0]);
-        }
-      } catch {
-        // Fallback: Compute personalized scores based on the actual sessionProgress profile
-        if (sessionProgress.aptitudeScore || sessionProgress.studentProfile) {
-          const studentScore = sessionProgress.aptitudeScore || 85;
-          const budget = sessionProgress.studentProfile?.budgetAnnualLakhs || 14;
-          const parentBudget = sessionProgress.parentData?.maxBudgetAnnualLakhs || budget;
-          
-          const personalized = INITIAL_CAREERS.map(c => {
-            const sFit = Math.min(99, Math.round(c.scores.studentFit * (studentScore / 88)));
-            const fFit = parentBudget >= 20 ? Math.min(98, c.scores.financialFit + 10) : parentBudget <= 10 ? Math.max(55, c.scores.financialFit - 12) : c.scores.financialFit;
-            const overall = Math.round(0.35 * sFit + 0.20 * fFit + 0.15 * c.scores.familyAlignment + 0.20 * c.scores.marketFit + 0.10 * c.scores.locationFit);
-            return {
-              ...c,
-              scores: {
-                ...c.scores,
-                studentFit: sFit,
-                financialFit: fFit,
-                overallScore: overall
-              }
-            };
-          }).sort((a, b) => b.scores.overallScore - a.scores.overallScore);
-          setCareers(personalized);
-          setSelectedCareer(personalized[0]);
-        }
-      }
-    };
-
-    syncLiveProfile();
-    return () => { isMounted = false; };
-  }, [isCalibrated, sessionProgress]);
 
   // If student is not calibrated, show the authentic locked Decision Engine
   if (!isCalibrated) {
@@ -379,6 +488,7 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
   useEffect(() => {
     if (top6Careers.length > 0 && !top6Careers.some(c => c.id === selectedCareer.id)) {
       setSelectedCareer(top6Careers[0]);
+      onSelectCareerId?.(top6Careers[0].id);
     }
   }, [selectedDomain, careers]);
 
