@@ -32,15 +32,25 @@ import { ApiService } from './services/api';
 
 function extractInviteToken(): string | null {
   try {
+    const searchParams = new URLSearchParams(window.location.search);
+    const queryToken = searchParams.get('token') || searchParams.get('invite');
+    if (queryToken && queryToken.trim()) return queryToken.trim();
+
     const path = window.location.pathname;
     if (path.includes('/parent/invite/')) {
       const parts = path.split('/parent/invite/');
-      if (parts[1]) return parts[1].split('/')[0].split('?')[0];
+      if (parts[1]) {
+        const cleaned = parts[1].split('/')[0].split('?')[0].split('#')[0].trim();
+        if (cleaned) return cleaned;
+      }
     }
     const hash = window.location.hash;
     if (hash.includes('/parent/invite/')) {
       const parts = hash.split('/parent/invite/');
-      if (parts[1]) return parts[1].split('/')[0].split('?')[0];
+      if (parts[1]) {
+        const cleaned = parts[1].split('/')[0].split('?')[0].trim();
+        if (cleaned) return cleaned;
+      }
     }
   } catch {
     // fallback
