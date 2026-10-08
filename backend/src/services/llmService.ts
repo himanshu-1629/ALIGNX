@@ -5,17 +5,26 @@ import { IScoreComponents } from '../models/Recommendation';
 import { ISingleSkillGap } from '../models/SkillGap';
 import { IRoadmapMilestone } from '../models/Roadmap';
 
-// Initialize Gemini Client if API key is provided
+// Initialize Gemini Client dynamically
+let cachedKey: string | null = null;
 let genAIClient: GoogleGenAI | null = null;
-const apiKey = process.env.GEMINI_API_KEY;
 const defaultModelName = process.env.GEMINI_MODEL_NAME || 'gemini-3.5-flash-lite';
 
-if (apiKey && apiKey.trim() !== '') {
-  try {
-    genAIClient = new GoogleGenAI({ apiKey });
-  } catch (err) {
-    console.warn('[LLMService] Failed to initialize GoogleGenAI client:', err);
+function getGenAIClient(): GoogleGenAI | null {
+  const currentKey = process.env.GEMINI_API_KEY;
+  if (!currentKey || currentKey.trim() === '') {
+    return null;
   }
+  if (currentKey !== cachedKey || !genAIClient) {
+    try {
+      genAIClient = new GoogleGenAI({ apiKey: currentKey.trim() });
+      cachedKey = currentKey;
+    } catch (err) {
+      console.warn('[LLMService] Failed to initialize GoogleGenAI client:', err);
+      return null;
+    }
+  }
+  return genAIClient;
 }
 
 export interface RecommendationExplanationResult {
@@ -48,8 +57,9 @@ export class LLMService {
   ): Promise<RecommendationExplanationResult> {
     // Fallback template
     const fallback = this.buildFallbackExplanation(student, career, scores, overallScore);
+    const client = getGenAIClient();
 
-    if (!genAIClient) {
+    if (!client) {
       return fallback;
     }
 
@@ -87,7 +97,7 @@ Respond strictly in valid JSON format with this exact structure:
 Only output raw JSON without markdown code fences.
 `;
 
-      const response = await genAIClient.models.generateContent({
+      const response = await client.models.generateContent({
         model: defaultModelName,
         contents: prompt
       });
@@ -117,8 +127,9 @@ Only output raw JSON without markdown code fences.
     skillGaps: ISingleSkillGap[]
   ): Promise<RoadmapGenerationResult> {
     const fallback = this.buildFallbackRoadmap(career, skillGaps);
+    const client = getGenAIClient();
 
-    if (!genAIClient) {
+    if (!client) {
       return fallback;
     }
 
@@ -162,7 +173,7 @@ Respond strictly in valid JSON format matching this schema:
 Only output raw JSON without markdown code fences.
 `;
 
-      const response = await genAIClient.models.generateContent({
+      const response = await client.models.generateContent({
         model: defaultModelName,
         contents: prompt
       });
