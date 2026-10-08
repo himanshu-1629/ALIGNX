@@ -1,106 +1,147 @@
-# ALIGNX — Aligning Talent With Opportunity
+# ALIGNX — Real-Time Multi-Dimensional Career Intelligence & Decision Support Platform
 
 [![DataQuest 3.0](https://img.shields.io/badge/Hackathon-DataQuest%203.0-blue.svg)](https://github.com/himanshu-1629/ALIGNX)
 [![Challenge](https://img.shields.io/badge/Challenge-PRISM%20Engine-purple.svg)](https://github.com/himanshu-1629/ALIGNX)
+[![Presentation Deck](https://img.shields.io/badge/Pitch%20Deck-Google%20Slides-orange.svg)](https://docs.google.com/presentation/d/1dWUnx_up_YXxmj7wloj-4Z_OMFGZoAhl/edit?usp=drive_link&ouid=102706534764800955072&rtpof=true&sd=true)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB.svg)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-20%2B-339933.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PPT](https://docs.google.com/presentation/d/1dWUnx_up_YXxmj7wloj-4Z_OMFGZoAhl/edit?usp=drive_link&ouid=102706534764800955072&rtpof=true&sd=true)
 
-> **ALIGNX** is an AI-powered, multi-dimensional career decision and discovery platform designed for students navigating critical career choices. Instead of generic quizzes or open-ended chatbots, ALIGNX calculates career alignment across three real-world pillars: **Student Aptitude & Aspirations**, **Family Financial Realities**, and **Market & Geographic Demands**.
+> **ALIGNX** is an AI-powered, multi-dimensional career decision and discovery platform designed for students and parents navigating high-stakes career choices. Instead of generic personality quizzes or ungrounded chatbots, ALIGNX calculates career alignment across five real-world pillars: **Student Aptitude & Interests**, **Family Financial Realities**, **Parent–Student Alignment**, **Live Market Demand**, and **Geographic Hubs**.
 
 ---
 
-## 🌟 The Core Vision
+## 📽️ Project Presentation Deck (PPT)
 
-Most career guidance tools fail because they only look at a single dimension—typically student interest or a personality questionnaire—while ignoring the real-world constraints that dictate career success:
+📊 **Access the official project slide deck here:**  
+👉 **[ALIGNX Pitch Deck & System Architecture (Google Slides)](https://docs.google.com/presentation/d/1dWUnx_up_YXxmj7wloj-4Z_OMFGZoAhl/edit?usp=drive_link&ouid=102706534764800955072&rtpof=true&sd=true)**
+
+---
+
+## 🌟 The Core Problem & Vision
+
+Traditional career counseling fails because it evaluates students in a vacuum—typically relying on dry, 50-question personality surveys while completely ignoring the practical boundaries that determine real-world success:
 
 ```text
-      ┌───────────────────────┐
-      │   STUDENT DIMENSION   │  (Interests, Aptitude, Skills, Work Style, DNA)
-      └───────────┬───────────┘
+      ┌────────────────────────┐
+      │   STUDENT DIMENSION    │  (Cognitive Aptitude, RIASEC Holland Traits, Skills)
+      └───────────┬────────────┘
                   │
                   ▼
-      ┌───────────────────────┐
-      │   FAMILY DIMENSION    │  (Education Budget, Risk Tolerance, Expectations)
-      └───────────┬───────────┘
+      ┌────────────────────────┐
+      │    FAMILY DIMENSION    │  (Education Budget, Affordability Margin, Risk Appetite)
+      └───────────┬────────────┘
                   │
                   ▼
-      ┌───────────────────────┐
-      │   MARKET DIMENSION    │  (Industry Demand, Salary Trajectory, Regional Fit)
-      └───────────┬───────────┘
+      ┌────────────────────────┐
+      │    MARKET DIMENSION    │  (Verified Hiring Surges, Salary Bands, MoSPI/NASSCOM Data)
+      └───────────┬────────────┘
                   │
                   ▼
-      ┌───────────────────────┐
-      │ ALIGNX DECISION ENGINE│  (Multi-Fit Deterministic Scoring & Optimization)
-      └───────────┬───────────┘
+      ┌────────────────────────┐
+      │ ALIGNX DECISION ENGINE │  (Deterministic 5-Pillar Optimization Math)
+      └───────────┬────────────┘
                   │
                   ▼
-      ┌───────────────────────┐
-      │   DECISION SUPPORT    │  (Ranked Pathways, Explainability, What-If Twin)
-      └───────────────────────┘
+      ┌────────────────────────┐
+      │    DECISION SUPPORT    │  (Ranked Pathways, What-If Twin, 3-Phase Roadmaps)
+      └────────────────────────┘
 ```
 
-**ALIGNX does not dictate what career a student must choose.** It serves as an objective, transparent **decision support engine** empowering students and families to make informed, conflict-free life choices.
+**ALIGNX does not dictate what career a student must choose.** It serves as an objective, transparent **decision support engine** that synthesizes multi-party trade-offs into clear, actionable clarity.
 
 ---
 
-## 🚀 Key Features
+## 🚀 Key Innovation Highlights
 
-- **Multi-Dimensional Career DNA**: Generates a student's cognitive and interest profile across Holland Codes (RIASEC), skill vectors, and learning preferences.
-- **Financial Constraint Solver**: Cross-references career education costs (degree tuition, living expenses) against family affordability and scholarship potential.
-- **Parent–Student Conflict Index**: Quantifies differences between parent expectations and student aspirations, providing actionable middle-ground pathways.
-- **Explainable Decision Engine**: Uses deterministic, testable scoring formulas ($S_{\text{fit}}, F_{\text{fit}}, A_{\text{family}}, M_{\text{fit}}, L_{\text{fit}}$) rather than black-box AI hallucinations.
-- **AI-Powered Narrative Explanations**: Integrates Google Gemini LLMs to articulate *why* careers are recommended, bridging technical scores into empathetic advice.
-- **Interactive "What-If" Career Simulator**: Lets students test dynamic scenarios in real-time (*"What if my budget increases by ₹3L?"*, *"What if I relocate to Bangalore?"*, *"What if I learn PyTorch?"*).
-- **Personalized Learning & Skill-Gap Roadmaps**: Pinpoints precise technical and soft skill deficits and maps clear milestones to career readiness.
+### 1. ⚡ Streamlined 6 Tactical Missions (Career Discovery)
+- Replaced 18 tedious survey cards with **6 high-stakes dilemma missions** (Autonomous Hardware, Frontier AI, Spatial UX, Crisis Mediation, Deep-Tech Venture, and Critical System Integrity).
+- **Interactive Gamification**: Live tactile archetype cards (`[HARDWARE ARCHITECT]`, `[RESEARCH SCIENTIST]`, etc.), keyboard shortcuts (`1-4`, `Enter`), and a **Real-Time DNA Synthesis Equalizer HUD** that visualizes Holland RIASEC points accumulating live.
+- Takes **under 60 seconds** to complete while delivering mathematically rigorous psychometric inputs.
+
+### 2. 🧠 Universal Cognitive & IQ Aptitude Assessment
+- Replaced hyper-technical computer engineering jargon with **5 universal reasoning vectors** that test core cognitive capability regardless of background:
+  - **Logical Deduction**: Competitive sequence ordering puzzle.
+  - **Numerical Pattern**: Exponential doubling series recognition (`3, 7, 15, 31, 63, 127`).
+  - **Systemic Problem Solving**: Multi-variable balance scale substitution.
+  - **Spatial Orientation**: Cardinal compass mental rotation without 3D math.
+  - **Verbal Analogy**: Functional instrument relationship (`Compass:Navigation :: Thermometer:Temperature`).
+- Features instant keyboard navigation (`1-4`, `A-D`, `Enter`).
+
+### 3. 🗺️ Talent Atlas with Verified Government & Industry Data
+- **Live Market Telemetry**: Periodic 15-second background polling simulating real-time labor market shifts.
+- **Verified Ground-Truth Sources** (as documented in `docs/DATA_SOURCES.md`):
+  - **MoSPI PLFS (2023-24)**: Official labor force participation and urban youth unemployment baselines.
+  - **NASSCOM Strategic Review 2026**: High-demand tech domains, starting packages, and AI talent demand-supply ratios.
+  - **Wheebox India Skills Report 2026**: STEAM employability rates (54.2% national benchmark).
+  - **O*NET 31.0 & TeamLease Primer**: Skill vectors, STEM automation risk, and hiring surge telemetry.
+  - **NIRF & AICTE**: Higher education fee brackets and regional degree return-on-investment (ROI).
+- **Data Provenance Modal**: Interactive source audit showing official publication years, sample sizes, and update cycles.
+
+### 4. ⚖️ Deterministic 5-Pillar Decision Engine
+- Zero black-box AI guessing. Career scores are calculated with transparent, testable mathematical formulas:
+  $$\text{ALIGNX Score} = w_s S_{\text{fit}} + w_f F_{\text{fit}} + w_a A_{\text{family}} + w_m M_{\text{fit}} + w_l L_{\text{fit}}$$
+- Integrates a **Financial Friction Index** and **Parent–Student Conflict Index** to identify viable compromise careers.
+
+### 5. 🔮 Interactive "What-If" Career Twin Simulator & 3D Radar
+- Allows students to simulate life changes in real time:
+  - *"What if my education budget increases by ₹4 Lakhs?"*
+  - *"What if I relocate to Bangalore or Hyderabad?"*
+  - *"What if I acquire Distributed Systems or PyTorch skills?"*
+- Features real-time sensitivity sliders, an **Authentic Compass**, and a **3D Equilibrium Radar**.
+
+### 6. 🗺️ 3-Phase Milestone Roadmaps & Gemini LLM Explanations
+- Actionable 3-tier milestone plans (**0–6 months**, **6–18 months**, **18–36 months**).
+- Pinpoints skill deficits and specifies industry certifications, open-source projects, and target degree specializations.
+- Employs Google Gemini LLMs to articulate empathetic, humanized explanations bridging quantitative scores into practical guidance.
 
 ---
 
-## 📐 System Architecture
+## 📊 The Scoring Model (ALIGNX Engine)
 
-ALIGNX follows a modular, decoupled architecture:
+| Component | Default Weight | Key Mathematical Parameters |
+|---|:---:|---|
+| **Student Fit ($S_{\text{fit}}$)** | **35%** | Skill overlap (35%), Cognitive aptitude vector (35%), Holland RIASEC synergy (30%) |
+| **Financial Fit ($F_{\text{fit}}$)** | **20%** | Degree tuition vs. budget buffer, household financial friction, ROI payback period |
+| **Family Alignment ($A_{\text{family}}$)** | **15%** | Parental preference congruence, Parent–Student Conflict Index, risk penalty |
+| **Market Fit ($M_{\text{fit}}$)** | **20%** | 5-year growth trajectory, verified hiring surge, automation vulnerability discount |
+| **Location Fit ($L_{\text{fit}}$)** | **10%** | Regional industry clusters (Bangalore, Pune, Hyderabad), geographic mobility score |
+
+---
+
+## 🏗️ System Architecture
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
 │                               FRONTEND                                 │
-│                   React / Next.js + TypeScript + Tailwind              │
-│       Onboarding │ Assessment UI │ Dashboard │ Career Twin │ What-If   │
+│              React 19 + TypeScript + Vite + Vanilla Design System       │
+│  Onboarding │ 6-Mission Discovery │ Cognitive IQ │ What-If │ Talent Atlas│
 └───────────────────────────────────┬────────────────────────────────────┘
-                                    │ HTTPS / REST
+                                    │ HTTPS / REST (Port 5173 -> 5001)
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │                              BACKEND API                               │
-│                      Node.js / Express or FastAPI                      │
-│             Auth │ Validation │ Controllers │ Orchestration            │
+│                  Node.js / Express / TypeScript (ES Modules)           │
+│   Auth Controller │ Assessment Controller │ Market & Atlas Telemetry   │
 └───────────────────────┬────────────────────────┬───────────────────────┘
                         │                        │
          ┌──────────────┘                        └──────────────┐
          ▼                                                      ▼
 ┌──────────────────┐                                  ┌──────────────────┐
-│     DATABASE     │                                  │ DECISION ENGINE  │
-│  MongoDB Atlas   │                                  │ (Deterministic)  │
-│  (Document DB)   │                                  │ Multi-Fit Math   │
+│  DATABASE LAYER  │                                  │ DECISION ENGINE  │
+│   MongoDB Atlas  │                                  │ (Deterministic)  │
+│ Mongoose Models  │                                  │ Scoring Engine   │
 └──────────────────┘                                  └────────┬─────────┘
                                                                │
                                                      ┌─────────┴─────────┐
                                                      ▼                   ▼
                                             ┌──────────────────┐ ┌────────────────┐
                                             │ CAREER KNOWLEDGE │ │ LLM EXPLAINER  │
-                                            │       BASE       │ │ (Gemini API)   │
+                                            │ Verified MoSPI / │ │ (Google Gemini │
+                                            │ NASSCOM Datasets │ │ GenAI SDK)     │
                                             └──────────────────┘ └────────────────┘
 ```
-
----
-
-## 👥 Team & Ownership
-
-Developed for **DataQuest 3.0** by a dedicated 4-member team:
-
-| Member | Primary Domain | Core Responsibilities |
-|---|---|---|
-| **Himanshu** | **AI/ML & Decision Engine** | Mathematical scoring engine, Student Vector / Career DNA, Financial Solver, Conflict Index, What-If simulator logic. |
-| **Arpit** | **Data & LLM Layer** | Career Knowledge Base, LLM prompt engineering, Gemini integration, Career DNA narrative synthesis. |
-| **OM** | **Backend & Database** | API infrastructure, schema design (MongoDB / Mongoose), authentication, service orchestration. |
-| **Daksh** | **Frontend & UI/UX** | User experience, design system, interactive dashboards, Career Twin visualizations, What-If UI. |
 
 ---
 
@@ -108,84 +149,108 @@ Developed for **DataQuest 3.0** by a dedicated 4-member team:
 
 ```text
 ALIGNX/
-├── backend/            # Backend API server & business logic
-├── frontend/           # Client application (Next.js / React)
-├── database/           # MongoDB models, validation & seed scripts
-├── assets/             # Architecture diagrams, mockups, design assets
-├── docs/               # In-depth technical & product specifications
+├── backend/                    # Express + TypeScript API Server
+│   ├── src/
+│   │   ├── controllers/        # Assessment, Auth, Career, Market, Recommendation
+│   │   ├── engine/             # Deterministic scoringEngine.ts
+│   │   ├── models/             # Mongoose schemas (Assessment, Career, Student)
+│   │   ├── routes/             # REST API routing
+│   │   └── services/           # LLM service & market data aggregators
+│   ├── package.json
+│   └── tsconfig.json
+├── frontend/                   # React 19 + TypeScript Client App
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── common/         # AuthenticCompass, EquilibriumRadar3D, Modals
+│   │   │   ├── frames/         # Cinematic visual frames
+│   │   │   └── modules/        # Discovery (6 Missions), Aptitude (IQ),
+│   │   │                       # Talent Atlas, Recommendations, What-If, Parent
+│   │   ├── data/               # mockAlignxData.ts (Careers, Scenarios, Puzzles)
+│   │   └── services/           # ApiService client & telemetry listeners
+│   ├── index.html
+│   └── vite.config.ts
+├── database/                   # Seed files & raw verified data sets
+│   ├── data/raw/               # mospi_plfs_2023_24.json, nasscom_tech_2026.json
+│   └── seeds/                  # careers.json, assessment_questions.json
+├── docs/                       # Technical & Product Documentation
+│   ├── DATA_SOURCES.md         # Full Provenance & Government Citations
 │   ├── PRD.md                  # Product Requirements Document
-│   ├── TRD.md                  # Technical Requirements Document
-│   ├── SYSTEM_ARCHITECTURE.md  # Detailed System Architecture
-│   ├── DATABASE_SCHEMA.md      # Database Collections & Schema Architecture
-│   ├── API_DOCUMENTATION.md    # REST API Contracts
-│   ├── UI_UX.md                # Design System & Wireframes
-│   ├── USER_FLOW.md            # User Journeys & State Machines
-│   ├── ROADMAP.md              # Milestones & Sprint Breakdown
-│   └── testing.md              # Quality Assurance Strategy
-├── PROJECT.md          # Comprehensive Project Charter
-├── TASKS.md            # Detailed Team Task Breakdown
-├── TEAM.md             # Team Roles & Ownership Matrix
-└── README.md           # Project Overview & Quickstart
+│   ├── TRD.md                  # Technical Architecture Document
+│   ├── SYSTEM_ARCHITECTURE.md  # Detailed Micro-Architecture
+│   ├── DATABASE_SCHEMA.md      # Collection Schemas & Indices
+│   └── API_DOCUMENTATION.md    # REST API Contracts
+└── README.md                   # Project Overview & Quickstart Guide
 ```
 
 ---
 
-## 📊 The Scoring Model (ALIGNX Engine)
-
-The core recommendation score is calculated deterministically across 5 normalized components $[0, 100]$:
-
-$$\text{ALIGNX Score} = w_s S_{\text{fit}} + w_f F_{\text{fit}} + w_a A_{\text{family}} + w_m M_{\text{fit}} + w_l L_{\text{fit}}$$
-
-| Component | Default Weight | Evaluates |
-|---|:---:|---|
-| **Student Fit ($S_{\text{fit}}$)** | **35%** | Aptitude alignment, interest match (RIASEC), skill overlap |
-| **Financial Fit ($F_{\text{fit}}$)** | **20%** | Degree cost vs. budget, affordability margin, scholarship offset |
-| **Family Alignment ($A_{\text{family}}$)** | **15%** | Parental preference congruence, Parent–Student Conflict Index |
-| **Market Fit ($M_{\text{fit}}$)** | **20%** | Current industry hiring demand, 5-year growth trajectory, salary potential |
-| **Location Fit ($L_{\text{fit}}$)** | **10%** | Regional job clusters, geographic mobility constraints |
-
----
-
-## 🛠️ Getting Started
+## 🛠️ Getting Started & Quick Setup
 
 ### Prerequisites
+- **Node.js**: v18+ or v20 LTS
+- **MongoDB**: Local MongoDB instance or MongoDB Atlas connection string
+- **Google Gemini API Key** *(optional, for live LLM explanations)*
 
-- Node.js (v18+ or v20 LTS)
-- Python (3.10+ for Decision Engine & AI modules)
-- MongoDB (Local instance or free MongoDB Atlas URI)
-
-### Quick Setup
+### 1. Clone & Install Dependencies
 
 ```bash
-# 1. Clone the repository
+# Clone the repository
 git clone https://github.com/himanshu-1629/ALIGNX.git
 cd ALIGNX
 
-# 2. Setup Backend
+# Install Backend dependencies
 cd backend
-npm install   # or pip install -r requirements.txt
-cp .env.example .env
+npm install
 
-# 3. Setup Frontend
+# Install Frontend dependencies
 cd ../frontend
 npm install
+```
+
+### 2. Configure Environment Variables
+
+Create `backend/.env`:
+```env
+PORT=5001
+MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/alignx
+JWT_SECRET=your_jwt_secret_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+### 3. Launch the Application
+
+```bash
+# Terminal 1: Start Backend (Port 5001)
+cd backend
+npm run dev
+
+# Terminal 2: Start Frontend (Port 5173)
+cd frontend
 npm run dev
 ```
 
+Visit **`http://localhost:5173`** in your browser.
+
 ---
 
-## 📖 Complete Documentation Index
+## 👥 Team & Ownership (DataQuest 3.0)
 
-For deep dives into design and implementation details, refer to:
-- 📋 [Product Requirements Document (PRD)](file:///Users/himanshusingh/project/ALIGNX/docs/PRD.md)
-- ⚙️ [Technical Requirements Document (TRD)](file:///Users/himanshusingh/project/ALIGNX/docs/TRD.md)
-- 🏗️ [System Architecture](file:///Users/himanshusingh/project/ALIGNX/docs/SYSTEM_ARCHITECTURE.md)
-- 🗄️ [Database Schema & Models](file:///Users/himanshusingh/project/ALIGNX/docs/DATABASE_SCHEMA.md)
-- 🔌 [API Endpoints Documentation](file:///Users/himanshusingh/project/ALIGNX/docs/API_DOCUMENTATION.md)
-- 🧪 [Testing Strategy](file:///Users/himanshusingh/project/ALIGNX/docs/testing.md)
-- 🗺️ [Development Roadmap](file:///Users/himanshusingh/project/ALIGNX/docs/ROADMAP.md)
-- 👥 [Team Roles & Ownership](file:///Users/himanshusingh/project/ALIGNX/TEAM.md)
-- ✅ [Task Breakdown](file:///Users/himanshusingh/project/ALIGNX/TASKS.md)
+| Member | Primary Domain | Core Responsibilities |
+|---|---|---|
+| **Himanshu** | **AI/ML & Decision Engine** | Mathematical 5-pillar scoring engine, Talent Atlas telemetry, 6-mission tactical discovery, universal IQ aptitude evaluation, What-If simulator. |
+| **Arpit** | **Data & LLM Layer** | Career knowledge base, Gemini prompt engineering, narrative synthesis, user authentication & profile integration. |
+| **OM** | **Backend & Database** | REST API infrastructure, Mongoose data models, seed pipelines, service orchestration. |
+| **Daksh** | **Frontend & UI/UX** | Design system, 3D radar visualizer, authentic compass, landing cinematic frames. |
+
+---
+
+## 🔗 Important Project Links
+
+- 📊 **[Google Slides Presentation Deck](https://docs.google.com/presentation/d/1dWUnx_up_YXxmj7wloj-4Z_OMFGZoAhl/edit?usp=drive_link&ouid=102706534764800955072&rtpof=true&sd=true)**
+- 📋 [Data Sources & Provenance Audit](docs/DATA_SOURCES.md)
+- 🏗️ [System Architecture](docs/SYSTEM_ARCHITECTURE.md)
+- 🔌 [API Endpoints Documentation](docs/API_DOCUMENTATION.md)
+- 📄 [Product Requirements Document (PRD)](docs/PRD.md)
 
 ---
 
