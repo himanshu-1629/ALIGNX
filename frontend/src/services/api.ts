@@ -405,4 +405,70 @@ export class ApiService {
   public static async getDashboard() {
     return this.request<{ success: boolean; data: any }>('/dashboard/me');
   }
+
+  // 13. Live Talent Atlas Telemetry & Market Intelligence
+  public static async getTalentAtlasData(): Promise<ApiResponse<TalentAtlasPayload>> {
+    return this.request<ApiResponse<TalentAtlasPayload>>('/market/atlas');
+  }
 }
+
+export interface TalentAtlasPayload {
+  pulse: {
+    activeOpenings: number;
+    openingsDelta: string;
+    nationalVelocity: number;
+    volatilityScore: number;
+    lastUpdated: string;
+    hotHub: string;
+    dominantSector: string;
+  };
+  states: Array<{
+    id: string;
+    name: string;
+    capital: string;
+    zone: 'South' | 'West' | 'North' | 'Central';
+    tagline: string;
+    startingCtcLakhs: number;
+    fiveYearCtcLakhs: number;
+    hiringVelocity: number;
+    arbitrageYield: string;
+    activePostings?: number;
+    liveDelta?: string;
+    topCareers: Array<{
+      title: string;
+      domain: string;
+      surge: string;
+      avgCtc: number;
+    }>;
+    keyHubs: string[];
+    keyEmployers: string[];
+    feederInstitutes: string[];
+    deficitTag: string;
+    plfs?: { lfpr: number; ur: number; source: string };
+    employability?: { rate: number; city: string; source: string };
+    gccDensity?: { count: number; source: string };
+  }>;
+  popularCareers: Array<{
+    id: string;
+    rank: number;
+    title: string;
+    domain: string;
+    nationalSurge: string;
+    startingCtc: string;
+    fiveYearCtc: string;
+    popularityScore: number;
+    topStates: string[];
+    shortageIndex: string;
+    whyPopular: string;
+    activeOpenings?: number;
+  }>;
+  provenanceSources?: Array<{
+    id: string;
+    title: string;
+    authority: string;
+    metrics: string;
+    citation: string;
+    url: string;
+  }>;
+}
+
