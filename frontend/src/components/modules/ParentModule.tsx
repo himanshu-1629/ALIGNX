@@ -996,9 +996,10 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
             <button
               onClick={onBack}
               className="alignx-key"
-              style={{ padding: '12px 18px', fontSize: '0.76rem' }}
+              style={{ padding: '12px 18px', fontSize: '0.76rem', display: 'flex', alignItems: 'center', gap: '6px' }}
             >
-              <span>← CAREER DNA</span>
+              <ChevronLeft size={14} />
+              <span>← PREVIOUS (CAREER DNA)</span>
             </button>
           )}
 

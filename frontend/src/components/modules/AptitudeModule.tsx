@@ -7,20 +7,54 @@ import { ArrowRight, ChevronLeft, Activity, Sparkles, Brain, ShieldCheck } from 
 
 interface AptitudeModuleProps {
   onComplete: (score: number, dimensionScores: Record<string, number>) => void;
+  onBack?: () => void;
   onSkipToDna?: () => void;
+  draftAptitude?: {
+    currentIdx: number;
+    selectedAnswers: Record<number, number>;
+    score: number | null;
+    metrics: any | null;
+    showResults: boolean;
+  };
+  onUpdateDraft?: (updates: {
+    currentIdx?: number;
+    selectedAnswers?: Record<number, number>;
+    score?: number | null;
+    metrics?: any | null;
+    showResults?: boolean;
+  }) => void;
 }
 
-export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSkipToDna }) => {
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
+export const AptitudeModule: React.FC<AptitudeModuleProps> = ({
+  onComplete,
+  onBack,
+  onSkipToDna,
+  draftAptitude,
+  onUpdateDraft
+}) => {
+  const [currentIdx, setCurrentIdx] = useState(draftAptitude?.currentIdx ?? 0);
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>(
+    draftAptitude?.selectedAnswers ?? {}
+  );
   const [isCalculating, setIsCalculating] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const [showResults, setShowResults] = useState(draftAptitude?.showResults ?? false);
+
+  // Sync state if draftAptitude changes externally
+  useEffect(() => {
+    if (draftAptitude) {
+      if (draftAptitude.currentIdx !== undefined) setCurrentIdx(draftAptitude.currentIdx);
+      if (draftAptitude.selectedAnswers) setSelectedAnswers(draftAptitude.selectedAnswers);
+      if (draftAptitude.showResults !== undefined) setShowResults(draftAptitude.showResults);
+    }
+  }, [draftAptitude]);
 
   const question = APTITUDE_QUESTIONS[currentIdx];
   const totalQuestions = APTITUDE_QUESTIONS.length;
 
   const handleSelectOption = (qId: number, optionIndex: number) => {
-    setSelectedAnswers(prev => ({ ...prev, [qId]: optionIndex }));
+    const updated = { ...selectedAnswers, [qId]: optionIndex };
+    setSelectedAnswers(updated);
+    onUpdateDraft?.({ selectedAnswers: updated });
   };
 
   // Keyboard navigation support: 1-4 / A-D to select, Enter to advance
@@ -61,9 +95,21 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
     }, 0);
   };
 
+  const handlePrev = () => {
+    if (currentIdx > 0) {
+      const prevIdx = currentIdx - 1;
+      setCurrentIdx(prevIdx);
+      onUpdateDraft?.({ currentIdx: prevIdx });
+    } else if (onBack) {
+      onBack();
+    }
+  };
+
   const handleNext = () => {
     if (currentIdx < totalQuestions - 1) {
-      setCurrentIdx(currentIdx + 1);
+      const nextIdx = currentIdx + 1;
+      setCurrentIdx(nextIdx);
+      onUpdateDraft?.({ currentIdx: nextIdx });
     } else {
       setIsCalculating(true);
       setTimeout(() => {
@@ -81,6 +127,12 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
           spatialArchitecture: Math.min(92, Math.round(finalScore * 0.92)),
           riskTolerance: Math.min(94, Math.round(finalScore * 0.95))
         };
+
+        onUpdateDraft?.({
+          score: finalScore,
+          metrics,
+          showResults: true
+        });
 
         // Persist to session
         saveSessionProgress({
@@ -112,9 +164,6 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
     }
   };
 
-  const handlePrev = () => {
-    if (currentIdx > 0) setCurrentIdx(currentIdx - 1);
-  };
 
   const rawSum = calculateRawSum();
   const calculatedPercent = Math.max(76, Math.min(98, Math.round((rawSum / (totalQuestions * 20)) * 100) || 88));
@@ -298,15 +347,13 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <button
                 onClick={handlePrev}
-                disabled={currentIdx === 0}
                 className="alignx-key"
                 style={{
-                  opacity: currentIdx === 0 ? 0.4 : 1,
-                  cursor: currentIdx === 0 ? 'not-allowed' : 'pointer'
+                  cursor: 'pointer'
                 }}
               >
                 <ChevronLeft size={14} />
-                <span>PREVIOUS</span>
+                <span>{currentIdx === 0 ? '← PREVIOUS' : 'PREVIOUS'}</span>
               </button>
 
               {onSkipToDna && (
@@ -409,10 +456,24 @@ export const AptitudeModule: React.FC<AptitudeModuleProps> = ({ onComplete, onSk
             ))}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-hairline)', paddingTop: '28px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}>
-              <ShieldCheck size={14} color="var(--accent)" />
-              <span>SAVED TO SESSION MEMORY</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-hairline)', paddingTop: '28px', flexWrap: 'wrap', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <button
+                onClick={() => {
+                  setShowResults(false);
+                  setCurrentIdx(totalQuestions - 1);
+                  onUpdateDraft?.({ showResults: false, currentIdx: totalQuestions - 1 });
+                }}
+                className="alignx-key"
+                style={{ padding: '12px 18px', fontSize: '0.74rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <ChevronLeft size={14} />
+                <span>← REVIEW QUESTIONS</span>
+              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}>
+                <ShieldCheck size={14} color="var(--accent)" />
+                <span>SAVED TO SESSION MEMORY</span>
+              </div>
             </div>
 
             <RollButton

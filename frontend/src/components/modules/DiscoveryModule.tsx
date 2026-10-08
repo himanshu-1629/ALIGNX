@@ -7,14 +7,42 @@ import { ArrowRight, ChevronLeft, CheckCircle2, Zap, Sparkles } from 'lucide-rea
 
 interface DiscoveryModuleProps {
   onComplete: (discoveryResults: Record<number, string>) => void;
+  onBack?: () => void;
   onSkipToAptitude?: () => void;
+  draftDiscovery?: {
+    currentIdx: number;
+    selectedChoices: Record<number, DiscoveryChoice>;
+    isFinished: boolean;
+  };
+  onUpdateDraft?: (updates: {
+    currentIdx?: number;
+    selectedChoices?: Record<number, DiscoveryChoice>;
+    isFinished?: boolean;
+  }) => void;
 }
 
-export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, onSkipToAptitude }) => {
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [selectedChoices, setSelectedChoices] = useState<Record<number, DiscoveryChoice>>({});
-  const [isFinished, setIsFinished] = useState(false);
+export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({
+  onComplete,
+  onBack,
+  onSkipToAptitude,
+  draftDiscovery,
+  onUpdateDraft
+}) => {
+  const [currentIdx, setCurrentIdx] = useState(draftDiscovery?.currentIdx ?? 0);
+  const [selectedChoices, setSelectedChoices] = useState<Record<number, DiscoveryChoice>>(
+    draftDiscovery?.selectedChoices ?? {}
+  );
+  const [isFinished, setIsFinished] = useState(draftDiscovery?.isFinished ?? false);
   const [pulseKey, setPulseKey] = useState(0);
+
+  // Sync state if draftDiscovery changes externally
+  useEffect(() => {
+    if (draftDiscovery) {
+      if (draftDiscovery.currentIdx !== undefined) setCurrentIdx(draftDiscovery.currentIdx);
+      if (draftDiscovery.selectedChoices) setSelectedChoices(draftDiscovery.selectedChoices);
+      if (draftDiscovery.isFinished !== undefined) setIsFinished(draftDiscovery.isFinished);
+    }
+  }, [draftDiscovery]);
 
   const scenario = DISCOVERY_SCENARIOS[currentIdx];
   const totalMissions = DISCOVERY_SCENARIOS.length;
@@ -63,23 +91,32 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
   }, [currentIdx, selectedChoices, scenario, isFinished]);
 
   const handleSelectChoice = (choice: DiscoveryChoice) => {
-    setSelectedChoices(prev => ({ ...prev, [scenario.id]: choice }));
+    const updated = { ...selectedChoices, [scenario.id]: choice };
+    setSelectedChoices(updated);
     setPulseKey(prev => prev + 1);
+    onUpdateDraft?.({ selectedChoices: updated });
   };
 
   const handlePrev = () => {
     if (currentIdx > 0) {
-      setCurrentIdx(currentIdx - 1);
+      const prevIdx = currentIdx - 1;
+      setCurrentIdx(prevIdx);
+      onUpdateDraft?.({ currentIdx: prevIdx });
+    } else if (onBack) {
+      onBack();
     }
   };
 
   const handleNext = () => {
     if (selectedChoices[scenario.id]) {
       if (currentIdx < totalMissions - 1) {
-        setCurrentIdx(currentIdx + 1);
+        const nextIdx = currentIdx + 1;
+        setCurrentIdx(nextIdx);
+        onUpdateDraft?.({ currentIdx: nextIdx });
         window.scrollTo({ top: 120, behavior: 'smooth' });
       } else {
         setIsFinished(true);
+        onUpdateDraft?.({ isFinished: true });
         window.scrollTo({ top: 120, behavior: 'smooth' });
       }
     }
@@ -495,22 +532,21 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
             >
               <button
                 onClick={handlePrev}
-                disabled={currentIdx === 0}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
                   background: 'transparent',
                   border: 'none',
-                  color: currentIdx === 0 ? 'var(--text-muted)' : 'var(--text-secondary)',
-                  cursor: currentIdx === 0 ? 'not-allowed' : 'pointer',
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.78rem',
                   padding: '8px 12px'
                 }}
               >
                 <ChevronLeft size={16} />
-                <span>PREVIOUS MISSION</span>
+                <span>{currentIdx === 0 ? '← PREVIOUS' : 'PREVIOUS MISSION'}</span>
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -621,6 +657,18 @@ export const DiscoveryModule: React.FC<DiscoveryModuleProps> = ({ onComplete, on
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => {
+                setIsFinished(false);
+                setCurrentIdx(totalMissions - 1);
+                onUpdateDraft?.({ isFinished: false, currentIdx: totalMissions - 1 });
+              }}
+              className="alignx-key"
+              style={{ padding: '14px 24px', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+            >
+              <ChevronLeft size={16} />
+              <span>← PREVIOUS MISSION</span>
+            </button>
             <RollButton
               onClick={async () => {
                 saveSessionProgress({
