@@ -245,6 +245,16 @@ export const CareerDnaModule: React.FC<CareerDnaModuleProps> = ({
       {/* Next Step CTA */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-hairline)', paddingTop: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="alignx-key"
+              style={{ padding: '12px 18px', fontSize: '0.76rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <ChevronLeft size={14} />
+              <span>← PREVIOUS</span>
+            </button>
+          )}
           {onSkipToDashboard && (
             <button onClick={onSkipToDashboard} className="alignx-key" style={{ padding: '12px 18px', fontSize: '0.76rem' }}>
               <span>SKIP TO 5D DASHBOARD</span>

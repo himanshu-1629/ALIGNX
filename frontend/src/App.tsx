@@ -15,8 +15,17 @@ import { WhatIfModule } from './components/modules/WhatIfModule';
 import { RoadmapModule } from './components/modules/RoadmapModule';
 import { TalentAtlasModule } from './components/modules/TalentAtlasModule';
 import { AssessmentGateModal } from './components/AssessmentGateModal';
-import type { StudentProfile, AlignxSessionProgress } from './types/alignx';
-import { getSessionProgress, saveSessionProgress, clearSessionProgress, DEFAULT_SESSION_PROGRESS } from './utils/sessionManager';
+import type { StudentProfile, AlignxSessionProgress, AssessmentDraftState } from './types/alignx';
+import {
+  getSessionProgress,
+  saveSessionProgress,
+  clearSessionProgress,
+  DEFAULT_SESSION_PROGRESS,
+  getAssessmentDraft,
+  saveAssessmentDraft,
+  clearAssessmentDraft,
+  DEFAULT_ASSESSMENT_DRAFT
+} from './utils/sessionManager';
 import { AuthModal } from './components/auth/AuthModal';
 import { ParentInvitePortal } from './components/portal/ParentInvitePortal';
 import { ApiService } from './services/api';
@@ -44,8 +53,14 @@ export function App() {
   const [selectedCareerId, setSelectedCareerId] = useState<string>('ai-engineer');
   const [, setStudentProfile] = useState<StudentProfile | null>(null);
   const [sessionProgress, setSessionProgress] = useState<AlignxSessionProgress>(getSessionProgress());
+  const [assessmentDraft, setAssessmentDraft] = useState<AssessmentDraftState>(() => getAssessmentDraft());
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [inviteToken, setInviteToken] = useState<string | null>(extractInviteToken);
+
+  const handleUpdateDraft = (updates: Partial<AssessmentDraftState>) => {
+    const updated = saveAssessmentDraft(updates);
+    setAssessmentDraft(updated);
+  };
 
   // Listen to popstate and hashchange for invite URLs
   useEffect(() => {
@@ -151,15 +166,18 @@ export function App() {
   };
 
   const handleResetSession = () => {
+    clearAssessmentDraft();
     const fresh = clearSessionProgress();
     setSessionProgress(fresh);
     setStudentProfile(null);
+    setAssessmentDraft(DEFAULT_ASSESSMENT_DRAFT);
     setCurrentView('home');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleOnboardingComplete = (profile: StudentProfile) => {
     setStudentProfile(profile);
+    handleUpdateDraft({ profile });
     const updated = saveSessionProgress({
       lastActiveView: 'discovery',
       studentProfile: profile,
@@ -339,12 +357,28 @@ export function App() {
             onComplete={handleOnboardingComplete}
             currentUser={currentUser}
             onRequireAuth={() => setIsAuthModalOpen(true)}
+            draftProfile={assessmentDraft.profile}
+            onUpdateDraft={(profileUpdates) =>
+              handleUpdateDraft({
+                profile: { ...assessmentDraft.profile, ...profileUpdates }
+              })
+            }
           />
         )}
 
         {currentView === 'discovery' && (
           <DiscoveryModule
             onComplete={handleDiscoveryComplete}
+            onBack={() => {
+              setCurrentView('onboarding');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            draftDiscovery={assessmentDraft.discovery}
+            onUpdateDraft={(discoveryUpdates) =>
+              handleUpdateDraft({
+                discovery: { ...assessmentDraft.discovery, ...discoveryUpdates }
+              })
+            }
             onSkipToAptitude={() => {
               setCurrentView('aptitude');
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -355,6 +389,16 @@ export function App() {
         {currentView === 'aptitude' && (
           <AptitudeModule
             onComplete={handleAptitudeComplete}
+            onBack={() => {
+              setCurrentView('discovery');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            draftAptitude={assessmentDraft.aptitude}
+            onUpdateDraft={(aptitudeUpdates) =>
+              handleUpdateDraft({
+                aptitude: { ...assessmentDraft.aptitude, ...aptitudeUpdates }
+              })
+            }
             onSkipToDna={() => {
               setCurrentView('dna');
               window.scrollTo({ top: 0, behavior: 'smooth' });

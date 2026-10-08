@@ -10,6 +10,29 @@ export interface StudentProfile {
   riskTolerance: 'low' | 'moderate' | 'high';
   aspirations: string[];
   interests: string[];
+  targetSalaryLakhs?: number;
+  preferredCountry?: string;
+}
+
+export interface AssessmentDraftState {
+  profile: StudentProfile;
+  discovery: {
+    currentIdx: number;
+    selectedChoices: Record<number, any>;
+    isFinished: boolean;
+  };
+  aptitude: {
+    currentIdx: number;
+    selectedAnswers: Record<number, number>;
+    score: number | null;
+    metrics: AptitudeMetricScores | null;
+    showResults: boolean;
+  };
+  dna: {
+    dominantArchetype?: string;
+    subType?: string;
+    description?: string;
+  };
 }
 
 export interface DimensionScores {

@@ -4,6 +4,7 @@ import type { CareerRecommendation, AlignxSessionProgress } from '../../types/al
 import { ApiService } from '../../services/api';
 import { RollButton } from '../RollButton';
 import type { AppView } from '../Header';
+import { DecisionArchitecturePipeline } from './DecisionArchitecturePipeline';
 import {
   Columns,
   Sparkles,
@@ -373,6 +374,14 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
     ? careers
     : careers.filter(c => c.domain.toLowerCase().includes(selectedDomain.toLowerCase()) || selectedDomain.toLowerCase().includes(c.domain.toLowerCase()));
 
+  const top6Careers = filteredCareers.slice(0, 6);
+
+  useEffect(() => {
+    if (top6Careers.length > 0 && !top6Careers.some(c => c.id === selectedCareer.id)) {
+      setSelectedCareer(top6Careers[0]);
+    }
+  }, [selectedDomain, careers]);
+
   return (
     <div style={{ maxWidth: '1440px', margin: '36px auto', padding: '0 28px' }}>
       {/* Studio Header & Navigation Switcher */}
@@ -501,14 +510,14 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
             <span className="tracking-widest-mono" style={{ color: 'var(--text-muted)' }}>
-              RANKED CANDIDATES ({filteredCareers.length})
+              TOP 6 RANKED CANDIDATES
             </span>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--accent)' }}>
               CLICK CARD TO INSPECT
             </span>
           </div>
 
-          {filteredCareers.map((career, idx) => {
+          {top6Careers.map((career, idx) => {
             const isSelected = selectedCareer.id === career.id;
             return (
               <div
@@ -880,6 +889,17 @@ export const RecommendationsModule: React.FC<RecommendationsModuleProps> = ({
           )}
         </div>
       </div>
+
+      {/* Visual System Architecture & Decision Pipeline: How ALIGNX Reached This Recommendation */}
+      <DecisionArchitecturePipeline
+        topCareers={top6Careers}
+        selectedCareer={selectedCareer}
+        onSelectCareer={(career) => {
+          setSelectedCareer(career);
+          onSelectCareerId?.(career.id);
+        }}
+        sessionProgress={sessionProgress}
+      />
 
       <style>{`
         @media (max-width: 960px) {
