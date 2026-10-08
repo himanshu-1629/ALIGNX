@@ -410,6 +410,43 @@ export class ApiService {
   public static async getTalentAtlasData(): Promise<ApiResponse<TalentAtlasPayload>> {
     return this.request<ApiResponse<TalentAtlasPayload>>('/market/atlas');
   }
+
+  // 14. Live Talent & Job Search (Powered by Adzuna API)
+  public static async searchLiveTalent(query?: string, location?: string, page = 1, limit = 6): Promise<ApiResponse<LiveJobSearchData>> {
+    const params = new URLSearchParams();
+    if (query) params.set('query', query);
+    if (location && location !== 'All India') params.set('location', location);
+    params.set('page', page.toString());
+    params.set('limit', limit.toString());
+    return this.request<ApiResponse<LiveJobSearchData>>(`/market/search?${params.toString()}`);
+  }
+}
+
+export interface LiveJobPosting {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  city: string;
+  salaryMinINR: number | null;
+  salaryMaxINR: number | null;
+  salaryDisplay: string;
+  avgSalaryLakhs: number | null;
+  contractType: string;
+  redirectUrl: string;
+  created: string;
+  category: string;
+  description: string;
+}
+
+export interface LiveJobSearchData {
+  count: number;
+  meanSalaryLakhs: number | null;
+  results: LiveJobPosting[];
+  source: string;
+  cached: boolean;
+  query: string;
+  location: string;
 }
 
 export interface TalentAtlasPayload {

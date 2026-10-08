@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { Career } from '../models/Career';
 import { sendSuccess } from '../utils/apiResponse';
 import { AppError } from '../middleware/errorHandler';
+import { adzunaService } from '../services/adzunaService';
 
 /**
  * Get market demand metrics for a career
@@ -449,6 +450,14 @@ export const getTalentAtlasData = async (
         metrics: '4-Year B.Tech Cost of Attendance tiers across Central Govt, Deemed Private, and State Engineering Colleges',
         citation: 'Ministry of Education (2025/2026). NIRF India Rankings & Institutional Fee Schedules.',
         url: 'https://nirfindia.org/'
+      },
+      {
+        id: 'adzuna-live',
+        title: 'Adzuna Live Labor Market API (India Real-Time Feed)',
+        authority: 'Adzuna Global Job Index & Wage Telemetry (api.adzuna.com)',
+        metrics: 'Live active tech openings, real-time starting/mid salary bands across Indian hubs',
+        citation: 'Adzuna API (2026). Real-Time Labor Demand & Wage Indices for India (App ID: 13999789).',
+        url: 'https://www.adzuna.in/'
       }
     ];
 
@@ -467,4 +476,38 @@ export const getTalentAtlasData = async (
     next(error);
   }
 };
+
+/**
+ * Search live talent and active jobs via Adzuna API
+ * GET /api/v1/market/search?query=...&location=...&page=...
+ */
+export const searchLiveTalent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const query = (req.query.query as string) || (req.query.what as string) || 'technology';
+    const location = (req.query.location as string) || (req.query.where as string) || '';
+    const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 8;
+
+    const data = await adzunaService.searchJobs({
+      what: query,
+      where: location,
+      page,
+      resultsPerPage: limit
+    });
+
+    sendSuccess({
+      res,
+      statusCode: 200,
+      message: 'Live job listings retrieved successfully via Adzuna API',
+      data
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 

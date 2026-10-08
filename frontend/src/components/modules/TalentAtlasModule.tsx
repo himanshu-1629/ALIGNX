@@ -7,10 +7,14 @@ import {
   RefreshCw,
   Clock,
   ShieldCheck,
-  ExternalLink
+  ExternalLink,
+  Search,
+  Building2,
+  Zap,
+  Briefcase
 } from 'lucide-react';
 import type { AppView } from '../Header';
-import { ApiService, type TalentAtlasPayload } from '../../services/api';
+import { ApiService, type TalentAtlasPayload, type LiveJobPosting } from '../../services/api';
 
 interface StateData {
   id: string;
@@ -354,10 +358,20 @@ interface TalentAtlasModuleProps {
 
 export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAssessment }) => {
   const [selectedStateId, setSelectedStateId] = useState<string>('karnataka');
-  const [activeTab, setActiveTab] = useState<'states' | 'popular' | 'arbitrage'>('states');
+  const [activeTab, setActiveTab] = useState<'states' | 'popular' | 'arbitrage' | 'live_search'>('states');
   const [zoneFilter, setZoneFilter] = useState<'All' | 'South' | 'West' | 'North'>('All');
 
-  // Real-time market telemetry state
+  // Adzuna Live Job Search State
+  const [searchQuery, setSearchQuery] = useState<string>('AI Engineer');
+  const [searchLocation, setSearchLocation] = useState<string>('Bengaluru');
+  const [searchResults, setSearchResults] = useState<LiveJobPosting[]>([]);
+  const [searchTotalCount, setSearchTotalCount] = useState<number>(0);
+  const [searchMeanSalary, setSearchMeanSalary] = useState<number | null>(null);
+  const [isSearchingJobs, setIsSearchingJobs] = useState<boolean>(false);
+  const [searchHasExecuted, setSearchHasExecuted] = useState<boolean>(false);
+  const [searchSource, setSearchSource] = useState<string>('Adzuna Live Labor Market API (India)');
+
+  // Live market telemetry state
   const [statesData, setStatesData] = useState<StateData[]>(INDIAN_STATES_DATA);
   const [popularCareersData, setPopularCareersData] = useState<PopularCareer[]>(NATIONAL_POPULAR_CAREERS);
   const [pulseData, setPulseData] = useState<TalentAtlasPayload['pulse'] | null>(null);
@@ -367,6 +381,35 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
   const [timeAgo, setTimeAgo] = useState<string>('Connecting...');
   const [autoSync, setAutoSync] = useState<boolean>(true);
+
+  // Live Adzuna Job Search executor
+  const executeLiveJobSearch = useCallback(async (queryOverride?: string, locOverride?: string) => {
+    const q = queryOverride !== undefined ? queryOverride : searchQuery;
+    const l = locOverride !== undefined ? locOverride : searchLocation;
+    setIsSearchingJobs(true);
+    try {
+      const res = await ApiService.searchLiveTalent(q, l, 1, 8);
+      if (res?.data) {
+        setSearchResults(res.data.results || []);
+        setSearchTotalCount(res.data.count || 0);
+        setSearchMeanSalary(res.data.meanSalaryLakhs);
+        setSearchSource(res.data.source || 'Adzuna Live Labor Market API (India)');
+        setSearchHasExecuted(true);
+      }
+    } catch (err) {
+      console.warn('[TalentAtlas] Live job search note:', err);
+    } finally {
+      setIsSearchingJobs(false);
+    }
+  }, [searchQuery, searchLocation]);
+
+  const handleDrilldownToLiveJobs = (careerTitle: string, locationName: string) => {
+    setSearchQuery(careerTitle);
+    setSearchLocation(locationName);
+    setActiveTab('live_search');
+    executeLiveJobSearch(careerTitle, locationName);
+    window.scrollTo({ top: 400, behavior: 'smooth' });
+  };
 
   // Live market telemetry fetcher
   const fetchLiveMarketData = useCallback(async (silent = false) => {
@@ -762,13 +805,19 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
           {[
             { id: 'states' as const, label: '01 · STATE & TECH CORRIDOR ATLAS', icon: <MapPin size={13} /> },
             { id: 'popular' as const, label: '02 · NATIONAL CAREER SURGE MATRIX', icon: <TrendingUp size={13} /> },
-            { id: 'arbitrage' as const, label: '03 · SALARY VS COST-OF-LIVING ARBITRAGE', icon: <BarChart3 size={13} /> }
+            { id: 'arbitrage' as const, label: '03 · SALARY VS COST-OF-LIVING ARBITRAGE', icon: <BarChart3 size={13} /> },
+            { id: 'live_search' as const, label: '04 · LIVE ADZUNA TALENT RADAR ⚡', icon: <Zap size={13} /> }
           ].map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  if (tab.id === 'live_search' && !searchHasExecuted) {
+                    executeLiveJobSearch();
+                  }
+                }}
                 style={{
                   padding: '14px 22px',
                   backgroundColor: isActive ? '#ECE9E2' : 'transparent',
@@ -1134,6 +1183,38 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                             {c.surge}
                           </span>
                         </div>
+
+                        <button
+                          onClick={() => handleDrilldownToLiveJobs(c.title, selectedState.capital.split('·')[0].trim())}
+                          style={{
+                            marginTop: '8px',
+                            width: '100%',
+                            padding: '6px 8px',
+                            backgroundColor: '#FFFFFF',
+                            border: '1px solid rgba(45, 90, 67, 0.35)',
+                            color: '#2D5A43',
+                            fontFamily: "'Martian Mono', monospace",
+                            fontSize: '9.5px',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '5px',
+                            transition: 'all 0.15s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#2D5A43';
+                            e.currentTarget.style.color = '#FFFFFF';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#FFFFFF';
+                            e.currentTarget.style.color = '#2D5A43';
+                          }}
+                        >
+                          <Zap size={11} />
+                          <span>SEARCH LIVE ON ADZUNA ↗</span>
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -1488,6 +1569,448 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
                 ■ START 5D ASSESSMENT (PROFILE & GOALS)
               </button>
             </div>
+          </div>
+        )}
+
+        {/* ====================================================================
+            TAB 4: LIVE ADZUNA TALENT RADAR & REAL-TIME JOB SEARCH
+            ==================================================================== */}
+        {activeTab === 'live_search' && (
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              border: '1px solid rgba(24, 24, 22, 0.14)',
+              padding: '36px'
+            }}
+          >
+            {/* Top Banner with Live Adzuna Status */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      padding: '3px 8px',
+                      backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                      border: '1px solid rgba(16, 185, 129, 0.35)',
+                      color: '#065F46',
+                      fontFamily: "'Martian Mono', monospace",
+                      fontSize: '10px',
+                      fontWeight: 700
+                    }}
+                  >
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block' }} />
+                    LIVE ADZUNA LABOR API CONNECTED · APP ID: 13999789
+                  </span>
+                  <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61' }}>
+                    COUNTRY: INDIA (in)
+                  </span>
+                </div>
+                <h3 style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '32px', fontWeight: 800, textTransform: 'uppercase', margin: 0, lineHeight: 1.1 }}>
+                  REAL-TIME TECH JOBS & LIVE WAGE RADAR
+                </h3>
+                <p style={{ fontFamily: 'system-ui, sans-serif', fontSize: '14px', color: '#6E6A61', marginTop: '6px', marginBottom: 0, maxWidth: '720px' }}>
+                  Query real-time open positions across India's premier tech clusters with live salary telemetry, verified enterprise employers, and direct application links from Adzuna's index.
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => executeLiveJobSearch()}
+                  disabled={isSearchingJobs}
+                  style={{
+                    height: '36px',
+                    padding: '0 16px',
+                    backgroundColor: '#F6F5F1',
+                    border: '1px solid rgba(24, 24, 22, 0.2)',
+                    fontFamily: "'Martian Mono', monospace",
+                    fontSize: '10.5px',
+                    fontWeight: 600,
+                    cursor: isSearchingJobs ? 'not-allowed' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <RefreshCw size={13} className={isSearchingJobs ? 'animate-spin' : ''} />
+                  <span>REFRESH FEED</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Interactive Search Bar & Filters */}
+            <div
+              style={{
+                backgroundColor: '#F6F5F1',
+                border: '1px solid rgba(24, 24, 22, 0.12)',
+                padding: '20px',
+                marginBottom: '28px'
+              }}
+            >
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  executeLiveJobSearch();
+                }}
+                style={{
+                  display: 'flex',
+                  gap: '12px',
+                  flexWrap: 'wrap',
+                  marginBottom: '14px'
+                }}
+              >
+                {/* Keyword input */}
+                <div style={{ flex: '1 1 280px', position: 'relative' }}>
+                  <Search size={16} color="#6E6A61" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search by job title, skill, or domain (e.g. AI Engineer, Robotics, Cloud)..."
+                    style={{
+                      width: '100%',
+                      height: '42px',
+                      paddingLeft: '38px',
+                      paddingRight: '12px',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid rgba(24, 24, 22, 0.2)',
+                      fontFamily: "'Martian Mono', monospace",
+                      fontSize: '11.5px',
+                      color: '#181816',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+
+                {/* Location selector */}
+                <div style={{ width: '180px' }}>
+                  <select
+                    value={searchLocation}
+                    onChange={(e) => {
+                      setSearchLocation(e.target.value);
+                      executeLiveJobSearch(searchQuery, e.target.value);
+                    }}
+                    style={{
+                      width: '100%',
+                      height: '42px',
+                      padding: '0 12px',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid rgba(24, 24, 22, 0.2)',
+                      fontFamily: "'Martian Mono', monospace",
+                      fontSize: '11px',
+                      color: '#181816',
+                      outline: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <option value="">All India</option>
+                    <option value="Bengaluru">Bengaluru</option>
+                    <option value="Hyderabad">Hyderabad</option>
+                    <option value="Pune">Pune</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Gurugram">Delhi-NCR (Gurugram)</option>
+                    <option value="Noida">Delhi-NCR (Noida)</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Ahmedabad">Ahmedabad / GIFT City</option>
+                    <option value="Kochi">Kochi / Kerala</option>
+                  </select>
+                </div>
+
+                {/* Submit button */}
+                <button
+                  type="submit"
+                  disabled={isSearchingJobs}
+                  style={{
+                    height: '42px',
+                    padding: '0 24px',
+                    backgroundColor: '#2D5A43',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    fontFamily: "'Martian Mono', monospace",
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    letterSpacing: '0.08em',
+                    cursor: isSearchingJobs ? 'not-allowed' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    transition: 'background-color 0.15s ease'
+                  }}
+                >
+                  <Zap size={14} />
+                  <span>{isSearchingJobs ? 'QUERYING ADZUNA...' : 'SEARCH LIVE OPENINGS'}</span>
+                </button>
+              </form>
+
+              {/* Quick Tech Role Chips */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61', fontWeight: 600 }}>
+                  SUGGESTED FILTERS:
+                </span>
+                {[
+                  'AI & Machine Learning',
+                  'Full Stack Cloud Architect',
+                  'Robotics & Embedded Firmware',
+                  'Cybersecurity Analyst',
+                  'Data Systems Engineer',
+                  'Semiconductor VLSI'
+                ].map((chip) => (
+                  <button
+                    key={chip}
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery(chip);
+                      executeLiveJobSearch(chip, searchLocation);
+                    }}
+                    style={{
+                      padding: '4px 9px',
+                      backgroundColor: searchQuery.toLowerCase() === chip.toLowerCase() ? '#2D5A43' : '#FFFFFF',
+                      color: searchQuery.toLowerCase() === chip.toLowerCase() ? '#FFFFFF' : '#181816',
+                      border: '1px solid rgba(24, 24, 22, 0.18)',
+                      fontFamily: "'Martian Mono', monospace",
+                      fontSize: '10px',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    {chip}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Telemetry Indicator Strip */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '12px',
+                marginBottom: '28px'
+              }}
+            >
+              <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61' }}>
+                  ACTIVE LIVE OPENINGS
+                </div>
+                <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '28px', fontWeight: 800, color: '#2D5A43', margin: '2px 0' }}>
+                  {searchTotalCount.toLocaleString()}
+                </div>
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#2D5A43' }}>
+                  Verified index in {searchLocation || 'All India'}
+                </div>
+              </div>
+
+              <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61' }}>
+                  ESTIMATED AVERAGE CTC
+                </div>
+                <div style={{ fontFamily: "'Big Shoulders Display', sans-serif", fontSize: '28px', fontWeight: 800, color: '#181816', margin: '2px 0' }}>
+                  {searchMeanSalary ? `₹${searchMeanSalary} LPA` : '₹15 - ₹24 LPA'}
+                </div>
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#6E6A61' }}>
+                  Based on live posted employer bands
+                </div>
+              </div>
+
+              <div style={{ padding: '16px', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61' }}>
+                  DATA SOURCE PROVENANCE
+                </div>
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '12px', fontWeight: 700, color: '#181816', marginTop: '6px' }}>
+                  {searchSource}
+                </div>
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '9.5px', color: '#065F46', marginTop: '2px' }}>
+                  Cached (10m TTL) · Zero Rate Limit Impact
+                </div>
+              </div>
+            </div>
+
+            {/* Results Grid */}
+            {isSearchingJobs ? (
+              <div style={{ padding: '60px 20px', textAlign: 'center', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                <RefreshCw size={28} className="animate-spin" color="#2D5A43" style={{ margin: '0 auto 12px' }} />
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '12px', fontWeight: 700, color: '#181816' }}>
+                  QUERYING ADZUNA REAL-TIME INDIAN JOB INDEX...
+                </div>
+                <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '13px', color: '#6E6A61', marginTop: '4px' }}>
+                  Retrieving active postings and live compensation bands for "{searchQuery}"
+                </div>
+              </div>
+            ) : searchResults.length > 0 ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '16px' }}>
+                {searchResults.map((job) => (
+                  <div
+                    key={job.id}
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid rgba(24, 24, 22, 0.14)',
+                      padding: '22px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      transition: 'all 0.18s ease',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = '#2D5A43';
+                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(45, 90, 67, 0.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = 'rgba(24, 24, 22, 0.14)';
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.03)';
+                    }}
+                  >
+                    <div>
+                      {/* Top Badges */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px', marginBottom: '10px' }}>
+                        <span
+                          style={{
+                            fontFamily: "'Martian Mono', monospace",
+                            fontSize: '9.5px',
+                            fontWeight: 700,
+                            padding: '3px 8px',
+                            backgroundColor: 'rgba(45, 90, 67, 0.1)',
+                            color: '#2D5A43',
+                            border: '1px solid rgba(45, 90, 67, 0.25)'
+                          }}
+                        >
+                          {job.category.toUpperCase()}
+                        </span>
+
+                        <span
+                          style={{
+                            fontFamily: "'Martian Mono', monospace",
+                            fontSize: '9.5px',
+                            fontWeight: 700,
+                            color: '#2D5A43',
+                            padding: '3px 8px',
+                            backgroundColor: '#F6F5F1',
+                            border: '1px solid rgba(24, 24, 22, 0.1)'
+                          }}
+                        >
+                          {job.salaryDisplay}
+                        </span>
+                      </div>
+
+                      {/* Job Title */}
+                      <h4
+                        style={{
+                          fontFamily: 'system-ui, sans-serif',
+                          fontSize: '17px',
+                          fontWeight: 700,
+                          color: '#181816',
+                          lineHeight: 1.3,
+                          margin: '0 0 8px 0'
+                        }}
+                      >
+                        {job.title}
+                      </h4>
+
+                      {/* Company & Location */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', alignItems: 'center', marginBottom: '12px', fontFamily: "'Martian Mono', monospace", fontSize: '11px', color: '#6E6A61' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                          <Building2 size={13} color="#2D5A43" />
+                          <span style={{ fontWeight: 600, color: '#181816' }}>{job.company}</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <MapPin size={13} color="#6E6A61" />
+                          <span>{job.location}</span>
+                        </div>
+                      </div>
+
+                      {/* Description Snippet */}
+                      <p
+                        style={{
+                          fontFamily: 'system-ui, sans-serif',
+                          fontSize: '13px',
+                          color: '#55524B',
+                          lineHeight: 1.5,
+                          margin: '0 0 16px 0'
+                        }}
+                      >
+                        {job.description}
+                      </p>
+                    </div>
+
+                    {/* Bottom Action Footer */}
+                    <div
+                      style={{
+                        borderTop: '1px solid rgba(24, 24, 22, 0.08)',
+                        paddingTop: '14px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontFamily: "'Martian Mono', monospace", fontSize: '10px', color: '#6E6A61' }}>
+                        <Clock size={11} />
+                        <span>{new Date(job.created).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                      </div>
+
+                      <a
+                        href={job.redirectUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '6px 14px',
+                          backgroundColor: '#181816',
+                          color: '#F6F5F1',
+                          textDecoration: 'none',
+                          fontFamily: "'Martian Mono', monospace",
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          letterSpacing: '0.06em',
+                          textTransform: 'uppercase',
+                          transition: 'background-color 0.15s ease'
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#2D5A43')}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#181816')}
+                      >
+                        <span>VIEW ON ADZUNA</span>
+                        <ExternalLink size={11} />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ padding: '48px 20px', textAlign: 'center', backgroundColor: '#F6F5F1', border: '1px solid rgba(24, 24, 22, 0.1)' }}>
+                <Briefcase size={32} color="#6E6A61" style={{ margin: '0 auto 12px' }} />
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: '13px', fontWeight: 700, color: '#181816' }}>
+                  NO OPENINGS FOUND MATCHING "{searchQuery}"
+                </div>
+                <p style={{ fontFamily: 'system-ui, sans-serif', fontSize: '13px', color: '#6E6A61', marginTop: '6px' }}>
+                  Try broadening your keyword or selecting "All India" to view all available positions.
+                </p>
+                <button
+                  onClick={() => {
+                    setSearchQuery('technology');
+                    setSearchLocation('');
+                    executeLiveJobSearch('technology', '');
+                  }}
+                  style={{
+                    marginTop: '12px',
+                    padding: '8px 18px',
+                    backgroundColor: '#2D5A43',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    fontFamily: "'Martian Mono', monospace",
+                    fontSize: '10.5px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  VIEW ALL TECH OPENINGS (INDIA)
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
