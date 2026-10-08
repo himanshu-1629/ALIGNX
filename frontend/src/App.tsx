@@ -480,6 +480,8 @@ export function App() {
         {currentView === 'roadmap' && (
           <RoadmapModule
             careerId={selectedCareerId || 'ai_ml_engineer'}
+            sessionProgress={sessionProgress}
+            onSelectCareer={(cId) => setSelectedCareerId(cId)}
             onBackToDashboard={() => {
               setCurrentView('dashboard');
               window.scrollTo({ top: 0, behavior: 'smooth' });
