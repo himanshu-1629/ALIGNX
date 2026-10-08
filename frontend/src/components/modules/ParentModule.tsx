@@ -712,18 +712,20 @@ export const ParentModule: React.FC<ParentModuleProps> = ({ onContinue, onBack, 
     const session = getSessionProgress();
     const onboardBudget = session.studentProfile?.budgetAnnualLakhs || 15;
     const onboardRisk = session.studentProfile?.riskTolerance || 'moderate';
-    const primary = parents[0] || {
+    const primary: ParentInput = parents[0] || {
       id: 'p_confirmed',
+      parentId: 'p_confirmed',
       name: 'Primary Guardian',
       relation: 'Father',
       maxBudgetAnnualLakhs: onboardBudget,
       preferredLocations: ['Domestic Tier-1 Tech Hubs'],
       priorityFocus: 'Stability',
       riskAppetite: onboardRisk === 'high' ? 'high' : onboardRisk === 'low' ? 'low' : 'moderate',
+      conflictPoints: [`Annual tuition ceiling confirmed at ₹${onboardBudget}L/yr`],
       status: 'COMPLETED'
     };
 
-    const updated = parents.length > 0 ? parents.map(p => ({ ...p, status: 'COMPLETED' as const })) : [primary];
+    const updated: ParentInput[] = parents.length > 0 ? parents.map(p => ({ ...p, status: 'COMPLETED' as const })) : [primary];
     setParents(updated);
 
     saveSessionProgress({

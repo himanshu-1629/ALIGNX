@@ -416,10 +416,18 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
       }
     } catch (err) {
       console.warn('[TalentAtlas] Live job search note:', err);
+      setSearchHasExecuted(true);
     } finally {
       setIsSearchingJobs(false);
     }
   }, [searchQuery, searchLocation]);
+
+  // Auto-execute live job search when user switches to or lands on live_search tab
+  useEffect(() => {
+    if (activeTab === 'live_search' && !searchHasExecuted && !isSearchingJobs) {
+      executeLiveJobSearch();
+    }
+  }, [activeTab, searchHasExecuted, isSearchingJobs, executeLiveJobSearch]);
 
   const handleDrilldownToLiveJobs = (careerTitle: string, locationName: string) => {
     setSearchQuery(careerTitle);
@@ -452,6 +460,7 @@ export const TalentAtlasModule: React.FC<TalentAtlasModuleProps> = ({ onStartAss
       }
     } catch (err) {
       console.warn('[TalentAtlas] Live market telemetry fetch note:', err);
+      setTimeAgo((prev) => (prev === 'Connecting...' ? 'Cached Baseline' : prev));
     } finally {
       if (!silent) {
         setTimeout(() => setIsSyncing(false), 350);

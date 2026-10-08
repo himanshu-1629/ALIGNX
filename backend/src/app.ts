@@ -11,7 +11,15 @@ export const createApp = (): Application => {
     cors({
       origin: '*', // Allow frontend dev servers (Vite: 5173, Next.js: 3000, etc.)
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization']
+      allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'x-student-id',
+        'X-Student-Id',
+        'Accept',
+        'Origin',
+        'X-Requested-With'
+      ]
     })
   );
 
