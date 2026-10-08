@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Menu, X, Lock } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Menu, X, Lock, User } from 'lucide-react';
 
 export type AppView =
   | 'home'
@@ -38,6 +38,35 @@ export const Header: React.FC<HeaderProps> = ({
   onAssessmentGateTrigger
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target as Node)
+      ) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    if (profileDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [profileDropdownOpen]);
 
   // Group active view states
   const isHomeActive = currentView === 'home';
@@ -227,68 +256,208 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* SIGN IN or USER PROFILE */}
-          {currentUser ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span
-                style={{
-                  fontFamily: "'Martian Mono', monospace",
-                  fontSize: '9.5px',
-                  color: '#2D5A43',
-                  fontWeight: 600,
-                  letterSpacing: '0.04em'
-                }}
-              >
-                {currentUser.name?.split(' ')[0]?.toUpperCase() || 'STUDENT'}
-              </span>
-              <button
-                onClick={onSignOut}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#6E6A61',
-                  fontSize: '9.5px',
-                  fontFamily: "'Martian Mono', monospace",
-                  cursor: 'pointer',
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase'
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#181816')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#6E6A61')}
-              >
-                (SIGN OUT)
-              </button>
-            </div>
-          ) : (
+          {/* Profile Avatar & Anchored Dropdown */}
+          <div ref={profileDropdownRef} style={{ position: 'relative' }}>
             <button
-              onClick={onOpenAuth}
+              onClick={() => setProfileDropdownOpen((prev) => !prev)}
+              aria-label="User Profile"
+              title={currentUser ? currentUser.name : 'Account Profile'}
               style={{
-                background: 'none',
-                border: '1px solid rgba(24, 24, 22, 0.22)',
-                borderRadius: '0px',
-                color: '#181816',
-                fontFamily: "'Martian Mono', monospace",
-                fontSize: '10px',
-                fontWeight: 600,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
+                width: '34px',
                 height: '34px',
-                padding: '0 14px',
+                borderRadius: '50%',
+                backgroundColor: profileDropdownOpen
+                  ? 'rgba(45, 90, 67, 0.14)'
+                  : currentUser
+                  ? 'rgba(45, 90, 67, 0.08)'
+                  : 'rgba(24, 24, 22, 0.04)',
+                border: `1px solid ${
+                  profileDropdownOpen
+                    ? '#2D5A43'
+                    : currentUser
+                    ? 'rgba(45, 90, 67, 0.35)'
+                    : 'rgba(24, 24, 22, 0.18)'
+                }`,
+                color: profileDropdownOpen ? '#2D5A43' : currentUser ? '#2D5A43' : '#6E6A61',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 cursor: 'pointer',
-                transition: 'border-color 0.2s ease, color 0.2s ease'
+                fontFamily: "'Martian Mono', monospace",
+                fontSize: '12px',
+                fontWeight: 700,
+                padding: 0,
+                transition: 'all 0.18s ease',
+                userSelect: 'none'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = '#2D5A43';
                 e.currentTarget.style.color = '#2D5A43';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(24, 24, 22, 0.22)';
-                e.currentTarget.style.color = '#181816';
+                if (!profileDropdownOpen) {
+                  e.currentTarget.style.borderColor = currentUser
+                    ? 'rgba(45, 90, 67, 0.35)'
+                    : 'rgba(24, 24, 22, 0.18)';
+                  e.currentTarget.style.color = currentUser ? '#2D5A43' : '#6E6A61';
+                }
               }}
             >
-              SIGN IN
+              {currentUser?.name ? (
+                currentUser.name.trim().charAt(0).toUpperCase()
+              ) : (
+                <User size={15} />
+              )}
             </button>
-          )}
+
+            {/* Profile Dropdown Card */}
+            {profileDropdownOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 10px)',
+                  right: 0,
+                  width: '240px',
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid rgba(24, 24, 22, 0.14)',
+                  borderRadius: '0px',
+                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.10)',
+                  padding: '24px 20px 20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  zIndex: 1000,
+                  animation: 'alignxProfileFade 0.18s ease-out'
+                }}
+              >
+                {/* 1. Avatar */}
+                <div
+                  style={{
+                    width: '52px',
+                    height: '52px',
+                    borderRadius: '50%',
+                    backgroundColor: currentUser ? 'rgba(45, 90, 67, 0.1)' : 'rgba(24, 24, 22, 0.06)',
+                    border: '1px solid rgba(24, 24, 22, 0.12)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontFamily: "'Martian Mono', monospace",
+                    fontSize: '18px',
+                    fontWeight: 700,
+                    color: currentUser ? '#2D5A43' : '#6E6A61',
+                    marginBottom: '12px'
+                  }}
+                >
+                  {currentUser?.name ? (
+                    currentUser.name.trim().charAt(0).toUpperCase()
+                  ) : (
+                    <User size={22} color="#6E6A61" />
+                  )}
+                </div>
+
+                {/* 2. Name */}
+                <div
+                  style={{
+                    fontFamily: "'Big Shoulders Display', sans-serif",
+                    fontSize: '20px',
+                    fontWeight: 800,
+                    color: '#181816',
+                    letterSpacing: '0.03em',
+                    textTransform: 'uppercase',
+                    lineHeight: 1.2
+                  }}
+                >
+                  {currentUser?.name || 'Guest User'}
+                </div>
+
+                {/* 3. Email (Only for logged in) */}
+                {currentUser?.email && (
+                  <div
+                    style={{
+                      fontFamily: "'Martian Mono', monospace",
+                      fontSize: '10px',
+                      color: '#6E6A61',
+                      marginTop: '4px',
+                      wordBreak: 'break-all',
+                      lineHeight: 1.4
+                    }}
+                  >
+                    {currentUser.email}
+                  </div>
+                )}
+
+                {/* 4. Action Button (Sign Out OR Sign In) */}
+                {currentUser ? (
+                  <button
+                    onClick={() => {
+                      setProfileDropdownOpen(false);
+                      onSignOut?.();
+                    }}
+                    style={{
+                      marginTop: '20px',
+                      width: '100%',
+                      height: '34px',
+                      background: 'none',
+                      border: '1px solid rgba(24, 24, 22, 0.22)',
+                      borderRadius: '0px',
+                      color: '#181816',
+                      fontFamily: "'Martian Mono', monospace",
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      transition: 'all 0.18s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = '#B91C1C';
+                      e.currentTarget.style.color = '#B91C1C';
+                      e.currentTarget.style.backgroundColor = 'rgba(185, 28, 28, 0.05)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = 'rgba(24, 24, 22, 0.22)';
+                      e.currentTarget.style.color = '#181816';
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
+                  >
+                    SIGN OUT
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setProfileDropdownOpen(false);
+                      onOpenAuth?.();
+                    }}
+                    style={{
+                      marginTop: '20px',
+                      width: '100%',
+                      height: '34px',
+                      backgroundColor: '#181816',
+                      color: '#F6F5F1',
+                      border: 'none',
+                      borderRadius: '0px',
+                      fontFamily: "'Martian Mono', monospace",
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.18s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#2D5A43';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#181816';
+                    }}
+                  >
+                    SIGN IN
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Primary CTA: ■ START ASSESSMENT */}
           <button
@@ -427,6 +596,19 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </div>
       )}
+
+      <style>{`
+        @keyframes alignxProfileFade {
+          from {
+            opacity: 0;
+            transform: translateY(-6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </header>
   );
 };
